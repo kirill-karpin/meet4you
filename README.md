@@ -5,7 +5,7 @@
 ## Getting started
 
 Start project
-1. https://gitlab.com/otus-dreamteam/meet4you.git
+1. git clone https://gitlab.com/otus-dreamteam/meet4you.git
 2. cd .\meet4you
 3. docker-compose up
 4. cd .\WebApp\ 

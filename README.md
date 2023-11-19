@@ -5,8 +5,11 @@
 ## Getting started
 
 Start project
-1. docker-compose up
-2. dotnet ef database update
+1. https://gitlab.com/otus-dreamteam/meet4you.git
+2. cd .\meet4you
+3. docker-compose up
+4. cd .\WebApp\ 
+5. dotnet ef database update
 
 
 ## Add your files

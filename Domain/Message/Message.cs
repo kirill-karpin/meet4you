@@ -4,9 +4,9 @@ namespace Message;
 
 public class Message : BaseEntity
 {
-    private int From { set; get; }
-    private int To { set; get; }
-    private DateTime Date { set; get; }
-    private bool IsRead { set; get; }
-    private string Content { set; get; }
+    public int From { set; get; }
+    public int To { set; get; }
+    public DateTime Date { set; get; }
+    public bool IsRead { set; get; }
+    public string Content { set; get; }
 }

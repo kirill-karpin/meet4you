@@ -17,6 +17,7 @@ namespace WebApi
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var applicationSettings = configuration.Get<ApplicationSettings>();
+            applicationSettings.ConnectionString = configuration?.GetConnectionString("DefaultConnection") ?? "";
             services.AddSingleton(applicationSettings);
             services.AddScoped(typeof(DbContext), typeof(DataContext));
             return services.AddSingleton((IConfigurationRoot)configuration)

@@ -10,6 +10,6 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
-      - 5522:5432
+      - 5555:5432
     volumes:
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql

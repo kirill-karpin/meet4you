@@ -1,6 +1,6 @@
-﻿namespace Entities.Abstractions;
+﻿namespace Message.Dto;
 
-public class BaseEntity
+public class MessageDto
 {
     public Guid Id { get; set; }
     public int Sort { get; set; }
@@ -10,4 +10,10 @@ public class BaseEntity
     public Guid CreatedBy { get; set; }
     public Guid UpdatedBy { get; set; }
     public bool Deleted { get; set; }
+
+    private int From { set; get; }
+    private int To { set; get; }
+    private DateTime Date { set; get; }
+    private bool IsRead { set; get; }
+    public string Content { set; get; }
 }

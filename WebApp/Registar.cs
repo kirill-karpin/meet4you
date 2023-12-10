@@ -5,6 +5,9 @@ using Message.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using User;
+using User.Abstraction;
+using User.Service;
 using WebApi.Settings;
 
 namespace WebApi
@@ -30,6 +33,9 @@ namespace WebApi
         {
             serviceCollection
                 .AddTransient<MessageService, MessageService>();
+            serviceCollection
+                .AddTransient<IUserService, UserService>();
+
             return serviceCollection;
         }
 
@@ -37,6 +43,9 @@ namespace WebApi
         {
             serviceCollection
                 .AddTransient<IMessageRepository, MessageRepository>();
+            serviceCollection
+                .AddTransient<IUserRepository, UserRepository>();
+
             return serviceCollection;
         }
     }

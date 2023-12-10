@@ -76,6 +76,7 @@ namespace WebApi
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MessageMappingProfile>();
+                cfg.AddProfile<UserMappingProfile>();
             });
             configuration.AssertConfigurationIsValid();
             return configuration;

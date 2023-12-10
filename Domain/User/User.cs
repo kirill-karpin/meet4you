@@ -1,30 +1,28 @@
 ﻿using Entities.Abstractions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace User;
 
-/// <summary>
-/// User Data Transfer Object
-/// </summary>
-public class UserDto
+public class User : BaseEntity
 {
     /// <summary>
     /// Блокирована ли учётная запись;
     /// false - всё Ок;
     /// true - пользователь накосячил и наказан;
     /// </summary>
-    public bool Blocked { get; set; }
+    public bool Blocked {  get; set; }
     /// <summary>
     /// Половая принадлежность;
     /// 0 (false) - девочка;
     /// 1 (true)  - мальчик;
     /// Думаю комментарии излишни =)
     /// </summary>
-    public bool Gender { get; set; }
+    public bool Gender {  get; set; }
     /// <summary>
     /// Дата рождения пользователя
     /// </summary>
-    public DateTime DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; } 
     /// <summary>
     /// Имя пользователя
     /// </summary>
@@ -63,12 +61,5 @@ public class UserDto
     /// </summary>
     public bool HaveChildren { get; set; }
 
-
-}
-
-public enum FamilyStatus
-{
-    Свободен = 0,
-    ВБраке = 1,
-    Разведён = 3
+    
 }

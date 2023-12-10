@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace User.Mappers
+namespace User
 {
-    public interface IUserMapper<T, U>
+    public enum FamilyStatus
     {
-
-        public Task<U> Cast(T t);
-
-        public Task<T> Cast(U u);
+        Свободен = 0,
+        ВБраке = 1,
+        Разведён = 3
     }
 }

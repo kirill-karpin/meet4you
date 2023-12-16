@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using City.Mapping;
+using Country.Mapping;
 using Message;
 using Message.Mapping;
 using Microsoft.AspNetCore.Builder;
@@ -75,6 +77,8 @@ namespace WebApi
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MessageMappingProfile>();
+                cfg.AddProfile<CityMappingProfile>();
+                cfg.AddProfile<CountryMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
             });
             configuration.AssertConfigurationIsValid();

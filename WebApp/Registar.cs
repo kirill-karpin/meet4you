@@ -1,4 +1,8 @@
-﻿using Infrastructure;
+﻿using City;
+using City.Abstractions;
+using Country;
+using Country.Abstractions;
+using Infrastructure;
 using Install;
 using Message;
 using Message.Abstraction;
@@ -32,19 +36,20 @@ namespace WebApi
         private static IServiceCollection InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection
-                .AddTransient<MessageService, MessageService>();
-            serviceCollection.AddTransient<IUserService, UserService>();
-
+                .AddTransient<MessageService, MessageService>()
+                .AddTransient<ICityService, CityService>()
+                .AddTransient<ICountryService, CountryService>()
+                .AddTransient<IUserService, UserService>();
             return serviceCollection;
         }
 
         private static IServiceCollection InstallRepositories(this IServiceCollection serviceCollection)
         {
             serviceCollection
-                .AddTransient<IMessageRepository, MessageRepository>();
-            serviceCollection
+                .AddTransient<IMessageRepository, MessageRepository>()
+                .AddTransient<ICityRepository, CityRepository>()
+                .AddTransient<ICountryRepository, CountryRepository>();
                 .AddTransient<IUserRepository, UserRepository>();
-
             return serviceCollection;
         }
     }

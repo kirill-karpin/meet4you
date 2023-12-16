@@ -11,5 +11,5 @@ public class DataContext : DbContext
     
     
     public DbSet<Message.Message> Messages { get; set; }
-    public DbSet<Entities.User> Users { get; set; }
+    public DbSet<User.User> Users { get; set; }
 }

@@ -61,5 +61,17 @@ public class User : BaseEntity
     /// </summary>
     public bool HaveChildren { get; set; }
 
-    
+    /// <summary>
+    /// Логин пользователя. Не передавать в DTO!
+    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
+    /// </summary>
+    [MaxLength(150)]
+    public string Login {  get; set; }
+
+    /// <summary>
+    /// Хеш пароля пользователя (будем хранить пароль в БД напрямую - нам менторы вставят Ай-Яй-Яй!)
+    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
+    /// </summary>
+    [MaxLength(150)]
+    public string Password {  get; set; }
 }

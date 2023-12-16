@@ -7,7 +7,7 @@ using User.Dto;
 
 namespace User.ProfileEditors
 {
-    internal class ProfileEditor : IProfileEditor<UserDto, Entities.User>
+    internal class ProfileEditor : IProfileEditor<UserDto, User>
     {
         /// <summary>
         /// Сохраняет настройки пользователя
@@ -15,7 +15,7 @@ namespace User.ProfileEditors
         /// <param name="userDto">UserDto с изменёнными данными профиля</param>
         /// <returns>UserEntity, как подтверждение того, что настройки были применены</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<Entities.User> ChangeProfileSettings(UserDto userDto)
+        public async Task<User> ChangeProfileSettings(UserDto userDto)
         {
             throw new NotImplementedException();
         }

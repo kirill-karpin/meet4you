@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace User
 {
     public interface IUserService
     {
-        public Task<UserDto> Add(UserDto userDto);
-        public Task<UserDto> Update(UserDto userDto);
+        public Task<UserDto> Add(UserDto_WithLoginPassword userDto_WithLoginPassword);
+        public Task<UserDto> Get(Guid id);
     }
 }

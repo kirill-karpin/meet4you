@@ -33,8 +33,7 @@ namespace WebApi
         {
             serviceCollection
                 .AddTransient<MessageService, MessageService>();
-            serviceCollection
-                .AddTransient<IUserService, UserService>();
+            serviceCollection.AddTransient<IUserService, UserService>();
 
             return serviceCollection;
         }

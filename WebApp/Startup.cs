@@ -9,8 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using User;
-
+using User.Mapping;
 
 namespace WebApi
 {
@@ -80,6 +79,7 @@ namespace WebApi
                 cfg.AddProfile<MessageMappingProfile>();
                 cfg.AddProfile<CityMappingProfile>();
                 cfg.AddProfile<CountryMappingProfile>();
+                cfg.AddProfile<UserMappingProfile>();
             });
             configuration.AssertConfigurationIsValid();
             return configuration;

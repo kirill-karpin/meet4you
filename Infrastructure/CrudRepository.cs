@@ -15,7 +15,7 @@ public class CrudRepository<TEntity> : ICrudRepository<TEntity> where TEntity : 
         _entitySet = _context.Set<TEntity>();
     }
     
-    #region Get
+        #region Get
 
         /// <summary>
         /// Получить сущность по ID.

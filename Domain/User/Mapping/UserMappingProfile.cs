@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using User.Dto;
+
+namespace User.Mapping
+{
+    public class UserMappingProfile : Profile
+    {
+        public UserMappingProfile()
+        {
+            //CreateMap<UserDto, User>();//.ReverseMap();
+
+            //CreateMap<UserDto, User>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto_WithLoginPassword>().ReverseMap();
+            //CreateMap<UserDto, User>();
+        }
+
+    }
+}

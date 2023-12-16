@@ -9,6 +9,9 @@ using Message.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using User;
+using User.Abstraction;
+using User.Service;
 using WebApi.Settings;
 
 namespace WebApi
@@ -35,8 +38,8 @@ namespace WebApi
             serviceCollection
                 .AddTransient<MessageService, MessageService>()
                 .AddTransient<ICityService, CityService>()
-                .AddTransient<ICountryService, CountryService>();
-                
+                .AddTransient<ICountryService, CountryService>()
+                .AddTransient<IUserService, UserService>();
             return serviceCollection;
         }
 
@@ -46,6 +49,7 @@ namespace WebApi
                 .AddTransient<IMessageRepository, MessageRepository>()
                 .AddTransient<ICityRepository, CityRepository>()
                 .AddTransient<ICountryRepository, CountryRepository>();
+                .AddTransient<IUserRepository, UserRepository>();
             return serviceCollection;
         }
     }

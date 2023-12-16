@@ -1,28 +1,35 @@
 ﻿using Entities.Abstractions;
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace User;
+namespace User.Dto;
 
-public class User : BaseEntity
+/// <summary>
+/// User Data Transfer Object
+/// !!! Отличается тем, что при (создании)/(обновлении логина пароля пользователя) нам НУЖНЫ логин и пароль. Так что при данном событии мы их передаём
+/// </summary>
+public class UserDto_WithLoginPassword
 {
+    /// <summary>
+    /// Id будем использовать для того, чтобы обращаться к пользователю напрямую, минуя поиск по остальным параметрам
+    /// </summary>
+    public Guid? Id { get; set; }
     /// <summary>
     /// Блокирована ли учётная запись;
     /// false - всё Ок;
     /// true - пользователь накосячил и наказан;
     /// </summary>
-    public bool Blocked {  get; set; }
+    public bool Blocked { get; set; }
     /// <summary>
     /// Половая принадлежность;
     /// 0 (false) - девочка;
     /// 1 (true)  - мальчик;
     /// Думаю комментарии излишни =)
     /// </summary>
-    public bool Gender {  get; set; }
+    public bool Gender { get; set; }
     /// <summary>
     /// Дата рождения пользователя
     /// </summary>
-    public DateTime DateOfBirth { get; set; } 
+    public DateTime DateOfBirth { get; set; }
     /// <summary>
     /// Имя пользователя
     /// </summary>
@@ -63,15 +70,13 @@ public class User : BaseEntity
 
     /// <summary>
     /// Логин пользователя. Не передавать в DTO!
-    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
     /// </summary>
     [MaxLength(150)]
-    public string Login {  get; set; }
+    public string Login { get; set; }
 
     /// <summary>
     /// Хеш пароля пользователя (будем хранить пароль в БД напрямую - нам менторы вставят Ай-Яй-Яй!)
-    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
     /// </summary>
     [MaxLength(150)]
-    public string Password {  get; set; }
+    public string Password { get; set; }
 }

@@ -44,7 +44,10 @@ namespace User.Service
 
         public async Task<UserDto> Get(Guid id)
         {
-            throw new NotImplementedException();
+            User user = await _userRepository.GetAsync(id);
+            UserDto userDto = _userMapper.Map<UserDto>(user);
+
+            return userDto;
         }
 
     }

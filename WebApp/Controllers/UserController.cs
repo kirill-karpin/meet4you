@@ -30,6 +30,6 @@ public class UserController : ControllerBase
     [Route("{id}")]
     public async Task<UserDto> Get(Guid id)
     {
-        return await _userService.Get(id); //.Get(id);
+        return await _userService.Get(id);
     }
 }

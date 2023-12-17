@@ -9,14 +9,8 @@
 
         public string ConnectionString
         {
-            get
-            {
-                return _connectionString;
-            }
-            set
-            {
-                _connectionString = value;
-            }
+            get { return _connectionString; }
+            set { _connectionString = value; }
         }
     }
 }

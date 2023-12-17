@@ -15,9 +15,8 @@ namespace WebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                    });
+                    webBuilder.UseUrls("https://localhost:7172", "http://localhost:5128");
+                    webBuilder.ConfigureAppConfiguration((hostingContext, config) => { });
                 });
     }
 }

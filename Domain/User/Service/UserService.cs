@@ -11,7 +11,8 @@ using User.Dto;
 
 namespace User.Service
 {
-    public class UserService : CrudService<User, UserDto_WithLoginPassword, UserDto_WithLoginPassword, UserDto>, IUserService
+    public class UserService : CrudService<User, UserDto_WithLoginPassword, UserDto_WithLoginPassword, UserDto>,
+        IUserService
     {
         private readonly IMapper _userMapper;
         private readonly IUserRepository _userRepository;
@@ -49,6 +50,5 @@ namespace User.Service
 
             return userDto;
         }
-
     }
 }

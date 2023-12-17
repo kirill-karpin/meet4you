@@ -21,15 +21,15 @@ public class ProfileController : Controller
     {
         return await _profileService.GetOwnProfile();
     }
-    
-    
+
+
     [HttpGet]
     [Route("list")]
     public async Task<List<IProfile>> List()
     {
         return await _profileService.ListProfile();
     }
-    
+
     [HttpGet]
     [Route("get")]
     public async Task<IProfile> Get(Guid id)

@@ -13,12 +13,14 @@ public class UserDto_WithLoginPassword
     /// Id будем использовать для того, чтобы обращаться к пользователю напрямую, минуя поиск по остальным параметрам
     /// </summary>
     public Guid? Id { get; set; }
+
     /// <summary>
     /// Блокирована ли учётная запись;
     /// false - всё Ок;
     /// true - пользователь накосячил и наказан;
     /// </summary>
     public bool Blocked { get; set; }
+
     /// <summary>
     /// Половая принадлежность;
     /// 0 (false) - девочка;
@@ -26,27 +28,33 @@ public class UserDto_WithLoginPassword
     /// Думаю комментарии излишни =)
     /// </summary>
     public bool Gender { get; set; }
+
     /// <summary>
     /// Дата рождения пользователя
     /// </summary>
     public DateTime DateOfBirth { get; set; }
+
     /// <summary>
     /// Имя пользователя
     /// </summary>
     public string FirstName { get; set; }
+
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
     public string LastName { get; set; }
+
     /// <summary>
     /// Отчество пользователя
     /// </summary>
     public string Surname { get; set; }
+
     /// <summary>
     /// Пользователь о себе
     /// </summary>
     [MaxLength(250)]
     public string About { get; set; }
+
     /// <summary>
     /// Кого ищет пользователь
     /// </summary>

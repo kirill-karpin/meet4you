@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
-
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CountryController : ControllerBase

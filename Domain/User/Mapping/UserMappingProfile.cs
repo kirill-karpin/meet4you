@@ -20,6 +20,5 @@ namespace User.Mapping
             CreateMap<User, UserDto_WithLoginPassword>().ReverseMap();
             //CreateMap<UserDto, User>();
         }
-
     }
 }

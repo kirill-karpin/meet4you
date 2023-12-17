@@ -1,25 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using User;
+using User.Dto;
+using WebApi.Models;
+using WebApi.Service;
+using WebApp.Models;
 
 namespace WebApp.Controllers.Auth;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthenticationController: Controller
+public class AuthenticationController : Controller
 {
+    private readonly IProfileService _profileService;
+
+
+    public AuthenticationController(IProfileService profileService)
+    {
+        _profileService = profileService;
+    }
+
     [HttpPost]
     [Route("sign-in")]
-    public IActionResult SignIn()
+    public async Task<SignInResponseDto> SignIn(SignInModelDto signInModel)
     {
-        return Ok("ok");
+        IProfile profile = await this._profileService.AuthByLoginPassword(signInModel);
+
+        return await Task.FromResult(new SignInResponseDto()
+        {
+            Token = "secret_token",
+            RefresthToken = "secret_refresh_token"
+        });
     }
-    
+
     [HttpPost]
     [Route("registration")]
-    public IActionResult Registration()
+    public async Task<IActionResult> Registration(RegistrationRequestModelDto registrationRequestModelDto)
     {
-        return Ok("ok");
+        try
+        {
+            UserDto newUser = await _profileService.Registration(registrationRequestModelDto);
+            return Ok(newUser.Id);
+        }
+        catch (Exception e)
+        {
+            return BadRequest("error");    
+        }
     }
-    
+
     [HttpPost]
     [Route("reset-password")]
     public IActionResult ResetPassword()

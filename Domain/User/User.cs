@@ -11,35 +11,42 @@ public class User : BaseEntity
     /// false - всё Ок;
     /// true - пользователь накосячил и наказан;
     /// </summary>
-    public bool Blocked {  get; set; }
+    public bool Blocked { get; set; }
+
     /// <summary>
     /// Половая принадлежность;
     /// 0 (false) - девочка;
     /// 1 (true)  - мальчик;
     /// Думаю комментарии излишни =)
     /// </summary>
-    public bool Gender {  get; set; }
+    public bool Gender { get; set; }
+
     /// <summary>
     /// Дата рождения пользователя
     /// </summary>
-    public DateTime DateOfBirth { get; set; } 
+    public DateTime DateOfBirth { get; set; }
+
     /// <summary>
     /// Имя пользователя
     /// </summary>
     public string FirstName { get; set; }
+
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
     public string LastName { get; set; }
+
     /// <summary>
     /// Отчество пользователя
     /// </summary>
     public string Surname { get; set; }
+
     /// <summary>
     /// Пользователь о себе
     /// </summary>
     [MaxLength(250)]
     public string About { get; set; }
+
     /// <summary>
     /// Кого ищет пользователь
     /// </summary>
@@ -66,12 +73,12 @@ public class User : BaseEntity
     /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
     /// </summary>
     [MaxLength(150)]
-    public string Login {  get; set; }
+    public string Login { get; set; }
 
     /// <summary>
     /// Хеш пароля пользователя (будем хранить пароль в БД напрямую - нам менторы вставят Ай-Яй-Яй!)
     /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
     /// </summary>
     [MaxLength(150)]
-    public string Password {  get; set; }
+    public string Password { get; set; }
 }

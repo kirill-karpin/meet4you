@@ -1,8 +1,5 @@
-﻿
+﻿namespace City.DTO;
 
-namespace City.DTO;
-
-    public class CreatingCityDTO
-    {
-    }
-
+public class CreatingCityDTO
+{
+}

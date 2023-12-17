@@ -2,8 +2,6 @@
 
 namespace City.Abstractions;
 
-    public interface ICityRepository : ICrudRepository<City>
-    { 
-    }
-
-
+public interface ICityRepository : ICrudRepository<City>
+{
+}

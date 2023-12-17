@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using User;
 using User.Abstraction;
 using User.Service;
+using WebApi.Service;
 using WebApi.Settings;
 
 namespace WebApi
@@ -36,10 +37,11 @@ namespace WebApi
         private static IServiceCollection InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection
-                .AddTransient<MessageService, MessageService>()
+                .AddTransient<IMessageService, MessageService>()
                 .AddTransient<ICityService, CityService>()
                 .AddTransient<ICountryService, CountryService>()
-                .AddTransient<IUserService, UserService>();
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<IProfileService, ProfileService>();
             return serviceCollection;
         }
 
@@ -48,7 +50,7 @@ namespace WebApi
             serviceCollection
                 .AddTransient<IMessageRepository, MessageRepository>()
                 .AddTransient<ICityRepository, CityRepository>()
-                .AddTransient<ICountryRepository, CountryRepository>();
+                .AddTransient<ICountryRepository, CountryRepository>()
                 .AddTransient<IUserRepository, UserRepository>();
             return serviceCollection;
         }

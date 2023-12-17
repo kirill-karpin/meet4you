@@ -10,7 +10,7 @@ public class CityService : CrudService<City, CreatingCityDTO, UpdatingCityDTO, C
     private readonly IMapper _mapper;
     private readonly ICityRepository _cityRepository;
 
-    public CityService(IMapper mapper,ICityRepository cityRepository) : base(mapper, cityRepository)
+    public CityService(IMapper mapper, ICityRepository cityRepository) : base(mapper, cityRepository)
     {
     }
 }

@@ -40,6 +40,7 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseCors(
                 options => options
                     .AllowAnyOrigin()
@@ -57,21 +58,18 @@ namespace WebApi
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-               
+
             app.UseSwaggerUI();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
-        
+
         private static IServiceCollection InstallAutomapper(IServiceCollection services)
         {
             services.AddSingleton<IMapper>(new Mapper(GetMapperConfiguration()));
             return services;
         }
-        
+
         private static MapperConfiguration GetMapperConfiguration()
         {
             var configuration = new MapperConfiguration(cfg =>

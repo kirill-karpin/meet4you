@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;
 
-
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CityController : ControllerBase
@@ -16,14 +15,10 @@ public class CityController : ControllerBase
         _cityService = cityService;
     }
 
-   
+
     [HttpGet]
     public async Task<CityDTO> Get(Guid id)
     {
         return await _cityService.GetByIdAsync(id);
     }
-
-    
-
-
 }

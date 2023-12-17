@@ -20,17 +20,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Domain\Message\Message.csproj" />
+        <ProjectReference Include="..\Domain\Message\Message.csproj"/>
         <ProjectReference Include="..\Domain\User\User.csproj"/>
         <ProjectReference Include="..\Entities\Entities.csproj"/>
-        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-        <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
+        <ProjectReference Include="..\DataAccess\DataAccess.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\Notification\" />
-      <Folder Include="Migrations\" />
-      <Folder Include="WebApp\" />
+        <Folder Include="Controllers\Notification\"/>
+        <Folder Include="Migrations\"/>
+        <Folder Include="WebApp\"/>
     </ItemGroup>
 
 </Project>

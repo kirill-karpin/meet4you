@@ -1,8 +1,8 @@
-﻿using Country.Abstractions;
+﻿using Location.Country.Abstractions;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Country;
+namespace Location.Country;
 
 public class CountryRepository : CrudRepository<Country>, ICountryRepository
 {

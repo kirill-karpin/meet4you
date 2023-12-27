@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using City.DTO;
+using Location.City.DTO;
 
 
-namespace City.Mapping;
+namespace Location.City.Mapping;
 
 public class CityMappingProfile : Profile
 {

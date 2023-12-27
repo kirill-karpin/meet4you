@@ -1,6 +1,6 @@
 ﻿using Entities.Abstractions;
 
-namespace Country;
+namespace Location.Country;
 
 public class Country : BaseEntity
 {

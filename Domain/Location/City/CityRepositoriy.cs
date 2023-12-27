@@ -1,8 +1,8 @@
-﻿using City.Abstractions;
+﻿using Location.City.Abstractions;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace City;
+namespace Location.City;
 
 public class CityRepository : CrudRepository<City>, ICityRepository
 {

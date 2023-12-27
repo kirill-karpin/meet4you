@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using City.Mapping;
-using Country.Mapping;
+using Location.City.Mapping;
+using Location.Country.Mapping;
 using Message;
 using Message.Mapping;
 using Microsoft.AspNetCore.Builder;

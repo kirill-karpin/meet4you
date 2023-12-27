@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Abstraction;
 
-namespace City.Abstractions;
+namespace Location.City.Abstractions;
 
 public interface ICityRepository : ICrudRepository<City>
 {

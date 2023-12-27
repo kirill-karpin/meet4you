@@ -1,6 +1,6 @@
-﻿using City.DTO;
-using Country.Abstractions;
-using Country.DTO;
+﻿using Location.City.DTO;
+using Location.Country.Abstractions;
+using Location.Country.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;

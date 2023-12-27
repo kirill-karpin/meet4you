@@ -1,7 +1,7 @@
-﻿using City;
-using City.Abstractions;
-using Country;
-using Country.Abstractions;
+﻿using Location.City;
+using Location.City.Abstractions;
+using Location.Country;
+using Location.Country.Abstractions;
 using Infrastructure;
 using Install;
 using Message;

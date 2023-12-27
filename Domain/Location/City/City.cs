@@ -1,6 +1,6 @@
 ﻿using Entities.Abstractions;
 
-namespace City;
+namespace Location.City;
 
 public class City : BaseEntity
 {

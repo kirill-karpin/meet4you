@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Country.DTO;
+using Location.Country.DTO;
 
 
-namespace Country.Mapping;
+namespace Location.Country.Mapping;
 
 public class CountryMappingProfile : Profile
 {

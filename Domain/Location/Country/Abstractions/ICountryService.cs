@@ -1,6 +1,6 @@
-﻿using Country.DTO;
+﻿using Location.Country.DTO;
 
-namespace Country.Abstractions;
+namespace Location.Country.Abstractions;
 
 public interface ICountryService
 {

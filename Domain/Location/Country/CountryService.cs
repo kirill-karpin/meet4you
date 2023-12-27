@@ -1,10 +1,8 @@
-﻿using Country.Abstractions;
+﻿using Location.Country.Abstractions;
 using AutoMapper;
-using Infrastructure;
-using System.Data.Entity;
-using Country.DTO;
+using Location.Country.DTO;
 
-namespace Country;
+namespace Location.Country;
 
 public class CountryService : ICountryService
 {

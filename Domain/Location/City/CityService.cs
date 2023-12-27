@@ -1,9 +1,9 @@
-﻿using City.Abstractions;
+﻿using Location.City.Abstractions;
 using AutoMapper;
 using Infrastructure;
-using City.DTO;
+using Location.City.DTO;
 
-namespace City;
+namespace Location.City;
 
 public class CityService : CrudService<City, CreatingCityDTO, UpdatingCityDTO, CityDTO>, ICityService
 {

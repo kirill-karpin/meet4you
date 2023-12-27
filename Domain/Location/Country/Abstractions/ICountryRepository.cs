@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Abstraction;
 
-namespace Country.Abstractions;
+namespace Location.Country.Abstractions;
 
 public interface ICountryRepository : ICrudRepository<Country>
 {

@@ -1,4 +1,4 @@
-﻿namespace Country.DTO;
+﻿namespace Location.Country.DTO;
 
 public class CountryDTO
 {

@@ -1,5 +1,5 @@
-﻿using City.Abstractions;
-using City.DTO;
+﻿using Location.City.Abstractions;
+using Location.City.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;

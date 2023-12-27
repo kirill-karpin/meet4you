@@ -13,4 +13,5 @@ public class DataContext : DbContext
     public DbSet<User.User> Users { get; set; }
     public DbSet<Location.Country.Country> Countries { get; set; }
     public DbSet<Location.City.City> Cities { get; set; }
+    public DbSet<Location.UserLocation> UserLocations { get; set; }
 }

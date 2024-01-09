@@ -1,5 +1,5 @@
 # Use postgres/example user/password credentials
-version: '3.1'
+version: '3.8'
 
 services:
 
@@ -23,4 +23,18 @@ services:
       - "6379:6379"
     volumes:
       - ./docker/redis:/data
-      
+
+  mongo:
+    image: 'mongo:4.4'
+    container_name: mongodb
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGODB_INITDB_ROOT_PASSWORD=meetforyou
+    volumes:
+      - ./docker/mongo:/data/db
+    ports:
+      - '27017:27017'      

@@ -32,8 +32,8 @@ services:
       options:
         max-size: 1g
     environment:
-      - MONGODB_INITDB_ROOT_USERNAME=mongoadmin
-      - MONGODB_INITDB_ROOT_PASSWORD=meetforyou
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=meetforyou
     volumes:
       - ./docker/mongo:/data/db
     ports:

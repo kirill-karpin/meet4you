@@ -56,10 +56,4 @@ public class CityController : ControllerBase
 
         return Ok();
     }
-
-
-
-
-
-
 }

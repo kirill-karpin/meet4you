@@ -2,6 +2,9 @@
 using Location.City.Abstractions;
 using Location.Country;
 using Location.Country.Abstractions;
+using Location.UserLocation.Abstractions;
+using Location.UserLocation;
+using Location;
 using Infrastructure;
 using Install;
 using Message;
@@ -14,6 +17,7 @@ using User.Abstraction;
 using User.Service;
 using WebApi.Service;
 using WebApi.Settings;
+
 
 namespace WebApi
 {
@@ -40,6 +44,7 @@ namespace WebApi
                 .AddTransient<IMessageService, MessageService>()
                 .AddTransient<ICityService, CityService>()
                 .AddTransient<ICountryService, CountryService>()
+                .AddTransient<ILocationService, LocationService>()
                 .AddTransient<IUserService, UserService>()
                 .AddTransient<IProfileService, ProfileService>();
             return serviceCollection;
@@ -51,6 +56,7 @@ namespace WebApi
                 .AddTransient<IMessageRepository, MessageRepository>()
                 .AddTransient<ICityRepository, CityRepository>()
                 .AddTransient<ICountryRepository, CountryRepository>()
+                .AddTransient<IUserLocationRepository, UserLocationRepository>()
                 .AddTransient<IUserRepository, UserRepository>();
             return serviceCollection;
         }

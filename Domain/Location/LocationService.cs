@@ -6,6 +6,7 @@ using Location.City.DTO;
 using Location.UserLocation.DTO;
 using Location.City.Abstractions;
 using Location.UserLocation;
+using System.Data.Entity;
 
 namespace Location;
 
@@ -28,15 +29,32 @@ public class LocationService : ILocationService
         _mapper = mapper;
     }
 
-    public async Task<UserLocationDTO> AddUserLocation(UserLocationDTO userLocationDTO)
+    public async Task<Guid> AddUserLocation(UserLocationDTO userLocationDTO)
     {
-        var user = await _userLocationRepository.AddAsync(_mapper.Map<UserLocation.UserLocation>(userLocationDTO));
-        return userLocationDTO;
-            
+        var country = _countryRepository.GetAsync(userLocationDTO.CountryId);
+        if (country==null)
+            throw new KeyNotFoundException("Country not found");
+
+        var city = _cityRepository.GetAsync(userLocationDTO.CityId);
+        if (city == null)
+            throw new KeyNotFoundException("City not found");
+
+        var userLocation = _mapper.Map<UserLocation.UserLocation>(userLocationDTO);
+
+         await _userLocationRepository.AddAsync(userLocation);
+
+        return userLocation.Id;   
     }
 
-    public Task<UserLocationDTO> GetUserLocation(Guid userId)
+    public async Task<UserLocationDTO> GetUserLocation(Guid userId)
     {
-        throw new NotImplementedException();
+        var userLocations = await _userLocationRepository.GetPagedAsync(1, 100);
+
+        var userLocation = userLocations.FirstOrDefault(x => x.UserId == userId);
+
+        if (userLocation==null)
+            throw new KeyNotFoundException("UserLocation not found");
+
+        return _mapper.Map<UserLocationDTO>(userLocation);
     }
 }

@@ -6,7 +6,7 @@ namespace Location.UserLocation.Abstractions;
 
 public interface ILocationService
 {
-    Task<UserLocationDTO> AddUserLocation(UserLocationDTO userLocationDTO);
+    Task<Guid> AddUserLocation(UserLocationDTO userLocationDTO);
 
     Task<UserLocationDTO> GetUserLocation(Guid userId);
 }

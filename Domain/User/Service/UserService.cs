@@ -2,7 +2,9 @@
 using Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using User.Abstraction;
@@ -50,5 +52,31 @@ namespace User.Service
             return userDto;
         }
 
+        /// <summary>
+        /// Генерирует Хэш на основе пароля пользователя и строки Соли из файла конфигурации
+        /// </summary>
+        /// <param name="unhashedPassword">Нехешированный (оригинальный и неизмененный) пароль</param>
+        /// <returns>Хэш паролья для последующего хранения в БД</returns>
+        public async Task<string> GetHashPasswordWithSalt(string unhashedPassword, string salt)
+        {
+            string preResult = $"{unhashedPassword}{salt}";
+            string result = string.Empty;
+
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array  
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(preResult));
+
+                // Convert byte array to a string   
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                result = builder.ToString();
+            }
+
+            return result;
+        }
     }
 }

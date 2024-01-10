@@ -48,7 +48,7 @@ namespace WebApi
             serviceCollection
                 .AddTransient<IMessageRepository, MessageRepository>()
                 .AddTransient<ICityRepository, CityRepository>()
-                .AddTransient<ICountryRepository, CountryRepository>();
+                .AddTransient<ICountryRepository, CountryRepository>()
                 .AddTransient<IUserRepository, UserRepository>();
             return serviceCollection;
         }

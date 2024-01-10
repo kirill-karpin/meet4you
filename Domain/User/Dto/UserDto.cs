@@ -68,4 +68,20 @@ public class UserDto
     public bool HaveChildren { get; set; }
 
 
+
+    /// <summary>
+    /// Имя пользователя на сайте знакомств (которое он хочет высавить "на обозрение" для других пользователей
+    /// </summary>
+    [MaxLength(150)]
+    public string UserName { get; set; }
+
+    /// <summary>
+    /// Возраст пользователя
+    /// </summary>
+    public int Age { get; set; }
+
+    /// <summary>
+    /// Подтверждён ли аккаунт пользователя? Нет - не лезь сюда за бабами! Совсем усилий не приложил!..
+    /// </summary>
+    public bool Confirmed { get; set; }
 }

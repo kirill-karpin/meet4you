@@ -1,9 +1,12 @@
 ﻿using Entities.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 
 namespace User;
 
+[Index(nameof(Login), IsUnique = true)]
 public class User : BaseEntity
 {
     /// <summary>
@@ -74,4 +77,34 @@ public class User : BaseEntity
     /// </summary>
     [MaxLength(150)]
     public string Password {  get; set; }
+
+
+
+
+    /// <summary>
+    /// Имя пользователя на сайте знакомств (которое он хочет высавить "на обозрение" для других пользователей
+    /// </summary>
+    [MaxLength(150)]
+    public string UserName { get; set; }
+
+    /// <summary>
+    /// Возраст пользователя
+    /// </summary>
+    public int Age { get; set; }
+
+    /// <summary>
+    /// Подтверждён ли аккаунт пользователя? Нет - не лезь сюда за бабами! Совсем усилий не приложил!..
+    /// </summary>
+    public bool Confirmed {  get; set; }
+
+    /// <summary>
+    /// Дата подтверждения пользователем своего аккаунта
+    /// Может быть NULL
+    /// </summary>
+    public DateTime? Confirmed_At {  get; set; }
+
+    /// <summary>
+    /// Email пользователя. Может быть использован для восстановления пароля, подтверждения регистрации и т.д.
+    /// </summary>
+    public string Email { get; set; }
 }

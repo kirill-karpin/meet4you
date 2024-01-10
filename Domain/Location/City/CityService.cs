@@ -5,7 +5,7 @@ using Location.City.DTO;
 
 namespace Location.City;
 
-public class CityService : CrudService<City, CreatingCityDTO, UpdatingCityDTO, CityDTO>, ICityService
+public class CityService : CrudService<City, CityDTO, CityDTO, CityDTO>, ICityService
 {
     private readonly IMapper _mapper;
     private readonly ICityRepository _cityRepository;
@@ -13,4 +13,6 @@ public class CityService : CrudService<City, CreatingCityDTO, UpdatingCityDTO, C
     public CityService(IMapper mapper, ICityRepository cityRepository) : base(mapper, cityRepository)
     {
     }
+
+
 }

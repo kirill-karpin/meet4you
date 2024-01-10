@@ -1,6 +1,6 @@
 ﻿using Entities.Abstractions;
 
-namespace Location
+namespace Location.UserLocation
 {
     public class UserLocation : BaseEntity
     {

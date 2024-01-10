@@ -1,28 +1,24 @@
 ﻿using Location.Country.Abstractions;
 using AutoMapper;
 using Location.Country.DTO;
+using Infrastructure;
+using Location.City.Abstractions;
+using Location.City.DTO;
+using System.Linq.Expressions;
+using System.Xml;
 
 namespace Location.Country;
 
-public class CountryService : ICountryService
+public class CountryService : CrudService<Country, CreateOrUpdateCountryDTO, CreateOrUpdateCountryDTO, CountryDTO>, ICountryService
 {
     private readonly ICountryRepository _countryRepository;
     private readonly IMapper _mapper;
 
-    public CountryService(ICountryRepository countryRepository, IMapper mapper)
+    public CountryService(ICountryRepository countryRepository, IMapper mapper) : base(mapper,countryRepository)
     {
         _countryRepository = countryRepository;
         _mapper = mapper;
     }
 
-    public Task<List<CountryDTO>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<CountryDTO> GetByIdAsync(Guid id)
-    {
-        var country = await _countryRepository.GetAsync(id);
-        return _mapper.Map<Country, CountryDTO>(country);
-    }
+    
 }

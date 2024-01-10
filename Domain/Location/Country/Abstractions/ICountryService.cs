@@ -1,9 +1,9 @@
-﻿using Location.Country.DTO;
+﻿using Infrastructure.Abstraction;
+using Location.Country.DTO;
 
 namespace Location.Country.Abstractions;
 
-public interface ICountryService
+public interface ICountryService : ICrudService<Country, CreateOrUpdateCountryDTO, CreateOrUpdateCountryDTO, CountryDTO>
 {
-    Task<List<CountryDTO>> GetAllAsync();
-    Task<CountryDTO> GetByIdAsync(Guid id);
+   
 }

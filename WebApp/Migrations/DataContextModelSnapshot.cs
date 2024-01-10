@@ -22,7 +22,7 @@ namespace WebApp.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("City.City", b =>
+            modelBuilder.Entity("Location.City.City", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace WebApp.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Country.Country", b =>
+            modelBuilder.Entity("Location.Country.Country", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,6 +97,47 @@ namespace WebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("Location.UserLocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserLocations");
                 });
 
             modelBuilder.Entity("Message.Message", b =>
@@ -194,7 +235,8 @@ namespace WebApp.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<bool>("Gender")
                         .HasColumnType("boolean");
@@ -204,7 +246,8 @@ namespace WebApp.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -247,16 +290,16 @@ namespace WebApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("City.City", b =>
+            modelBuilder.Entity("Location.City.City", b =>
                 {
-                    b.HasOne("Country.Country", null)
+                    b.HasOne("Location.Country.Country", null)
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Country.Country", b =>
+            modelBuilder.Entity("Location.Country.Country", b =>
                 {
                     b.Navigation("Cities");
                 });

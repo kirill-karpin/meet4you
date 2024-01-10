@@ -12,13 +12,9 @@ namespace User.Mapping
     {
         public UserMappingProfile()
         {
-            //CreateMap<UserDto, User>();//.ReverseMap();
-
-            //CreateMap<UserDto, User>();
-
             CreateMap<User, UserDto>();
             CreateMap<User, UserDto_WithLoginPassword>().ReverseMap();
-            //CreateMap<UserDto, User>();
+
         }
 
     }

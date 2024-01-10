@@ -4,11 +4,11 @@ using Infrastructure.Abstraction;
 
 namespace Infrastructure;
 
-public abstract class CrudService<TEntity, TCreatingDtoEntity, TUpdatingDtoEntity,  TDtoEntity>
-    : ICrudService<TEntity, TCreatingDtoEntity, TUpdatingDtoEntity,  TDtoEntity> 
-    where TDtoEntity :class
-    where TUpdatingDtoEntity :class
-    where TCreatingDtoEntity :class
+public abstract class CrudService<TEntity, TCreatingDtoEntity, TUpdatingDtoEntity, TDtoEntity>
+    : ICrudService<TEntity, TCreatingDtoEntity, TUpdatingDtoEntity, TDtoEntity>
+    where TDtoEntity : class
+    where TUpdatingDtoEntity : class
+    where TCreatingDtoEntity : class
     where TEntity : BaseEntity
 {
     private readonly IMapper _mapper;

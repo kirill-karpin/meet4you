@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using City.Mapping;
-using Country.Mapping;
+using Location.City.Mapping;
+using Location.Country.Mapping;
+using Location.UserLocation.Mapping;
 using Message;
 using Message.Mapping;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,7 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseCors(
                 options => options
                     .AllowAnyOrigin()
@@ -57,21 +59,18 @@ namespace WebApi
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-               
+
             app.UseSwaggerUI();
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
-        
+
         private static IServiceCollection InstallAutomapper(IServiceCollection services)
         {
             services.AddSingleton<IMapper>(new Mapper(GetMapperConfiguration()));
             return services;
         }
-        
+
         private static MapperConfiguration GetMapperConfiguration()
         {
             var configuration = new MapperConfiguration(cfg =>
@@ -79,6 +78,7 @@ namespace WebApi
                 cfg.AddProfile<MessageMappingProfile>();
                 cfg.AddProfile<CityMappingProfile>();
                 cfg.AddProfile<CountryMappingProfile>();
+                cfg.AddProfile<UserLocationMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
             });
             configuration.AssertConfigurationIsValid();

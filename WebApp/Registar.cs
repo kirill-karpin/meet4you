@@ -1,7 +1,10 @@
-﻿using City;
-using City.Abstractions;
-using Country;
-using Country.Abstractions;
+﻿using Location.City;
+using Location.City.Abstractions;
+using Location.Country;
+using Location.Country.Abstractions;
+using Location.UserLocation.Abstractions;
+using Location.UserLocation;
+using Location;
 using Infrastructure;
 using Install;
 using Message;
@@ -9,10 +12,13 @@ using Message.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using User;
 using User.Abstraction;
 using User.Service;
+using WebApi.Service;
 using WebApi.Settings;
+
 
 namespace WebApi
 {
@@ -36,10 +42,13 @@ namespace WebApi
         private static IServiceCollection InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection
-                .AddTransient<MessageService, MessageService>()
+                .AddTransient<IMessageService, MessageService>()
                 .AddTransient<ICityService, CityService>()
                 .AddTransient<ICountryService, CountryService>()
-                .AddTransient<IUserService, UserService>();
+                .AddTransient<ILocationService, LocationService>()
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<IProfileService, ProfileService>();
+
             return serviceCollection;
         }
 
@@ -49,6 +58,7 @@ namespace WebApi
                 .AddTransient<IMessageRepository, MessageRepository>()
                 .AddTransient<ICityRepository, CityRepository>()
                 .AddTransient<ICountryRepository, CountryRepository>()
+                .AddTransient<IUserLocationRepository, UserLocationRepository>()
                 .AddTransient<IUserRepository, UserRepository>();
             return serviceCollection;
         }

@@ -2,8 +2,8 @@
 
 namespace Infrastructure.Abstraction;
 
-public interface ICrudService<TEntity, in TCreatingDtoEntity, in TUpdatingDtoEntity,  TDtoEntity>
-    where TCreatingDtoEntity : class 
+public interface ICrudService<TEntity, in TCreatingDtoEntity, in TUpdatingDtoEntity, TDtoEntity>
+    where TCreatingDtoEntity : class
     where TDtoEntity : class
     where TEntity : class
 {
@@ -21,8 +21,7 @@ public interface ICrudService<TEntity, in TCreatingDtoEntity, in TUpdatingDtoEnt
     /// <param name="id"> Идентификатор. </param>
     /// <returns> ДТО курса. </returns>
     public Task<TDtoEntity> GetByIdAsync(Guid id);
-    
-    
+
 
     /// <summary>
     /// Создать сущность.
@@ -30,7 +29,7 @@ public interface ICrudService<TEntity, in TCreatingDtoEntity, in TUpdatingDtoEnt
     /// <param name="creatingDtoEntity"> ДТО создаваемой сущности. </param>
     /// <returns> Идентификатор. </returns>
     public Task<Guid> CreateAsync(TCreatingDtoEntity creatingDtoEntity);
-    
+
 
     /// <summary>
     /// Изменить сущность.

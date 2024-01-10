@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Install;
 
-
 public static class EntityFrameworkInstaller
 {
     public static IServiceCollection ConfigureContext(this IServiceCollection services,
@@ -15,7 +14,7 @@ public static class EntityFrameworkInstaller
                 connectionString,
                 optionsBuilder => optionsBuilder.MigrationsAssembly("WebApp"))
         );
-       
+
         return services;
     }
 }

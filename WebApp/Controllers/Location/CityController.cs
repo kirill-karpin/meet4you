@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApp.Controllers.Location;
 
 [ApiController]
-[Route("api/v1/[controller]/[action]")]
+[Route("city")]
 public class CityController : ControllerBase
 {
     private readonly ICityService _cityService;
@@ -16,7 +16,8 @@ public class CityController : ControllerBase
         _cityService = cityService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var cityDTO = await _cityService.GetByIdAsync(id);
@@ -27,6 +28,7 @@ public class CityController : ControllerBase
     }
 
     [HttpGet]
+    [Route("get-cities")]
     public async Task<IActionResult> GetCities()
     {
         var cities = await _cityService.GetPagedAsync(1, 100);
@@ -38,6 +40,7 @@ public class CityController : ControllerBase
 
 
     [HttpPost]
+    [Route("add-city")]
     public async Task<IActionResult> AddCity(CityDTO request)
     {
         request.Id = Guid.NewGuid();
@@ -50,6 +53,7 @@ public class CityController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("delete-city")]
     public async Task<IActionResult> DeleteCity(Guid id)
     {
         await _cityService.DeleteAsync(id);

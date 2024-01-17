@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using City.Mapping;
-using Country.Mapping;
+using Location.City.Mapping;
+using Location.Country.Mapping;
+using Location.UserLocation.Mapping;
+using Message;
 using Message.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

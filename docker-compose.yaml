@@ -1,5 +1,5 @@
 # Use postgres/example user/password credentials
-version: '3.1'
+version: '3.8'
 
 services:
 
@@ -13,3 +13,30 @@ services:
       - 5555:5432
     volumes:
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: 'redis:latest'
+    container_name: redis
+    restart: always
+    command: redis-server --requirepass meetforyou
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis:/data
+
+  mongo:
+    image: 'mongo:4.4'
+    container_name: mongodb
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=meetforyou
+      - MONGO_INITDB_DATABASE=meetforyou_files
+    volumes:
+      - ./docker/mongo:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - '27017:27017'      

@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using User;
+﻿using Install;
+using Microsoft.AspNetCore.Mvc;
 using User.Dto;
 using WebApi.Models;
-using WebApi.Service;
 using WebApp.Models;
+using WebApp.Service;
 
-namespace WebApp.Controllers.Auth;
+namespace WebApp.Controllers.Authentication;
 
 [ApiController]
 [Route("api/auth")]
 public class AuthenticationController : Controller
 {
     private readonly IProfileService _profileService;
-
-
+    
     public AuthenticationController(IProfileService profileService)
     {
         _profileService = profileService;
@@ -21,15 +20,19 @@ public class AuthenticationController : Controller
 
     [HttpPost]
     [Route("sign-in")]
-    public async Task<SignInResponseDto> SignIn(SignInModelDto signInModel)
+    public async Task<ISignInResponseDto> SignIn(SignInModelDto signInModelDto)
     {
-        IProfile profile = await this._profileService.AuthByLoginPassword(signInModel);
-
-        return await Task.FromResult(new SignInResponseDto()
+        try
         {
-            Token = "secret_token",
-            RefresthToken = "secret_refresh_token"
-        });
+            var tokens = await _profileService.AuthByLoginPassword(signInModelDto);
+            return await Task.FromResult(tokens);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 
     [HttpPost]

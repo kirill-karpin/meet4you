@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 using WebApi.Service;
+using WebApp.Service;
 
 namespace WebApp.Controllers.Profile;
 

@@ -1,5 +1,4 @@
-﻿using Country;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Install;
 

@@ -16,7 +16,7 @@ public class UserLocationController : ControllerBase
         _locationService = locationService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
     public async Task<IActionResult> GetUserLocation(Guid userId)
     {
         var userLocation = await _locationService.GetUserLocation(userId);

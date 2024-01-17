@@ -1,10 +1,9 @@
-﻿using Location.City.DTO;
-using Location.Country.DTO;
+﻿using Infrastructure.Abstraction;
 using Location.UserLocation.DTO;
 
 namespace Location.UserLocation.Abstractions;
 
-public interface ILocationService
+public interface ILocationService : ICrudService<UserLocation, UserLocationDTO, UserLocationDTO, UserLocationDTO>
 {
     Task<Guid> AddUserLocation(UserLocationDTO userLocationDTO);
 

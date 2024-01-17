@@ -92,6 +92,7 @@ namespace WebApp
                 cfg.AddProfile<MessageMappingProfile>();
                 cfg.AddProfile<CityMappingProfile>();
                 cfg.AddProfile<CountryMappingProfile>();
+                cfg.AddProfile<UserLocationMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
             });
             configuration.AssertConfigurationIsValid();

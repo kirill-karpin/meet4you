@@ -1,4 +1,4 @@
-﻿using Location.City;
+using Location.City;
 using Location.City.Abstractions;
 using Location.Country;
 using Location.Country.Abstractions;

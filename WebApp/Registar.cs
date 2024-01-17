@@ -1,4 +1,4 @@
-﻿using Location.City;
+using Location.City;
 using Location.City.Abstractions;
 using Location.Country;
 using Location.Country.Abstractions;
@@ -18,9 +18,9 @@ using User.Abstraction;
 using User.Service;
 using WebApi.Service;
 using WebApi.Settings;
+using WebApp.Service;
 
-
-namespace WebApi
+namespace WebApp
 {
     /// <summary>
     /// Регистратор сервиса

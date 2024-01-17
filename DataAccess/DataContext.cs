@@ -11,7 +11,7 @@ public class DataContext : DbContext
 
 
     public DbSet<Message.Message> Messages { get; set; }
-    public DbSet<User.User> Users { get; set; }
+    public DbSet<User.User?> Users { get; set; }
     public DbSet<Country.Country> Countries { get; set; }
     public DbSet<City.City> Cities { get; set; }
 }

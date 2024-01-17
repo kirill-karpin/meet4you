@@ -2,20 +2,18 @@
 using City.Abstractions;
 using Country;
 using Country.Abstractions;
-using Infrastructure;
 using Install;
 using Message;
 using Message.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using User;
 using User.Abstraction;
 using User.Service;
 using WebApi.Service;
 using WebApi.Settings;
+using WebApp.Service;
 
-namespace WebApi
+namespace WebApp
 {
     /// <summary>
     /// Регистратор сервиса

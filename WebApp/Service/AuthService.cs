@@ -1,4 +1,4 @@
-﻿namespace WebApi.Service;
+﻿namespace WebApp.Service;
 
 public class AuthService : IAuthService
 {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using User.Dto;
 using User;
 using System.Configuration;
-using WebApi.Settings;
+using WebApp.Settings;
 using System.Security.Policy;
 
 namespace WebApp.Controllers;

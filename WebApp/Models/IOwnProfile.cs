@@ -1,4 +1,4 @@
-﻿namespace WebApi.Models;
+﻿namespace WebApp.Models;
 
 public interface IOwnProfile : IProfile
 {

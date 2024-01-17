@@ -1,6 +1,6 @@
 ﻿using User;
 
-namespace WebApi.Models;
+namespace WebApp.Models;
 
 public class RegistrationRequestModelDto
 {
@@ -17,4 +17,5 @@ public class RegistrationRequestModelDto
     public string Login { get; set; }
     public string LookingFor { get; set; }
     public string About { get; set; }
+    public string Email { get; set; }
 }

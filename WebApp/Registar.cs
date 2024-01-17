@@ -18,9 +18,9 @@ using User.Abstraction;
 using User.Service;
 using WebApi.Service;
 using WebApi.Settings;
+using WebApp.Service;
 
-
-namespace WebApi
+namespace WebApp
 {
     /// <summary>
     /// Регистратор сервиса

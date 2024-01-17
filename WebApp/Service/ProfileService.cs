@@ -83,6 +83,9 @@ public class ProfileService : IProfileService
             LookingFor = registrationRequestModel.LookingFor,
             FamilyStatus = registrationRequestModel.FamilyStatus,
             HaveChildren = registrationRequestModel.HaveChildren,
+            Email = registrationRequestModel.Email,
+            UserName = registrationRequestModel.Login
+            
         });
     }
 

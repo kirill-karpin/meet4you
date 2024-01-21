@@ -1,5 +1,5 @@
 ﻿using User.Dto;
-using WebApi.Models;
+using WebApp.Models;
 using WebApp.Models;
 
 namespace WebApp.Service;

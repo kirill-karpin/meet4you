@@ -1,7 +1,7 @@
 ﻿using Message.Abstraction;
 using User;
 using User.Dto;
-using WebApi.Models;
+using WebApp.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Install;
@@ -28,7 +28,16 @@ public class ProfileService : IProfileService
     public async Task<IOwnProfile> GetOwnProfile()
     {
         return await Task.FromResult<IOwnProfile>(new MyProfile()
-            { Id = new Guid("bf470537-afd5-4849-ab8e-174961288d10") });
+        {
+            Id = new Guid("bf470537-afd5-4849-ab8e-174961288d10"),
+            User = new global::User.User()
+            {
+                FirstName = "string",
+                LastName = "string",
+                Surname = "string1",
+                Age = 0,
+            }
+        });
     }
 
     public async Task<List<IProfile>> ListProfile()
@@ -83,6 +92,9 @@ public class ProfileService : IProfileService
             LookingFor = registrationRequestModel.LookingFor,
             FamilyStatus = registrationRequestModel.FamilyStatus,
             HaveChildren = registrationRequestModel.HaveChildren,
+            Email = registrationRequestModel.Email,
+            UserName = registrationRequestModel.Login
+            
         });
     }
 

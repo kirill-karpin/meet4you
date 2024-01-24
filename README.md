@@ -12,6 +12,22 @@ Start project
 5. cd .\frontend\
 6. npm install && npm run dev
 
+В самом начале надо установить 8-й dotnet core SDK, а также добавить поддержку EF командой
+
+dotnet tool install --global dotnet-ef --version 8.*
+
+Можно не исползовать ключ --global, если на компе используются разные версии EF
+
+Тогда надо выполнить две команды:
+
+dotnet new tool-manifest
+
+dotnet tool install --local dotnet-ef --version 8.*
+
+и уже после этого заработает команда
+
+dotnet ef database update --startup-project WebApp/WebApp.csproj
+
 
 ## Add your files
 

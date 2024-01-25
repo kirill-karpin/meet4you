@@ -14,6 +14,9 @@ export default function Example()  {
         <div>
             Корзина : {count} товаров
         </div>
-        <button onClick={handleIncrease}>Добавить</button>
+        <form action="">
+        <input type="text"/>
+        <button onClick={handleIncrease} type={"submit"}>отправить</button>
+        </form>
     </>;
 }

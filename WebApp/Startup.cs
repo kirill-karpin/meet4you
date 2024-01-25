@@ -8,10 +8,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using User.Mapping;
 
+
+
 namespace WebApp
 {
+    
     public class Startup
     {
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,10 +26,18 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             InstallAutomapper(services);
             services.AddServices(Configuration);
             services.AddControllers();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => 
+                    builder.SetIsOriginAllowed(_ => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
             
@@ -56,12 +68,7 @@ namespace WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(
-                options => options
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-            );
+            app.UseCors();
             //app.UseHttpsRedirection();
 
             app.UseRouting();

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\FileStorage.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
+    <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestFileStorage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="TestFileStorage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="TestFileStorage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="TestFileStorage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="TestFileStorage\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="TestFileStorage\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="TestFileStorage\obj\TestFileStorage.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
+</Project>

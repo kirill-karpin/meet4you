@@ -6,7 +6,8 @@ namespace WebApp.Service;
 
 public interface IProfileService
 {
-    public Task<IOwnProfile> GetOwnProfile();
+   
+    public Task<IPersonalProfile> GetPersonaProfile(Guid id);
 
     public Task<List<IProfile>> ListProfile();
 

@@ -44,6 +44,13 @@ public class UserController : ControllerBase
     {
         string? hashWord = _configuration["DefaultHash"];
 
-        return await _userService.GetHashPasswordWithSalt(password, hashWord);
+        return await _userService.GetHashPasswordWithSalt(password, null);
+    }
+
+    [HttpPost]
+    [Route("Update")]
+    public async Task<UserDto> Update(UserDto userDto)
+    {
+        return await _userService.Update(userDto);
     }
 }

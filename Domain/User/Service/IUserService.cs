@@ -12,6 +12,7 @@ namespace User
     {
         public Task<UserDto> Add(UserDto_WithLoginPassword userDto_WithLoginPassword);
         public Task<UserDto> Get(Guid id);
+        public Task<UserDto> Update(UserDto userDto);
         public Task<string> GetHashPasswordWithSalt(string unhashedPassword, string salt);
     }
 }

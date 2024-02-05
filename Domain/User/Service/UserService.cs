@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using User.Abstraction;
 using User.CustomExceprions;
 using User.Dto;
+using User.Settings;
 
 namespace User.Service
 {
@@ -53,12 +55,53 @@ namespace User.Service
         }
 
         /// <summary>
+        /// Обновляет данные о пользователе
+        /// </summary>
+        /// <param name="userDto">UserDto с обновлённой информацией</param>
+        /// <returns>UserDto с обновленными данными, чтобы их можно было отобразить пользователю</returns>
+        /// <exception cref="UserNotFoundException">Если в UserDto не было заполнено поле Id, то метод выдаст данную ошибку</exception>
+        public async Task<UserDto> Update(UserDto userDto)
+        {
+            User userFromDb = null;
+            if (userDto.Id != Guid.Empty)
+                userFromDb = await _userRepository.GetAsync(userDto.Id);
+
+            if (userFromDb is null) throw new UserNotFoundException("Пользователь не найден, так как не передано поле Id");
+
+            User userFromDbo = _userMapper.Map<User>(userDto);
+            CopyProperties(userFromDbo, userFromDb);
+            await _userRepository.SaveChangesAsync();
+
+            UserDto resultUserDto = _userMapper.Map<UserDto>(userFromDb);
+
+            return resultUserDto;
+        }
+
+        private void CopyProperties(User source, User destination)
+        {
+            PropertyInfo[] destinationProperties = destination.GetType().GetProperties();
+            foreach (PropertyInfo destinationPi in destinationProperties)
+            {
+                PropertyInfo sourcePi = source.GetType().GetProperty(destinationPi.Name);
+                // если не отбрасывать null-ы, то мы затрем какое-то поле, которое помечено как "Not Null" на уровне БД - получим Exception и своё грустное лицо в подарок
+                if (sourcePi.GetValue(source, null) != null)
+                    destinationPi.SetValue(destination, sourcePi.GetValue(source, null), null);
+            }
+        }
+
+
+        /// <summary>
         /// Генерирует Хэш на основе пароля пользователя и строки Соли из файла конфигурации
         /// </summary>
         /// <param name="unhashedPassword">Нехешированный (оригинальный и неизмененный) пароль</param>
         /// <returns>Хэш паролья для последующего хранения в БД</returns>
-        public async Task<string> GetHashPasswordWithSalt(string unhashedPassword, string salt)
+        public async Task<string> GetHashPasswordWithSalt(string unhashedPassword, string salt = null)
         {
+            if (salt is null)
+            {
+                salt = new SettingsReader().GetSalt();
+            }
+
             string preResult = $"{unhashedPassword}{salt}";
             string result = string.Empty;
 
@@ -78,5 +121,6 @@ namespace User.Service
 
             return result;
         }
+
     }
 }

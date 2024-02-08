@@ -12,6 +12,7 @@ public class MessageMappingProfile : Profile
         CreateMap<Message, MessageDto>();
         CreateMap<MessageDto, MessageModel>();
         CreateMap<CreatingMessageModel, CreatingMessageDto>();
+        CreateMap<Message, CreatingMessageDto>().ReverseMap();
         CreateMap<UpdatingMessageModel, UpdatingMessageDto>();
     }
 }

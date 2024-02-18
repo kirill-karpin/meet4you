@@ -53,4 +53,25 @@ public class UserController : ControllerBase
     {
         return await _userService.Update(userDto);
     }
+
+    [HttpGet]
+    [Route("GetConfirmationCode")]
+    public async Task<string> GetConfirmationCode(Guid userId)
+    {
+        return await _userService.GetConfirmationCode(userId);
+    }
+
+    [HttpPost]
+    [Route("AddRequestToChangePassword")]
+    public async Task<bool> AddRequestToChangePassword(Guid userId, string newPassword)
+    {
+        return await _userService.AddRequestToChangePassword(userId, newPassword);
+    }
+
+    [HttpPost]
+    [Route("ChangePassword")]
+    public async Task<bool> ChangePassword(Guid userId, string newPassword, string confirmationCode)
+    {
+        return await _userService.ChangePassword(userId, newPassword, confirmationCode);
+    }
 }

@@ -1,6 +1,9 @@
 ﻿using Entities.Abstractions;
 using Infrastructure.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Http.Headers;
 
 namespace Infrastructure;
 
@@ -15,7 +18,7 @@ public class CrudRepository<TEntity> : ICrudRepository<TEntity> where TEntity : 
         _entitySet = _context.Set<TEntity>();
     }
     
-        #region Get
+    #region Get
 
     /// <summary>
     /// Получить сущность по ID.
@@ -62,6 +65,13 @@ public class CrudRepository<TEntity> : ICrudRepository<TEntity> where TEntity : 
         return await GetAll().ToListAsync(cancellationToken);
     }
 
+    #endregion
+
+    #region FindAsync
+    public virtual async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return await _context.Set<TEntity>().Where(expression).ToListAsync(cancellationToken);
+    }
     #endregion
 
     #region Create
@@ -198,6 +208,8 @@ public class CrudRepository<TEntity> : ICrudRepository<TEntity> where TEntity : 
     }
 
     #endregion
+
+
 
     public async Task<List<TEntity>> GetPagedAsync(int page, int itemsPerPage)
     {

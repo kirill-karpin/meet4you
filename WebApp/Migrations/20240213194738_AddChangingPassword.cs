@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class ModifyProfile : Migration
+    public partial class AddChangingPassword : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,6 +46,28 @@ namespace WebApp.Migrations
                 nullable: false,
                 defaultValue: "");
 
+            migrationBuilder.CreateTable(
+                name: "ResetPasswords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Login = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    ConfirmationCode = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    TimeLimit = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    NewPasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResetPasswords", x => x.Id);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Login",
                 table: "Users",
@@ -56,6 +78,9 @@ namespace WebApp.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ResetPasswords");
+
             migrationBuilder.DropIndex(
                 name: "IX_Users_Login",
                 table: "Users");

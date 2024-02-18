@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,11 +20,13 @@ namespace User.Service
     {
         private readonly IMapper _userMapper;
         private readonly IUserRepository _userRepository;
+        private readonly IResetPasswordRepository _resetPasswordRepository;
 
-        public UserService(IMapper mapper, IUserRepository userRepository) : base(mapper, userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IResetPasswordRepository resetPassRepository) : base(mapper, userRepository)
         {
             _userMapper = mapper;
             _userRepository = userRepository;
+            _resetPasswordRepository = resetPassRepository;
         }
 
         public async Task<UserDto> Add(UserDto_WithLoginPassword userDto_WithLoginPassword)
@@ -122,5 +125,65 @@ namespace User.Service
             return result;
         }
 
+        public async Task<bool> AddRequestToChangePassword(Guid userId, string newPassword)
+        {
+            var user = await _userRepository.GetAsync(userId);
+
+            string conformationCode = new Random().Next(100000, 999999).ToString();
+
+            await _resetPasswordRepository.AddAsync(
+                new ResetPassword
+                {
+                    Login = user.Login,
+                    ConfirmationCode = conformationCode,
+                    TimeLimit = DateTime.Now.AddMinutes(30),
+                    CreatedAt = DateTime.Now,
+                    NewPasswordHash = string.Empty // для начала - просто добавляем новый запрос. Сам хэш нового пароля появится позже
+                }
+                );
+
+            await _resetPasswordRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Возвращает код подтверждения
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Код подтверждения, если всё ок. Иначе - String.Empty</returns>
+        public async Task<string> GetConfirmationCode(Guid userId)
+        {
+            User userFromDB = await _userRepository.GetAsync(userId);
+            UserDto userDto = _userMapper.Map<UserDto>(userFromDB);
+
+            var userResetPassList = await _resetPasswordRepository.FindAsync(x => x.Login == userDto.Login);
+            if (userResetPassList == null) return string.Empty;
+            // отсуда переделать на DTO
+            var resetCodeRecord = userResetPassList.Where(x => x.CreatedAt == userResetPassList.Max(d => d.CreatedAt)).OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+
+            ResetPasswordDto resetPasswordDto = _userMapper.Map<ResetPasswordDto>(resetCodeRecord);
+            // Проверяем, действует ли ещё данный код
+            if (DateTime.Now < resetPasswordDto.TimeLimit)
+                return resetPasswordDto.ConfirmationCode;
+
+            return string.Empty;
+        }
+
+        public async Task<bool> ChangePassword(Guid userId, string newPassword, string confirmationCode)
+        {
+            string confirmationCodeFromDB = await GetConfirmationCode(userId);
+            if (confirmationCodeFromDB != confirmationCode)
+                return false;
+
+            string passHash = await GetHashPasswordWithSalt(newPassword);
+
+            User userFromDB = await _userRepository.GetAsync(userId);
+            userFromDB.Password = passHash;
+            await _userRepository.SaveChangesAsync();
+
+            return true;
+
+        }
     }
 }

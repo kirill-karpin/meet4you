@@ -80,6 +80,7 @@ namespace WebApi
                 cfg.AddProfile<CountryMappingProfile>();
                 cfg.AddProfile<UserLocationMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
+                cfg.AddProfile<ResetPasswordProfile>();
             });
             configuration.AssertConfigurationIsValid();
             return configuration;

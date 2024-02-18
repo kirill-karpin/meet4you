@@ -1,4 +1,5 @@
 ﻿using Entities.Abstractions;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Abstraction;
 
@@ -32,6 +33,15 @@ public interface ICrudRepository<TEntity> where TEntity : BaseEntity
     /// <param name="id"> Id сущности. </param>
     /// <returns> Cущность. </returns>
     Task<TEntity> GetAsync(Guid id);
+
+    /// <summary>
+    /// Получить коллекцию элеметов, по предиканту.
+    /// Нпример (x => x.Age == 18 && x.Gender == true)
+    /// </summary>
+    /// <param name="expression">Выражение, на основе которого будет проходить сортировка</param>
+    /// <param name="cancellationToken">Токен для отмены</param>
+    /// <returns>Коллекция IEnumerable, с которой будем работать. В реальной реализации - List</returns>
+    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Удалить сущность.

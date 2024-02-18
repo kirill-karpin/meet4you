@@ -1,0 +1,56 @@
+﻿@page "/chat"
+@inject HttpClient Http
+@using Microsoft.AspNetCore.SignalR
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+
+<PageTitle>Чаты</PageTitle>
+
+<h1>Чаты</h1>
+
+<table class="table">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var chat in chats)
+        {
+            var chatPath = $"/chat/{chat.UserId.ToString()}";
+            <tr>
+                <td>@chat.UserName</td>
+                <td>
+                    <NavLink href="@chatPath">Перейти в диалог</NavLink>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+@code {
+
+    private class ChatItem
+    {
+        public string UserName { set; get; }
+        public Guid UserId { set; get; }
+    }
+
+
+    private List<ChatItem> chats = new List<ChatItem>()
+    {
+       new ChatItem()
+       {
+           UserId = Guid.NewGuid(),
+           UserName = "111"
+       }
+    
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+    }
+    
+}

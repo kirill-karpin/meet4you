@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+@inject IJSRuntime JsRuntime;
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -7,21 +10,23 @@
 
     <main>
         <div class="top-row px-4">
+            
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
 
-        <AuthorizeView>
-            <Authorized>
-                    <NavLink  href="logout" Match="NavLinkMatch.All">
+            <AuthorizeView>
+                <Authorized>
+                    <a href="" >Online : @OnlineCount</a>
+                    <NavLink href="logout" Match="NavLinkMatch.All">
                         Logout
                     </NavLink>
-            </Authorized>
-            <NotAuthorized>
-                    <NavLink  href="login" Match="NavLinkMatch.All">
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink href="login" Match="NavLinkMatch.All">
                         Login
                     </NavLink>
-            </NotAuthorized>
-        </AuthorizeView>
-      
+                </NotAuthorized>
+            </AuthorizeView>
+
         </div>
 
        
@@ -31,3 +36,44 @@
         </article>
     </main>
 </div>
+
+@code {
+    
+    
+    public class AppStatus
+    {
+        public int OnlineCount { set; get; } = 0;
+    }
+
+    public int? OnlineCount { get; set;  } = 0;
+
+    private bool collapseNavMenu = true;
+    private HubConnection? hubConnection;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/status"))
+            .Build();
+
+        hubConnection.On<AppStatus>("ReceiveStatus",  async (status) =>
+        {
+            OnlineCount = status.OnlineCount;
+            await JsRuntime.InvokeVoidAsync("console.log", status.OnlineCount);
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+        
+        await hubConnection.SendAsync("FetchStatus");
+        
+        
+    }
+}

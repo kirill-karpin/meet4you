@@ -69,13 +69,17 @@ public class LocationService : CrudService<UserLocation.UserLocation, UserLocati
 
     public async Task<UserLocationDTO> GetUserLocation(Guid userId)
     {
-        var userLocations = await _userLocationRepository.GetPagedAsync(1, 100);
-
-        var userLocation = userLocations.FirstOrDefault(x => x.UserId == userId);
+        var userLocation = await _userLocationRepository.GetUserLocation(userId);
 
         if (userLocation==null)
             throw new KeyNotFoundException("UserLocation not found");
 
         return _mapper.Map<UserLocationDTO>(userLocation);
+    }
+    public async Task<List<UserLocationDTO>> GetAll()
+    {
+        var locations = await _userLocationRepository.GetAllAsync();
+
+        return _mapper.Map<List<UserLocation.UserLocation>, List<UserLocationDTO>>(locations);
     }
 }

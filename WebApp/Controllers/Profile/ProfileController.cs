@@ -33,9 +33,9 @@ public class ProfileController : Controller
     [Authorize]
     [HttpGet]
     [Route("list")]
-    public async Task<List<IProfile>> List()
+    public async Task<List<IProfile>> List([FromQuery] ListFilterModel filterModel)
     {
-        return await _profileService.ListProfile();
+        return await _profileService.ListProfile(filterModel);
     }
 
     [HttpGet]

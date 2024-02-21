@@ -6,12 +6,17 @@ using Message;
 using Message.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using User.Mapping;
+
+
 
 namespace WebApp
 {
+    
     public class Startup
     {
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,27 +27,64 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             InstallAutomapper(services);
             services.AddServices(Configuration);
             services.AddControllers();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => 
+                    builder.SetIsOriginAllowed(_ => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
             // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen();
-            
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
                         ValidIssuer = AuthOptions.AuthOptions.Issuer,
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         ValidAudience = AuthOptions.AuthOptions.Audience,
-                        ValidateLifetime = true,
+                        ValidateLifetime = false,
                         IssuerSigningKey = AuthOptions.AuthOptions.GetSymmetricSecurityKey(),
                         ValidateIssuerSigningKey = true,
-                        RefreshBeforeValidation = true
+                        //RefreshBeforeValidation = true
                     };
                 });
             
@@ -56,20 +98,16 @@ namespace WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(
-                options => options
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-            );
+            app.UseCors();
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            app.UseSwagger( );
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.

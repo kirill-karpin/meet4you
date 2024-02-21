@@ -212,3 +212,7 @@ ServiceFabricBackup/
 
 # Specific files
 *.auth
+
+#Mongo and redis files
+docker/mongo/
+docker/redis/

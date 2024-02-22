@@ -1,0 +1,36 @@
+﻿@page "/list"
+@inject HttpClient Http
+@inject ProfileService profileService
+
+<PageTitle>List</PageTitle>
+
+<h1>List Profile</h1>
+
+@if (response == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div>
+
+        <div style="min-width: 18rem; max-width:30.5%;">
+            <div>
+                <h3>@response</h3>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+@code {
+    private string response = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        response = await profileService.GetListProfile();
+    }
+}

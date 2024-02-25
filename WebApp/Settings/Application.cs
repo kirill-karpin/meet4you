@@ -1,4 +1,4 @@
-﻿namespace WebApi.Settings
+﻿namespace WebApp.Settings
 {
     /// <summary>
     /// Настройки приложения

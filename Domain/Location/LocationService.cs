@@ -1,47 +1,68 @@
 ﻿using Location.Country.Abstractions;
-using AutoMapper;
-using Location.Country.DTO;
+using Location.UserLocation;
 using Location.UserLocation.Abstractions;
-using Location.City.DTO;
 using Location.UserLocation.DTO;
 using Location.City.Abstractions;
-using Location.UserLocation;
-using System.Data.Entity;
+using AutoMapper;
+using Infrastructure;
+using User.Abstraction;
+using User;
+using AutoMapper.Configuration.Annotations;
 
 namespace Location;
 
-public class LocationService : ILocationService
+public class LocationService : CrudService<UserLocation.UserLocation, UserLocationDTO, UserLocationDTO, UserLocationDTO>, ILocationService
 {
     private readonly IUserLocationRepository _userLocationRepository;
     private readonly ICountryRepository _countryRepository;
     private readonly ICityRepository _cityRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
 
     public LocationService( IUserLocationRepository userLocationRepository, 
         ICountryRepository countryRepository,
-        ICityRepository cityRepository, 
-        IMapper mapper)
+        ICityRepository cityRepository,
+        IUserRepository userRepository,
+        IMapper mapper) :  base(mapper, userLocationRepository)
     {
         _userLocationRepository = userLocationRepository;
         _countryRepository = countryRepository;
         _cityRepository = cityRepository;
+        _userRepository= userRepository;
         _mapper = mapper;
     }
 
     public async Task<Guid> AddUserLocation(UserLocationDTO userLocationDTO)
     {
-        var country = _countryRepository.GetAsync(userLocationDTO.CountryId);
+        var country =await _countryRepository.GetAsync(userLocationDTO.CountryId);
         if (country==null)
             throw new KeyNotFoundException("Country not found");
 
-        var city = _cityRepository.GetAsync(userLocationDTO.CityId);
+        var city = await _cityRepository.GetAsync(userLocationDTO.CityId);
         if (city == null)
             throw new KeyNotFoundException("City not found");
 
-        var userLocation = _mapper.Map<UserLocation.UserLocation>(userLocationDTO);
+        var user = _userRepository.Get(userLocationDTO.UserId);
+        if (user == null)
+            throw new KeyNotFoundException("User not found");
 
-         await _userLocationRepository.AddAsync(userLocation);
+        var userLocations = await _userLocationRepository.GetPagedAsync(1, 100);
+
+        var userLocation = userLocations.FirstOrDefault(x => x.UserId == userLocationDTO.UserId);
+
+        if (userLocation == null)
+        {
+            userLocation = _mapper.Map<UserLocation.UserLocation>(userLocationDTO);
+            
+            userLocation.Id = Guid.NewGuid();
+
+            await _userLocationRepository.AddAsync(userLocation);
+        }
+        else
+            _userLocationRepository.Update(userLocation);
+        
+        await _userRepository.SaveChangesAsync();
 
         return userLocation.Id;   
     }

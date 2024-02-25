@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
-using WebApi.Service;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebApp.Models;
+using WebApp.Service;
+using WebApp.Service;
 
 namespace WebApp.Controllers.Profile;
 
@@ -15,14 +18,19 @@ public class ProfileController : Controller
         _profileService = profileService;
     }
 
+    [Authorize]
     [HttpGet]
     [Route("me")]
     public async Task<IProfile> Me()
     {
-        return await _profileService.GetOwnProfile();
+        string Id = User.Claims.First(i => i.Type == "Id").Value;
+        
+        Console.WriteLine($"/api/profile/me Id:{Id}");
+        
+        return await _profileService.GetPersonaProfile(new Guid(Id));
     }
 
-
+    [Authorize]
     [HttpGet]
     [Route("list")]
     public async Task<List<IProfile>> List()
@@ -31,6 +39,7 @@ public class ProfileController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     [Route("get")]
     public async Task<IProfile> Get(Guid id)
     {

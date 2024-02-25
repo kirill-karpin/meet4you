@@ -11,8 +11,8 @@ public class MessageDto
     public Guid UpdatedBy { get; set; }
     public bool Deleted { get; set; }
 
-    private int From { set; get; }
-    private int To { set; get; }
+    private Guid From { set; get; }
+    private Guid To { set; get; }
     private DateTime Date { set; get; }
     private bool IsRead { set; get; }
     public string Content { set; get; }

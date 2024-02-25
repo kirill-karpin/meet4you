@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApp.Controllers.Location;
 
 [ApiController]
-[Route("api/v1/[controller]/[action]")]
+[Route("user-location")]
 public class UserLocationController : ControllerBase
 {
     private readonly ILocationService _locationService;
@@ -16,7 +16,8 @@ public class UserLocationController : ControllerBase
         _locationService = locationService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("get-user-location")]
     public async Task<IActionResult> GetUserLocation(Guid userId)
     {
         var userLocation = await _locationService.GetUserLocation(userId);
@@ -27,6 +28,7 @@ public class UserLocationController : ControllerBase
     }
 
     [HttpPost]
+    [Route("add-user-location")]
     public async Task<IActionResult> AddUserLocation(UserLocationDTO userLocationDTO)
     {
         var guId = await _locationService.AddUserLocation(userLocationDTO);

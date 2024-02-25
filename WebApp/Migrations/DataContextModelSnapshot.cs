@@ -159,14 +159,11 @@ namespace WebApp.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("From")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("From")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("boolean");
@@ -174,8 +171,8 @@ namespace WebApp.Migrations
                     b.Property<int>("Sort")
                         .HasColumnType("integer");
 
-                    b.Property<int>("To")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("To")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

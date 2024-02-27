@@ -127,6 +127,7 @@ namespace WebApp
         {
             var configuration = new MapperConfiguration(cfg =>
             {
+                cfg.ShouldMapMethod = (m => false);
                 cfg.AddProfile<MessageMappingProfile>();
                 cfg.AddProfile<CityMappingProfile>();
                 cfg.AddProfile<CountryMappingProfile>();

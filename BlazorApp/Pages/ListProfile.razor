@@ -1,36 +1,130 @@
 ﻿@page "/list"
-@inject HttpClient Http
 @inject ProfileService profileService
+@inject LocationService locationService
+@using BlazorApp.Models
 
 <PageTitle>List</PageTitle>
 
 <h1>List Profile</h1>
 
-@if (response == null)
-{
-    <p>
-        <em>Loading...</em>
-    </p>
-}
-else
-{
-    <div>
 
-        <div style="min-width: 18rem; max-width:30.5%;">
-            <div>
-                <h3>@response</h3>
-            </div>
-        </div>
+<div class="autocomplete w-25">
+    <label>Страна</label>
+    <input @bind=selectedCountryName @oninput=HandleInputCountry class="form-control filter" /> @if (countries is not null)
+    {
+        <ul class="options">
+            @if (countries.Any())
+            { @foreach (var country in countries)
+                {
+                    <li class="option" @onclick=@(_=> SelectCountry(country.Id))>
+                        <span class="option-text">@country.Name</span>
+                    </li>
+                }       }
+            else
+            {
+                <li class="disabled option">Не найдено</li>
+            }
+        </ul>
+    }
+</div>
+<div class="autocomplete w-25">
+    <label>Город</label>
+    <input @bind=selectedCityName @oninput=HandleInputCity class="form-control filter" /> @if (cities is not null)
+    {
+        <ul class="options">
+            @if (cities.Any())
+            { @foreach (var city in cities)
+                {
+                    <li class="option" @onclick=@(_=> SelectCity(city.Id))>
+                        <span class="option-text">@city.Name</span>
+                    </li>
+                }       }
+            else
+            {
+                <li class="disabled option">Не найдено</li>
+            }
+        </ul>
+    }
+</div>
 
 
-    </div>
-}
+<table class='table'>
+    <thead>
+        <tr>
+            <th>profiles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in profiles)
+        {
+            <tr>
+                <td>profile</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 
 @code {
-    private string response = null;
+    private object[] profiles = null;
+
+    CountryResponse[]? countries;
+    CityResponse[]? cities;
+    Guid? selectedCountryId;
+    Guid? selectedCityId;
+    string? selectedCountryName;
+    string? selectedCityName;
+    string? filterCountries;
+    string? filterCities;
 
     protected override async Task OnInitializedAsync()
     {
-        response = await profileService.GetListProfile();
+        profiles = await profileService.GetListProfile();
+    }
+
+    async Task HandleInputCountry(ChangeEventArgs e)
+    {
+        filterCountries = e.Value?.ToString();
+        if (filterCountries?.Length > 2)
+        {
+            countries = await locationService.GetCountries();
+            countries = countries.Where(c => c.Name.ToLower().Contains(filterCountries.ToLower()))
+                .OrderBy(c => c)
+                .ToArray();
+        }
+        else
+        {
+            countries = null;
+            selectedCountryName = null;
+        }
+    }
+
+    async Task HandleInputCity(ChangeEventArgs e)
+    {
+        filterCities = e.Value?.ToString();
+        if (filterCities?.Length > 2)
+        {
+            cities = await locationService.GetCitiesByCountryId(selectedCountryId.Value);
+            cities = cities.Where(c => c.Name.ToLower().Contains(filterCities.ToLower()))
+                .OrderBy(c => c)
+                .ToArray();
+        }
+        else
+        {
+            cities = null;
+            selectedCityName = null;
+        }
+    }
+
+    void SelectCountry(Guid id)
+    {
+        selectedCountryId = id;
+        selectedCountryName = countries!.First(c => c.Id.Equals(selectedCountryId)).Name;
+        countries = null;
+    }
+
+    void SelectCity(Guid id)
+    {
+     
     }
 }

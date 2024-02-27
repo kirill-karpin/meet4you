@@ -39,12 +39,22 @@ public class ProfileService : IProfileService
         _userRepository = userRepository;
         _resetPasswordRepository = resetPassRepository;
     }
-    public async Task<List<IProfile>> ListProfile()
+    public async Task<List<IProfile>> ListProfile(ListFilterModel filterModel)
     {
-        return await Task.FromResult(new List<IProfile>()
+        var userFilterDto = new UserFilterDto
         {
-            new UserProfile() { Id = new Guid("bf470537-afd5-4849-ab8e-174961288d10") }
-        });
+            CityId = filterModel.CityId,
+            CountryId = filterModel.CountryId,
+            FamilyStatus = filterModel.FamilyStatus,
+            Gender = filterModel.Gender,
+            HaveChildren = filterModel.HaveChildren,
+            ItemsPerPage = filterModel.ItemsPerPage,
+            Page= filterModel.Page
+        };
+
+        var users = await _userService.GetPagedAsync(userFilterDto);
+
+        return await Task.FromResult(new List<IProfile>(users.Select(u => new UserProfile { Id = u.Id })));
     }
 
     public async Task<IProfile> GetProfile(Guid id)

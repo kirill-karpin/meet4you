@@ -38,6 +38,16 @@ public class CityController : ControllerBase
            : Ok(cities);
     }
 
+    [HttpGet]
+    [Route("get-cities/{countryId}")]
+    public async Task<IActionResult> GetCities(Guid countryId)
+    {
+        var cities = await _cityService.GetCitiesByCountryId(countryId);
+
+        return cities == null
+           ? BadRequest()
+           : Ok(cities);
+    }
 
     [HttpPost]
     [Route("add-city")]

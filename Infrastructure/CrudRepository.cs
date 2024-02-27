@@ -9,7 +9,7 @@ namespace Infrastructure;
 
 public class CrudRepository<TEntity> : ICrudRepository<TEntity> where TEntity : BaseEntity
 {
-    DbContext _context;
+    protected readonly DbContext _context;
     private readonly DbSet<TEntity> _entitySet;
 
     public CrudRepository(DbContext context)

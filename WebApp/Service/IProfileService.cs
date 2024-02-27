@@ -9,7 +9,7 @@ public interface IProfileService
    
     public Task<IPersonalProfile> GetPersonaProfile(Guid id);
 
-    public Task<List<IProfile>> ListProfile();
+    public Task<List<IProfile>> ListProfile(ListFilterModel filterModel);
 
     public Task<IProfile> GetProfile(Guid id);
 

@@ -19,19 +19,31 @@ public class ProfileService : IProfileService
     private readonly DataContext _db;
     private readonly IUserService _userService;
     private readonly IMessageService _messageService;
+    private readonly IMapper _mapper;
 
-    public ProfileService(IUserService userService, IMessageService messageService, DataContext db)
+    public ProfileService(IUserService userService, IMessageService messageService, IMapper mapper, DataContext db)
     {
         _db = db;
         _userService = userService;
         _messageService = messageService;
+        _mapper = mapper;
     }
-    public async Task<List<IProfile>> ListProfile()
+    public async Task<List<IProfile>> ListProfile(ListFilterModel filterModel)
     {
-        return await Task.FromResult(new List<IProfile>()
+        var userFilterDto = new UserFilterDto
         {
-            new UserProfile() { Id = new Guid("bf470537-afd5-4849-ab8e-174961288d10") }
-        });
+            CityId = filterModel.CityId,
+            CountryId = filterModel.CountryId,
+            FamilyStatus = filterModel.FamilyStatus,
+            Gender = filterModel.Gender,
+            HaveChildren = filterModel.HaveChildren,
+            ItemsPerPage = filterModel.ItemsPerPage,
+            Page= filterModel.Page
+        };
+
+        var users = await _userService.GetPagedAsync(userFilterDto);
+
+        return await Task.FromResult(new List<IProfile>(users.Select(u => new UserProfile { Id = u.Id })));
     }
 
     public async Task<IProfile> GetProfile(Guid id)

@@ -24,7 +24,7 @@ namespace WebApp.Service;
 public class ProfileService : IProfileService
 {
     private readonly DataContext _db;
-    //private readonly IUserService _userService;
+    private readonly IUserService _userService;
     private readonly IMessageService _messageService;
     private readonly IMapper _userMapper;
     private readonly IUserRepository _userRepository;

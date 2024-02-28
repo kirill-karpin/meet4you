@@ -185,5 +185,12 @@ namespace User.Service
             return true;
 
         }
+
+        public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto)
+        {
+            List<User> users = await _userRepository.GetPagedAsync(userFilterDto);
+            return _userMapper.Map<List<User>, List<UserDto>>(users);
+        }
+
     }
 }

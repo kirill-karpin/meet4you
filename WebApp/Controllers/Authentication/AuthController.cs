@@ -1,7 +1,7 @@
 ﻿using Install;
 using Microsoft.AspNetCore.Mvc;
 using User.Dto;
-using WebApi.Models;
+using WebApp.Models;
 using WebApp.Models;
 using WebApp.Service;
 

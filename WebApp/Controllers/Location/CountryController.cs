@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WebApp.Controllers.Location;
 
 [ApiController]
-[Route("api/v1/[controller]/[action]")]
+[Route("country")]
 public class CountryController : ControllerBase
 {
     private readonly ICountryService _countryService;
@@ -18,16 +18,7 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCountries()
-    {
-        var countries = await _countryService.GetPagedAsync(1, 100);
-
-        return countries == null
-           ? BadRequest()
-           : Ok(countries);
-    }
-
-    [HttpGet("{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var countryDTO = await _countryService.GetByIdAsync(id);
@@ -37,7 +28,19 @@ public class CountryController : ControllerBase
            : Ok(countryDTO);
     }
 
+    [HttpGet]
+    [Route("get-countries")]
+    public async Task<IActionResult> GetCountries()
+    {
+        var countries = await _countryService.GetPagedAsync(1, 100);
+
+        return countries == null
+           ? BadRequest()
+           : Ok(countries);
+    }
+
     [HttpPost]
+    [Route("add-country")]
     public async Task<IActionResult> AddCountry(CreateOrUpdateCountryDTO request)
     {
         request.Id = Guid.NewGuid();
@@ -50,6 +53,7 @@ public class CountryController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("delete-country")]
     public async Task<IActionResult> DeleteCountry(Guid id)
     {
         await _countryService.DeleteAsync(id);

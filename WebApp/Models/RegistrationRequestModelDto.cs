@@ -1,6 +1,6 @@
 ﻿using User;
 
-namespace WebApi.Models;
+namespace WebApp.Models;
 
 public class RegistrationRequestModelDto
 {

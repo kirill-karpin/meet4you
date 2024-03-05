@@ -99,7 +99,7 @@ namespace WebApp.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Location.UserLocation", b =>
+            modelBuilder.Entity("Location.UserLocation.UserLocation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -159,14 +159,11 @@ namespace WebApp.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("From")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("From")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("boolean");
@@ -174,8 +171,8 @@ namespace WebApp.Migrations
                     b.Property<int>("Sort")
                         .HasColumnType("integer");
 
-                    b.Property<int>("To")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("To")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -235,8 +232,7 @@ namespace WebApp.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("Gender")
                         .HasColumnType("boolean");
@@ -246,8 +242,7 @@ namespace WebApp.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Login")
                         .IsRequired()

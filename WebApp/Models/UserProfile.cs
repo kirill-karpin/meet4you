@@ -1,6 +1,6 @@
 ﻿using User.Dto;
 
-namespace WebApi.Models;
+namespace WebApp.Models;
 
 public class UserProfile : IProfile
 {

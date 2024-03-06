@@ -79,9 +79,9 @@ namespace User.Service
             return result;
         }
 
-        public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto)
+        public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page)
         {
-            List<User> users = await _userRepository.GetPagedAsync(userFilterDto);
+            List<User> users = await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page);
             return _userMapper.Map<List<User>, List<UserDto>>(users);
         }
     }

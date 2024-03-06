@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Models;
 using WebApp.Service;
 using WebApp.Service;
@@ -33,9 +34,9 @@ public class ProfileController : Controller
     [Authorize]
     [HttpGet]
     [Route("list")]
-    public async Task<List<IProfile>> List([FromQuery] ListFilterModel filterModel)
+    public async Task<List<IProfile>> List([FromQuery] ListFilterModel filterModel, int itemsPerPage, int page)
     {
-        return await _profileService.ListProfile(filterModel);
+        return await _profileService.ListProfile(filterModel, itemsPerPage, page);
     }
 
     [HttpGet]

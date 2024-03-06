@@ -7,7 +7,5 @@ public class UserFilterDto
     public bool? Gender { get; set; }
     public FamilyStatus? FamilyStatus { get; set; }
     public bool? HaveChildren { get; set; }
-    public int ItemsPerPage { get; set; }
-    public int Page { get; set; }
 }
 

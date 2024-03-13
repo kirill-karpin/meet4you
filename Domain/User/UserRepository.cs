@@ -15,6 +15,8 @@ namespace User
         {
             var query = GetAll().AsQueryable();
 
+            query = query.Where(u => userFilterDto.AgeFrom <= DateTime.Today.Year - u.DateOfBirth.Year && DateTime.Today.Year - u.DateOfBirth.Year <= userFilterDto.AgeTo);
+
             if (userFilterDto.Gender.HasValue)
             {
                 query = query.Where(u=>u.Gender == userFilterDto.Gender.Value);

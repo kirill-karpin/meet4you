@@ -28,15 +28,17 @@ public class ProfileService : IProfileService
         _messageService = messageService;
         _mapper = mapper;
     }
-    public async Task<List<IProfile>> ListProfile(ListFilterModel filterModel, int itemsPerPage, int page)
+    public async Task<List<IProfile>> ListProfile(GetProfilesListQuery query, int itemsPerPage, int page)
     {
         var userFilterDto = new UserFilterDto
         {
-            CityId = filterModel.CityId,
-            CountryId = filterModel.CountryId,
-            FamilyStatus = filterModel.FamilyStatus,
-            Gender = filterModel.Gender,
-            HaveChildren = filterModel.HaveChildren
+            CityId = query.CityId,
+            CountryId = query.CountryId,
+            FamilyStatus = query.FamilyStatus,
+            Gender = query.Gender,
+            HaveChildren = query.HaveChildren,
+            AgeFrom = query.AgeFrom,
+            AgeTo = query.AgeTo
         };
 
         var users = await _userService.GetPagedAsync(userFilterDto, itemsPerPage, page);

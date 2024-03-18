@@ -8,6 +8,7 @@
 
 <h1>Чаты</h1>
 
+
 <table class="table">
         <thead>
         <tr>
@@ -20,7 +21,7 @@
         {
             var chatPath = $"/chat/{chat.UserId.ToString()}";
             <tr>
-                <td>@chat.UserName</td>
+                <td>@chat.UserName</td> 
                 <td>
                     <NavLink href="@chatPath">Перейти в диалог</NavLink>
                 </td>
@@ -30,6 +31,7 @@
     </table>
 
 @code {
+    
 
     private class ChatItem
     {

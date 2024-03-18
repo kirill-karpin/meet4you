@@ -101,3 +101,22 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.notification-container {
+    position: relative;
+
+    .notification-counter {
+        font-size: 10px;
+        border: 1px solid red;
+        border-radius: 11px;
+        width: 22px;
+        height: 22px;
+        display: block;
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        left: 13px;
+        line-height: 22px;
+        background: red;
+    }
+}

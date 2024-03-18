@@ -22,5 +22,6 @@ builder.Services.AddScoped<LocationService, LocationService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 
+var host = builder.Build();
 
-await builder.Build().RunAsync();
+await host.RunAsync();

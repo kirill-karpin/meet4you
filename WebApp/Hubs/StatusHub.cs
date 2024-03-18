@@ -21,8 +21,6 @@ public class StatusHub : Hub
             OnlineCount = count
         };
         
-        Console.WriteLine("FetchStatus");
-        
         await Clients.All.SendAsync("ReceiveStatus", status);
     }
     

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using User.Dto;
 using WebApp.Models;
 using WebApp.Service;
 using WebApp.Service;
@@ -44,5 +45,13 @@ public class ProfileController : Controller
     public async Task<IProfile> Get(Guid id)
     {
         return await _profileService.GetProfile(id);
+    }
+
+    // TODO DELETE AFTER TEST
+    [HttpGet]
+    [Route("getTEST")]
+    public async Task<List<UserDto>> GetTest()
+    {
+        return await _profileService.GetTest();
     }
 }

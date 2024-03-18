@@ -305,4 +305,17 @@ public class ProfileService : IProfileService
 
     }
 
+    // DELETE AFTER
+    public async Task<List<UserDto>> GetTest()
+    {
+        var usersFromDb = await _userRepository.FindAsync(x => x.Login == "Ivan" && x.Age == 22);
+        List<UserDto> userDtos = new List<UserDto>();
+        foreach (var user in usersFromDb)
+        {
+            UserDto userDto = _userMapper.Map<UserDto>(user);
+            userDtos.Add(userDto);
+        }
+        return userDtos;
+    }
+
 }

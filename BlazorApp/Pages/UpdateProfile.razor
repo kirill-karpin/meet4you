@@ -1,0 +1,154 @@
+﻿@page "/updateprofile"
+@using BlazorApp.Models
+@using static User.Dto.UserDto;
+
+<PageTitle>Update Profile</PageTitle>
+
+<h1>Update Profile</h1>
+
+<div class="autocomplete w-25">
+    <label>Дата рождения</label> <!-- DateOfBirth -->
+    <input type="date" @bind="userDto.DateOfBirth" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Имя</label> <!-- FirstName -->
+    <input @bind="userDto.FirstName" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Фамилия</label> <!-- LastName -->
+    <input @bind="userDto.LastName" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Отчество</label> <!-- Surname -->
+    <input @bind="userDto.Surname" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>О себе</label> <!-- About -->
+    <input @bind="userDto.About" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Ищу</label> <!-- LookingFor -->
+    <input @bind="userDto.LookingFor" />
+</div>
+
+<!-- Вот тут прийдётся повозиться... -->
+<div class="autocomplete w-25">
+    <label>Семейное положение</label> <!-- FamilyStatus -->
+    @* <input @bind="userDto.FamilyStatus" /> *@
+    <select @bind="userDto.FamilyStatus">
+        @foreach (var status in Enum.GetValues(typeof(User.FamilyStatus)))
+        {
+            <option value="@status">@status.ToString()</option>
+        }
+    </select>
+</div>
+
+<div class="autocomplete w-25">
+    <label>Наличие детей</label> <!-- HaveChildren -->
+    <select @bind="userDto.HaveChildren">
+        <option value="yes">Да</option>\
+        <option value="no">Нет</option>
+    </select>
+</div>
+
+<div class="autocomplete w-25">
+    <label>Как нам тебя звать?</label> <!-- UserName -->
+    <input @bind="userDto.UserName" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Возраст</label> <!-- Age -->
+    <input @bind="userDto.Age" />
+</div>
+
+<div class="autocomplete w-25" style="margin-top 10px">
+    <input type="button" value="Сохранить" @bind:after="Save"/>
+</div>
+
+
+@code {
+    User.Dto.UserDto userDto = null;
+
+    // ?????
+    private object[] profiles = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Тут мне нужно получить данный объект
+        userDto = new User.Dto.UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Blocked = false,
+                Gender = true,
+                DateOfBirth = DateTime.Now,
+                FirstName = "Тест",
+                LastName = "Тестовый",
+                Surname = "Тестовский",
+                About = "Я пока тут просто мебель",
+                LookingFor = "Ищу новую, свежую сущность, не опороченную хранением в базе данных",
+                FamilyStatus = 0,
+                HaveChildren = false,
+                Login = "TestNagibator666",
+                UserName = "TestNagibator666",
+                Age = 22,
+                Confirmed = false
+    };
+    }
+
+    async Task Save()
+    {
+        
+    }
+
+    // async Task HandleInputCountry(ChangeEventArgs e)
+    // {
+    //     filterCountries = e.Value?.ToString();
+    //     if (filterCountries?.Length > 2)
+    //     {
+    //         countries = await locationService.GetCountries();
+    //         countries = countries.Where(c => c.Name.ToLower().Contains(filterCountries.ToLower()))
+    //             .OrderBy(c => c)
+    //             .ToArray();
+    //     }
+    //     else
+    //     {
+    //         countries = null;
+    //         selectedCountryName = null;
+    //     }
+    // }
+
+    // async Task HandleInputCity(ChangeEventArgs e)
+    // {
+    //     filterCities = e.Value?.ToString();
+    //     if (filterCities?.Length > 2)
+    //     {
+    //         cities = await locationService.GetCitiesByCountryId(selectedCountryId.Value);
+    //         cities = cities.Where(c => c.Name.ToLower().Contains(filterCities.ToLower()))
+    //             .OrderBy(c => c)
+    //             .ToArray();
+    //     }
+    //     else
+    //     {
+    //         cities = null;
+    //         selectedCityName = null;
+    //     }
+    // }
+
+    // void SelectCountry(Guid id)
+    // {
+    //     selectedCountryId = id;
+    //     selectedCountryName = countries!.First(c => c.Id.Equals(selectedCountryId)).Name;
+    //     countries = null;
+    // }
+
+    // void SelectCity(Guid id)
+    // {
+     
+    // }
+}

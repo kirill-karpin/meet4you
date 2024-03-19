@@ -6,53 +6,61 @@
 
 <PageTitle>Чаты</PageTitle>
 
-<h1>Чаты</h1>
+<RadzenDataList WrapItems="true" AllowPaging="false" Data="@chats" TItem="ChatItem">
+    <Template Context="chat">
+        <RadzenLink Path="@("/chat/" + chat.UserId.ToString())">
+            <RadzenCard Style="width:300px;" href="">
 
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
 
-<table class="table">
-        <thead>
-        <tr>
-            <th>Имя</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var chat in chats)
-        {
-            var chatPath = $"/chat/{chat.UserId.ToString()}";
-            <tr>
-                <td>@chat.UserName</td> 
-                <td>
-                    <NavLink href="@chatPath">Перейти в диалог</NavLink>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                    <RadzenImage Path="@chat.Photo" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(chat?.FirstName + " " + chat?.LastName)"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Собеседник</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">
+                            <b>@(chat?.FirstName + " " + chat?.LastName)</b>
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Город</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">
+                            <b>@(chat?.City)</b>
+                        </RadzenText>
+                    </RadzenStack>
+
+                </RadzenStack>
+
+                <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;"/>
+            </RadzenCard>
+        </RadzenLink>
+    </Template>
+</RadzenDataList>
+
 
 @code {
-    
+    public static string DefaultPhoto { set; get; } = "photo-default.jpg";
 
     private class ChatItem
     {
+        public Guid ChatId { set; get; }
         public string UserName { set; get; }
+        public string FirstName { set; get; }
+        public string LastName { set; get; }
+        public string City { set; get; }
         public Guid UserId { set; get; }
+        public string Photo { set; get; }
     }
 
 
     private List<ChatItem> chats = new List<ChatItem>()
     {
-       new ChatItem()
-       {
-           UserId = Guid.NewGuid(),
-           UserName = "111"
-       }
-    
+        new ChatItem()
+        {
+            ChatId = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            UserName = "111",
+            FirstName = "Иванов",
+            LastName = "Иван",
+            City = "Москва",
+            Photo = null ?? DefaultPhoto,
+        }
     };
 
-    protected override async Task OnInitializedAsync()
-    {
-       
-    }
-    
 }

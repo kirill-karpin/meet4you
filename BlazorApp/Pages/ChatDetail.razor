@@ -9,51 +9,40 @@
 
 <h1>Чат c пользователем </h1>
 
-<section class="col-12 " style="background-color: #eee; ">
-    <div class="container" style="height: 500px; overflow: auto;">
-        <div class="row d-flex">
-            <div class="col-12 ">
-                <div class="d-flex flex-row justify-content-end mb-4">
-                    <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">
-                        <p class="small mb-0">Thank you, I really like your product.</p>
-                    </div>
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                         alt="avatar 1" style="width: 45px; height: 100%;">
-                </div>
+<RadzenCard Class="rz-my-12 rz-mx-auto" Style="height: 500px; overflow: scroll;">
+    @foreach (var message in messages)
+    {
+        <RadzenRow Gap="0">
+            <RadzenStack >
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenStack Style="border-radius: 23px;">
+                        <img src="photo-default.jpg"
+                             alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                    </RadzenStack>
+                    <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
+                        @message
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenRow>
+    }
 
-                @foreach (var message in messages)
-                {
-                    <div class="d-flex flex-row justify-content-start mb-4">
+</RadzenCard>
+<RadzenCard>
 
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                             alt="avatar 1" style="width: 45px; height: 100%;">
+    <RadzenStack Orientation="Orientation.Horizontal">
 
-                        <div class="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
-                            <p class="small mb-0">@message</p>
-                        </div>
-                    </div>
-                }
+        <RadzenHtmlEditor @bind-Value=@messageInput style="height: 100px; width: 90%;" UploadUrl="upload/image">
+            <RadzenHtmlEditorUndo/>
+        </RadzenHtmlEditor>
+        <RadzenButton type="button" Style="width: 10%" Click="Send"
+                      disabled="@(!IsConnected)">
+            Отправить
+        </RadzenButton>
+    </RadzenStack>
 
-            </div>
-        </div>
-    </div>
+</RadzenCard>
 
-    <div class="container">
-        <div class="form-outline">
-            <textarea class="form-control" @bind="messageInput" rows="4"  id="textAreaExample"></textarea>
-            <button type="button" class="btn btn-outline-secondary" @onclick="Send"
-                    disabled="@(!IsConnected)">
-                Отправить
-            </button>
-        </div>
-    </div>
-
-
-    <hr>
-</section>
-<script >
-console.log("123123")
-</script>
 
 @code {
 

@@ -1,33 +1,102 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+@inject IJSRuntime JsRuntime;
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-
-        <AuthorizeView>
-            <Authorized>
-                    <NavLink  href="logout" Match="NavLinkMatch.All">
-                        Logout
-                    </NavLink>
-            </Authorized>
-            <NotAuthorized>
-                    <NavLink  href="login" Match="NavLinkMatch.All">
-                        Login
-                    </NavLink>
-            </NotAuthorized>
-        </AuthorizeView>
-      
+<RadzenLayout style="position: relative;grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+    <RadzenHeader>
+        <RadzenStack Gap="50%" JustifyContent="JustifyContent.Stretch" Orientation="Orientation.Horizontal">
+                      <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                                  <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)"/>
+                                  <RadzenLabel Text="Meet4You"/>
+                              </RadzenStack>
+            <RadzenStack Gap="2rem" Orientation="Orientation.Horizontal" 
+                          AlignItems="AlignItems.Center"
+                         JustifyContent="JustifyContent.Right"  Style="width: 100%">
+                <RadzenLabel >
+                    Online :  @OnlineCount
+                </RadzenLabel>
+                <RadzenLabel >
+                    <div class="notification-container"><RadzenIcon Icon="notifications"/>
+                        <span class="notification-counter">99+</span></div>
+                </RadzenLabel>
+                <RadzenLabel >
+                     <RadzenLink Path="logout">Выход</RadzenLink>
+                </RadzenLabel>
+            </RadzenStack>
+        </RadzenStack>
+        
+    </RadzenHeader>
+    <RadzenSidebar Responsive="false" @bind-Expanded="@SidebarExpanded" style="position: absolute; z-index: 3">
+        <RadzenStack AlignItems="AlignItems.End" Class="rz-p-2">
+            <RadzenButton Icon="west" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Click="@(() => SidebarExpanded = false)" />
+        </RadzenStack>
+        <RadzenPanelMenu>
+            <NavMenu/>
+        </RadzenPanelMenu>
+        <div class="rz-p-4">
+            Sidebar
         </div>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+              @Body
+        </div>
+    </RadzenBody>
+    @if (SidebarExpanded)
+    {
+    <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
+    }
+</RadzenLayout>
 
-       
+@code {
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    public bool SidebarExpanded = false;
+    
+    public class AppStatus
+    {
+        public int OnlineCount { set; get; } = 0;
+    }
+
+    public int? OnlineCount { get; set;  } = 0;
+    private int? CountNotification { get; set;  } = 0;
+    
+    private bool ShownNotification { get; set; } = false;
+
+    private bool collapseNavMenu = true;
+    private HubConnection? hubConnection;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/status"))
+            .Build();
+
+        hubConnection.On<AppStatus>("ReceiveStatus",  async (status) =>
+        {
+            OnlineCount = status.OnlineCount;
+            await JsRuntime.InvokeVoidAsync("console.log", status.OnlineCount);
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+        
+        await hubConnection.SendAsync("FetchStatus");
+        
+        
+    }
+
+    private async Task ShowNotificationBlock()
+    {
+        ShownNotification = !ShownNotification;
+    }
+    
+    
+}

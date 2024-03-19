@@ -32,7 +32,6 @@
         <Folder Include="Controllers\Notification\" />
         <Folder Include="Migrations\" />
         <Folder Include="Models\Abstraction\" />
-        <Folder Include="WebApp\" />
     </ItemGroup>
 
 </Project>

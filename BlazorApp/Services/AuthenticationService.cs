@@ -25,7 +25,7 @@ namespace BlazorApp.Services
         }
 
 
-        public async Task<LoginResponse> Login(LoginDTO model)
+        public async Task<LoginResponse?> Login(LoginDTO model)
         {
             
             var loginResult = await _httpClient.PostAsJsonAsync($"{baseUrl}/sign-in",model);
@@ -34,7 +34,7 @@ namespace BlazorApp.Services
             var loginResponseContent = await loginResult.Content.ReadFromJsonAsync<LoginResponse>();
             if (loginResponseContent != null)
             {
-                _localStorage.SetItemAsync("accessToken", loginResponseContent.Token);
+                _localStorage?.SetItemAsync("accessToken", loginResponseContent.Token);
                 ((AuthProvider)_authStateProvider).NotifyUserAuthentication(loginResponseContent.Token);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResponseContent.Token);
             }

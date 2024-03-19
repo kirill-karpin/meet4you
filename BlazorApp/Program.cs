@@ -24,5 +24,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddRadzenComponents();
+var host = builder.Build();
 
-await builder.Build().RunAsync();
+await host.RunAsync();

@@ -14,8 +14,8 @@
                             <RadzenImage Path="user.png" Style="width: 80px; height: 80px; border-radius: 50%" />
                         </RadzenColumn>
                         <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
-                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Username</RadzenText>
-                            <RadzenText TextStyle="TextStyle.Body2">@("City, Age")</RadzenText>
+                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">@profile.User.FirstName</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body2">@("%город%"), @(profile.User.Age) </RadzenText>
                         </RadzenColumn>
                         <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
                             <RadzenRow Gap="6px">

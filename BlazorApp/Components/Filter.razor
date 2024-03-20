@@ -7,7 +7,7 @@
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Страна" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
             <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id"
-                            Data=@countries Size="ButtonSize.Small" @* Change="@CountryChangedAsync" *@ />
+                            Data=@countries Size="ButtonSize.Small" Change="@CountryChangedAsync" />
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Город" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>

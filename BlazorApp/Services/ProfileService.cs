@@ -12,9 +12,9 @@ namespace BlazorApp.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ProfileResponse[]> GetListProfile(bool gender, FamilyStatus status, bool children, int ageFrom, int ageTo)
+        public async Task<ProfileResponse[]> GetListProfile(bool gender, int status, bool children, int ageFrom, int ageTo)
         {
-            string query = $"https://localhost:7172/api/profile/list?Gender={gender}&FamilyStatus={(int)status}&HaveChildren={children}&AgeFrom={ageFrom}&AgeTo={ageTo}&itemsPerPage=10&page=1";
+            string query = $"https://localhost:7172/api/profile/list?Gender={gender}&FamilyStatus={status}&HaveChildren={children}&AgeFrom={ageFrom}&AgeTo={ageTo}&itemsPerPage=10&page=1";
             var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(query);
             return data;
         }

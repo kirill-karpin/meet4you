@@ -1,0 +1,43 @@
+﻿@using BlazorApp.Models
+@using BlazorApp.Models.List
+@using BlazorApp.Components
+
+<RadzenDataList Style="height:400;overflow:auto;"
+                WrapItems="true" AllowPaging="true"
+                Data="@Profiles" TItem="ProfileResponse" PageSize="7" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+    <Template Context="profile">
+        <RadzenCard Style="width: 50%; padding: 0;">
+            <RadzenRow Gap="0">
+                <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                    <RadzenRow Gap="0">
+                        <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                            <RadzenImage Path="user.png" Style="width: 80px; height: 80px; border-radius: 50%" />
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Username</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body2">@("City, Age")</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
+                            <RadzenRow Gap="6px">
+                                <RadzenButton Text="Написать" Style="width: 100%" />
+                            </RadzenRow>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
+                            <RadzenRow Gap="6px">
+                                <RadzenButton Text="Профиль" Style="width: 100%" />
+                            </RadzenRow>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenColumn>
+
+
+            </RadzenRow>
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+@code {
+
+    [Parameter]
+    public ProfileResponse[] Profiles { get; set; }
+
+}

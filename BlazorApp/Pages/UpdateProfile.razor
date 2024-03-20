@@ -1,17 +1,87 @@
 ﻿@page "/updateprofile"
 @using BlazorApp.Models
+@using Radzen;
+@using Radzen.Blazor
 @using static User.Dto.UserDto;
 
-<PageTitle>Update Profile</PageTitle>
+<PageTitle>Обновить профиль</PageTitle>
 
-<h1>Update Profile</h1>
+<RadzenText TextStyle="TextStyle.H2">Обновить профиль</RadzenText>
+
+
+@* <RadzenCard class="my-4">
+    <RadzenStack Orientation="Orientation.Vertical" >
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+            <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+        </RadzenStack>
+    </RadzenStack>
+</RadzenCard>
+
+ <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+ <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+
+ <div class="rz-p-12 rz-text-align-center">
+     <RadzenLabel Text="Дата рождения бля!" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+     <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+ </div>
+
+  *@
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+    @* <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek /> *@
+ </div>
+
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.FirstName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Фамилия</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.LastName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Отчество</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.Surname class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">О себе</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.About class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ищу</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.LookingFor class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+
+
+
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Как нам тебя звать?</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.UserName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Возраст</RadzenText>
+    <RadzenNumeric TValue="int" Disabled="true" @bind-Value=@userDto.Age />
+    @* <RadzenTextBox Disabled="true" @bind-Value=userDto.Age class="w-100" aria-label="Default TextBox" /> *@
+</RadzenCard>
+
+@* <div class="autocomplete w-25">
+    <label>Как нам тебя звать?</label> <!-- UserName -->
+    <input @bind="userDto.UserName" />
+</div>
+
+<div class="autocomplete w-25">
+    <label>Возраст</label> <!-- Age -->
+    <input @bind="userDto.Age" />
+</div> *@
 
 <div class="autocomplete w-25">
     <label>Дата рождения</label> <!-- DateOfBirth -->
     <input type="date" @bind="userDto.DateOfBirth" />
 </div>
 
-<div class="autocomplete w-25">
+@* <div class="autocomplete w-25">
     <label>Имя</label> <!-- FirstName -->
     <input @bind="userDto.FirstName" />
 </div>
@@ -29,12 +99,12 @@
 <div class="autocomplete w-25">
     <label>О себе</label> <!-- About -->
     <input @bind="userDto.About" />
-</div>
+</div> *@
 
-<div class="autocomplete w-25">
+@* <div class="autocomplete w-25">
     <label>Ищу</label> <!-- LookingFor -->
     <input @bind="userDto.LookingFor" />
-</div>
+</div> *@
 
 <!-- Вот тут прийдётся повозиться... -->
 <div class="autocomplete w-25">
@@ -56,7 +126,7 @@
     </select>
 </div>
 
-<div class="autocomplete w-25">
+@* <div class="autocomplete w-25">
     <label>Как нам тебя звать?</label> <!-- UserName -->
     <input @bind="userDto.UserName" />
 </div>
@@ -64,7 +134,7 @@
 <div class="autocomplete w-25">
     <label>Возраст</label> <!-- Age -->
     <input @bind="userDto.Age" />
-</div>
+</div> *@
 
 <div class="autocomplete w-25" style="margin-top 10px">
     <input type="button" value="Сохранить" @bind:after="Save"/>
@@ -73,10 +143,6 @@
 
 @code {
     User.Dto.UserDto userDto = null;
-
-    // ?????
-    private object[] profiles = null;
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,7 +164,7 @@
                 UserName = "TestNagibator666",
                 Age = 22,
                 Confirmed = false
-    };
+            };
     }
 
     async Task Save()
@@ -106,49 +172,4 @@
         
     }
 
-    // async Task HandleInputCountry(ChangeEventArgs e)
-    // {
-    //     filterCountries = e.Value?.ToString();
-    //     if (filterCountries?.Length > 2)
-    //     {
-    //         countries = await locationService.GetCountries();
-    //         countries = countries.Where(c => c.Name.ToLower().Contains(filterCountries.ToLower()))
-    //             .OrderBy(c => c)
-    //             .ToArray();
-    //     }
-    //     else
-    //     {
-    //         countries = null;
-    //         selectedCountryName = null;
-    //     }
-    // }
-
-    // async Task HandleInputCity(ChangeEventArgs e)
-    // {
-    //     filterCities = e.Value?.ToString();
-    //     if (filterCities?.Length > 2)
-    //     {
-    //         cities = await locationService.GetCitiesByCountryId(selectedCountryId.Value);
-    //         cities = cities.Where(c => c.Name.ToLower().Contains(filterCities.ToLower()))
-    //             .OrderBy(c => c)
-    //             .ToArray();
-    //     }
-    //     else
-    //     {
-    //         cities = null;
-    //         selectedCityName = null;
-    //     }
-    // }
-
-    // void SelectCountry(Guid id)
-    // {
-    //     selectedCountryId = id;
-    //     selectedCountryName = countries!.First(c => c.Id.Equals(selectedCountryId)).Name;
-    //     countries = null;
-    // }
-
-    // void SelectCity(Guid id)
-    // {
-     
-    // }
 }

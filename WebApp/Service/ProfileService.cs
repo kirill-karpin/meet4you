@@ -28,7 +28,7 @@ public class ProfileService : IProfileService
         _messageService = messageService;
         _mapper = mapper;
     }
-    public async Task<List<IProfile>> ListProfile(GetProfilesListQuery query, int itemsPerPage, int page)
+    public async Task<List<UserProfile>> ListProfile(GetProfilesListQuery query, int itemsPerPage, int page)
     {
         var userFilterDto = new UserFilterDto
         {
@@ -43,7 +43,7 @@ public class ProfileService : IProfileService
 
         var users = await _userService.GetPagedAsync(userFilterDto, itemsPerPage, page);
 
-        return await Task.FromResult(new List<IProfile>(users.Select(u => new UserProfile { Id = u.Id , User=u})));
+        return await Task.FromResult(new List<UserProfile>(users.Select(u => new UserProfile { Id = u.Id , User=u})));
     }
 
     public async Task<IProfile> GetProfile(Guid id)

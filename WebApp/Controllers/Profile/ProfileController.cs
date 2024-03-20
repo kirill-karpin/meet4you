@@ -35,7 +35,7 @@ public class ProfileController : Controller
     [Authorize]
     [HttpGet]
     [Route("list")]
-    public async Task<List<IProfile>> List([FromQuery] GetProfilesListQuery query, [Required] int itemsPerPage, [Required] int page)
+    public async Task<List<UserProfile>> List([FromQuery] GetProfilesListQuery query, [Required] int itemsPerPage, [Required] int page)
     {
         return await _profileService.ListProfile(query, itemsPerPage, page);
     }

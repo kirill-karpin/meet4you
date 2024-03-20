@@ -5,126 +5,74 @@
 
 <PageTitle>List</PageTitle>
 
-<h1>List Profile</h1>
+<RadzenCard class="my-4">
+    <RadzenStack Orientation="Orientation.Horizontal" >
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Страна
+            <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id" 
+                            Data=@countries Size="ButtonSize.Small" Change="@OnChangeAsync" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Город
+            <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id" 
+                            Data=@cities Size="ButtonSize.Small" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Пол
+            <RadzenDropDown TValue="string" TextProperty="Text"
+                            Data="@(Enum.GetValues(typeof(Gender)).Cast<Gender>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Семейное положение
+            <RadzenDropDown TValue="string" TextProperty="Text" 
+                            Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Возраст
+            <RadzenSlider Range="true" @bind-Value=@range TValue="IEnumerable<int>" Style="margin-top: 16px;" />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            Дети
+            <RadzenSwitch @bind-Value="@hasChildren" Style="margin-top: 10px;" />
+        </RadzenStack>
+    </RadzenStack>
+</RadzenCard>
 
-
-<div class="autocomplete w-25">
-    <label>Страна</label>
-    <input @bind=selectedCountryName @oninput=HandleInputCountry class="form-control filter" /> @if (countries is not null)
-    {
-        <ul class="options">
-            @if (countries.Any())
-            { @foreach (var country in countries)
-                {
-                    <li class="option" @onclick=@(_=> SelectCountry(country.Id))>
-                        <span class="option-text">@country.Name</span>
-                    </li>
-                }       }
-            else
-            {
-                <li class="disabled option">Не найдено</li>
-            }
-        </ul>
-    }
-</div>
-<div class="autocomplete w-25">
-    <label>Город</label>
-    <input @bind=selectedCityName @oninput=HandleInputCity class="form-control filter" /> @if (cities is not null)
-    {
-        <ul class="options">
-            @if (cities.Any())
-            { @foreach (var city in cities)
-                {
-                    <li class="option" @onclick=@(_=> SelectCity(city.Id))>
-                        <span class="option-text">@city.Name</span>
-                    </li>
-                }       }
-            else
-            {
-                <li class="disabled option">Не найдено</li>
-            }
-        </ul>
-    }
-</div>
-
-
-<table class='table'>
-    <thead>
-        <tr>
-            <th>profiles</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var profile in profiles)
-        {
-            <tr>
-                <td>profile</td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 
 @code {
-    private object[] profiles = null;
-
     CountryResponse[]? countries;
     CityResponse[]? cities;
-    Guid? selectedCountryId;
-    Guid? selectedCityId;
-    string? selectedCountryName;
-    string? selectedCityName;
-    string? filterCountries;
-    string? filterCities;
+    bool hasChildren;
+
+    IEnumerable<int> range = new int[] { 18, 100 };
+    
 
     protected override async Task OnInitializedAsync()
     {
-        profiles = await profileService.GetListProfile();
+        await base.OnInitializedAsync();
+
+        countries = await locationService.GetCountries();
     }
 
-    async Task HandleInputCountry(ChangeEventArgs e)
+    public async Task OnChangeAsync(object value)
     {
-        filterCountries = e.Value?.ToString();
-        if (filterCountries?.Length > 2)
-        {
-            countries = await locationService.GetCountries();
-            countries = countries.Where(c => c.Name.ToLower().Contains(filterCountries.ToLower()))
-                .OrderBy(c => c)
-                .ToArray();
-        }
-        else
-        {
-            countries = null;
-            selectedCountryName = null;
-        }
-    }
-
-    async Task HandleInputCity(ChangeEventArgs e)
-    {
-        filterCities = e.Value?.ToString();
-        if (filterCities?.Length > 2)
-        {
-            cities = await locationService.GetCitiesByCountryId(selectedCountryId.Value);
-            cities = cities.Where(c => c.Name.ToLower().Contains(filterCities.ToLower()))
-                .OrderBy(c => c)
-                .ToArray();
-        }
-        else
-        {
+        if (value == null)
             cities = null;
-            selectedCityName = null;
-        }
+        else
+            cities  = await locationService.GetCitiesByCountryId((Guid)value);
     }
 
-    void SelectCountry(Guid id)
+    enum Gender
     {
-        selectedCountryId = id;
-        selectedCountryName = countries!.First(c => c.Id.Equals(selectedCountryId)).Name;
-        countries = null;
+        М,
+        Ж
     }
-
-    void SelectCity(Guid id)
+    enum FamilyStatus
     {
-     
+        Свободен = 0,
+        ВБраке = 1,
+        Разведён = 3
     }
 }
+

@@ -5,6 +5,7 @@ using BlazorApp.AuthProviders;
 using BlazorApp.Services;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Radzen;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -22,5 +23,6 @@ builder.Services.AddScoped<LocationService, LocationService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 
+builder.Services.AddRadzenComponents();
 
 await builder.Build().RunAsync();

@@ -24,6 +24,11 @@ namespace BlazorApp.Services
             baseUrl = "https://localhost:7172/api/auth";
         }
 
+        public async Task<HttpResponseMessage> Registration(RegistrationDTO model)
+        {
+            var result = await _httpClient.PostAsJsonAsync($"{baseUrl}/registration",model);
+            return result;
+        }
 
         public async Task<LoginResponse> Login(LoginDTO model)
         {

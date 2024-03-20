@@ -1,0 +1,78 @@
+﻿@page "/registr"
+@using BlazorJwtAuth.Models;
+@using System.Net
+@inject IAuthenticationService _authService;
+@inject NavigationManager _navMgr;
+<h3>Registration</h3>
+
+<div class="row my-2">
+    <div class="col-md-6">
+        <EditForm Model="@_registrationDto" OnValidSubmit="DoRegistration">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="Login">Login</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.Login"/>
+                <ValidationMessage For="@(()=>_registrationDto.Login)"/>
+            </div>
+            
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <InputText type="password" class="form-control" @bind-Value="_registrationDto.Password" />
+                <ValidationMessage For="@(()=>_registrationDto.Password)" />
+            </div>
+            
+            <div class="form-group">
+                <label for="FirstName">FirstName</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.FirstName"/>
+                <ValidationMessage For="@(()=>_registrationDto.FirstName)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="Surname">Surname</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.Surname"/>
+                <ValidationMessage For="@(()=>_registrationDto.Surname)"/>
+            </div>
+            <div class="form-group">
+                <label for="LastName">LastName</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.LastName"/>
+                <ValidationMessage For="@(()=>_registrationDto.LastName)"/>
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.Email"/>
+                <ValidationMessage For="@(()=>_registrationDto.Email)"/>
+            </div>
+            <div class="form-group">
+                <label for="LookingFor">LookingFor</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.LookingFor"/>
+                <ValidationMessage For="@(()=>_registrationDto.LookingFor)"/>
+            </div>
+            <div class="form-group">
+                <label for="About">About</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.About"/>
+                <ValidationMessage For="@(()=>_registrationDto.About)"/>
+            </div>
+            
+            <div class="my-2">
+                @_result.RequestMessage
+            </div>
+
+            <div class="my-2">
+                <button type="submit" class="btn btn-primary">Registration</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    RegistrationDTO _registrationDto = new();
+    HttpResponseMessage _result = new();
+    
+    async Task DoRegistration()
+    {
+        _result = await _authService.Registration(_registrationDto);
+        if (_result.StatusCode == HttpStatusCode.OK)
+            _navMgr.NavigateTo("/login");
+    }
+}

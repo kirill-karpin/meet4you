@@ -8,25 +8,24 @@
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-
-        <AuthorizeView>
-            <Authorized>
+            <AuthorizeView>
+                <Authorized>
                     <NavLink  href="logout" Match="NavLinkMatch.All">
                         Logout
                     </NavLink>
-            </Authorized>
-            <NotAuthorized>
+                </Authorized>
+                <NotAuthorized>
                     <NavLink  href="login" Match="NavLinkMatch.All">
                         Login
                     </NavLink>
-            </NotAuthorized>
-        </AuthorizeView>
-      
-        </div>
+                    <NavLink  href="registr" Match="NavLinkMatch.All">
+                        Registration
+                    </NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
+      </div>
 
-       
-
-        <article class="content px-4">
+       <article class="content px-4">
             @Body
         </article>
     </main>

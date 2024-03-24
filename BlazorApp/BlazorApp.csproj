@@ -15,6 +15,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Domain\User\User.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions">
         <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
       </Reference>

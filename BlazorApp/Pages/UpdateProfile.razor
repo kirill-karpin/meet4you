@@ -1,15 +1,15 @@
 ﻿@page "/updateprofile"
 @using BlazorApp.Models
-@using Radzen;
-@using Radzen.Blazor
 @using static User.Dto.UserDto;
+
+
 
 <PageTitle>Обновить профиль</PageTitle>
 
 <RadzenText TextStyle="TextStyle.H2">Обновить профиль</RadzenText>
 
 
-@* <RadzenCard class="my-4">
+<RadzenCard class="my-4">
     <RadzenStack Orientation="Orientation.Vertical" >
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
@@ -18,20 +18,26 @@
     </RadzenStack>
 </RadzenCard>
 
- <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+@*  <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
  <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
 
  <div class="rz-p-12 rz-text-align-center">
      <RadzenLabel Text="Дата рождения бля!" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
      <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
  </div>
+ *@
+ 
 
-  *@
-
-<div class="rz-p-12 rz-text-align-center">
+@* <div class="rz-p-12 rz-text-align-center">
     <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
-    @* <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek /> *@
- </div>
+    <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+ </div> *@
+
+@* <div class="rz-p-12 rz-text-align-center">
+    <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerChangeEvent" Style="margin-right: 8px; vertical-align: middle;" />
+    <RadzenDatePicker TValue="DateTime?" Value=@userDto.DateOfBirth Name="RadzenDatePickerChangeEvent" />
+</div> *@
+
 
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
@@ -173,3 +179,4 @@
     }
 
 }
+

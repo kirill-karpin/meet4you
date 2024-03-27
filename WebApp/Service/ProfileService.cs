@@ -35,6 +35,7 @@ public class ProfileService : IProfileService
     {
         _db = db;
         _messageService = messageService;
+        _userService = userService;
         _userMapper = mapper;
         _userRepository = userRepository;
         _resetPasswordRepository = resetPassRepository;

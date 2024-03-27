@@ -1,0 +1,51 @@
+﻿@inject LocationService locationService
+@using BlazorApp.Models
+@using BlazorApp.Models.List
+
+<RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+    <RadzenText Text="Страна" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
+    <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id"
+                    LoadData=@LoadData Data=@countries Size="ButtonSize.Small" Change=@OnCountryChange />
+</RadzenStack>
+<RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+    <RadzenText Text="Город" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
+    <RadzenDropDown  TValue="string" TextProperty="Name" ValueProperty="Id"
+                    Data=@cities Size="ButtonSize.Small" Change="@OnCityChange" />
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public Guid CountryId { get; set; }
+    [Parameter]
+    public Guid CityId { get; set; }
+
+    CountryResponse[]? countries;
+    CityResponse[]? cities;
+
+    async Task LoadData(LoadDataArgs args)
+    {
+        countries = await locationService.GetCountries();
+
+        await InvokeAsync(StateHasChanged);
+    }
+    public async void OnCountryChange(object value)
+    {
+        if (value == null)
+            cities = null;
+        else
+        {
+            var countryId = (Guid)value;
+            CountryId = countryId;
+            cities = await locationService.GetCitiesByCountryId(countryId);
+            await InvokeAsync(StateHasChanged);
+        }
+
+
+    }
+    public void OnCityChange(object value)
+    {
+        if (value != null)
+            CityId = (Guid)value;
+        StateHasChanged();
+    }
+}

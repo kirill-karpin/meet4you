@@ -4,7 +4,7 @@
 
 <RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
-        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+      @*   <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Страна" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
             <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id"
                             Data=@countries Size="ButtonSize.Small" Change="@CountryChangedAsync" />
@@ -13,10 +13,12 @@
             <RadzenText Text="Город" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
             <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id"
                             Data=@cities Size="ButtonSize.Small" />
-        </RadzenStack>
+        </RadzenStack> *@
+        <LocationComponent @ref=@locationComponent CityId="@CityId" CountryId="@CountryId"></LocationComponent>
+
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Пол" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> </RadzenText>
-            <RadzenDropDown Data="@genders" @bind-Value="@_gender" Change=@GenderChanged>
+            <RadzenDropDown Data="@genders" @bind-Value="@_gender" Change=@OnGenderChange>
                 <Template>
                     @Enum.GetName(typeof(Gender), context)
                 </Template>
@@ -32,7 +34,7 @@
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Возраст @range.First() - @range.Last() </RadzenText>
-                <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@range TValue="IEnumerable<int>" Change=@AgeChanged Style="margin-top: 16px;" />
+                <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@range TValue="IEnumerable<int>" Change=@OnAgeChange Style="margin-top: 16px;" />
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
                 <RadzenText Text="Дети" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H2"></RadzenText>
@@ -45,6 +47,8 @@
     </RadzenCard>
 
     @code {
+    LocationComponent locationComponent;
+
     IEnumerable<FamilyStatus> statuses = Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>();
     FamilyStatus status = FamilyStatus.Свободен;
 
@@ -66,27 +70,21 @@
         AgeTo = range.Last();
     }
 
-    public async Task CountryChangedAsync(object value)
-    {
-        if (value == null)
-            cities = null;
-        else
-            cities = await locationService.GetCitiesByCountryId((Guid)value);
-    }
-
-    public void GenderChanged()
+    public void OnGenderChange()
     {
         SelectedGender = _gender == Gender.Ж ? false : true;
+        this.StateHasChanged();
     }
-    public void AgeChanged()
+    public void OnAgeChange()
     {
         AgeFrom = range.First();
         AgeTo = range.Last();
     }
 
-    public void FamilyStatusChanged()
+    public void OnFamilyStatusChange()
     {
         Status = (int)_gender;
+        this.StateHasChanged();
     }
 
     [Parameter]
@@ -103,6 +101,12 @@
 
     [Parameter]
     public int Status { get; set; }
+
+    [Parameter]
+    public Guid CountryId { get; set; }
+
+    [Parameter]
+    public Guid CityId { get; set; }
 
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }

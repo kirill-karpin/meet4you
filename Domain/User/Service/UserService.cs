@@ -82,6 +82,16 @@ namespace User.Service
         public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page)
         {
             List<User> users = await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page);
+
+            users.ForEach(u =>
+            {
+                DateTime today = DateTime.Today;
+                var age = today.Year - u.DateOfBirth.Year;
+                if (u.DateOfBirth.AddYears(age) > today)
+                    age--;
+                u.Age = age;
+            });
+
             return _userMapper.Map<List<User>, List<UserDto>>(users);
         }
     }

@@ -8,36 +8,24 @@
 
 <RadzenText TextStyle="TextStyle.H2">Обновить профиль</RadzenText>
 
+@* <head>
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+</head> *@
 
-<RadzenCard class="my-4">
+@* <script src="_framework/blazor.webassembly.js"></script>
+<script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script> *@
+
+@* <RadzenCard class="my-4">
     <RadzenStack Orientation="Orientation.Vertical" >
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
             <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
         </RadzenStack>
     </RadzenStack>
-</RadzenCard>
+</RadzenCard> *@
 
-@*  <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
- <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
-
- <div class="rz-p-12 rz-text-align-center">
-     <RadzenLabel Text="Дата рождения бля!" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
-     <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
- </div>
- *@
- 
-
-@* <div class="rz-p-12 rz-text-align-center">
-    <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
-    <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
- </div> *@
-
-@* <div class="rz-p-12 rz-text-align-center">
-    <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerChangeEvent" Style="margin-right: 8px; vertical-align: middle;" />
-    <RadzenDatePicker TValue="DateTime?" Value=@userDto.DateOfBirth Name="RadzenDatePickerChangeEvent" />
-</div> *@
-
+@* -------------- *@
 
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
@@ -69,83 +57,19 @@
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Возраст</RadzenText>
     <RadzenNumeric TValue="int" Disabled="true" @bind-Value=@userDto.Age />
-    @* <RadzenTextBox Disabled="true" @bind-Value=userDto.Age class="w-100" aria-label="Default TextBox" /> *@
 </RadzenCard>
 
-@* <div class="autocomplete w-25">
-    <label>Как нам тебя звать?</label> <!-- UserName -->
-    <input @bind="userDto.UserName" />
-</div>
+<RadzenCard>
+    Семейное положение
+<RadzenDropDown TValue="string" TextProperty="Text"
+                Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+</RadzenCard>
 
-<div class="autocomplete w-25">
-    <label>Возраст</label> <!-- Age -->
-    <input @bind="userDto.Age" />
-</div> *@
-
-<div class="autocomplete w-25">
-    <label>Дата рождения</label> <!-- DateOfBirth -->
-    <input type="date" @bind="userDto.DateOfBirth" />
-</div>
-
-@* <div class="autocomplete w-25">
-    <label>Имя</label> <!-- FirstName -->
-    <input @bind="userDto.FirstName" />
-</div>
-
-<div class="autocomplete w-25">
-    <label>Фамилия</label> <!-- LastName -->
-    <input @bind="userDto.LastName" />
-</div>
-
-<div class="autocomplete w-25">
-    <label>Отчество</label> <!-- Surname -->
-    <input @bind="userDto.Surname" />
-</div>
-
-<div class="autocomplete w-25">
-    <label>О себе</label> <!-- About -->
-    <input @bind="userDto.About" />
-</div> *@
-
-@* <div class="autocomplete w-25">
-    <label>Ищу</label> <!-- LookingFor -->
-    <input @bind="userDto.LookingFor" />
-</div> *@
-
-<!-- Вот тут прийдётся повозиться... -->
-<div class="autocomplete w-25">
-    <label>Семейное положение</label> <!-- FamilyStatus -->
-    @* <input @bind="userDto.FamilyStatus" /> *@
-    <select @bind="userDto.FamilyStatus">
-        @foreach (var status in Enum.GetValues(typeof(User.FamilyStatus)))
-        {
-            <option value="@status">@status.ToString()</option>
-        }
-    </select>
-</div>
-
-<div class="autocomplete w-25">
-    <label>Наличие детей</label> <!-- HaveChildren -->
-    <select @bind="userDto.HaveChildren">
-        <option value="yes">Да</option>\
-        <option value="no">Нет</option>
-    </select>
-</div>
-
-@* <div class="autocomplete w-25">
-    <label>Как нам тебя звать?</label> <!-- UserName -->
-    <input @bind="userDto.UserName" />
-</div>
-
-<div class="autocomplete w-25">
-    <label>Возраст</label> <!-- Age -->
-    <input @bind="userDto.Age" />
-</div> *@
-
-<div class="autocomplete w-25" style="margin-top 10px">
-    <input type="button" value="Сохранить" @bind:after="Save"/>
-</div>
-
+<RadzenCard>
+    Наличие детей
+    <RadzenDropDown TValue="string" TextProperty="Text"
+                    Data="@(Enum.GetValues(typeof(Children)).Cast<Children>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+</RadzenCard>
 
 @code {
     User.Dto.UserDto userDto = null;
@@ -173,10 +97,17 @@
             };
     }
 
-    async Task Save()
+    enum FamilyStatus
     {
-        
+        Свободен = 0,
+        ВБраке = 1,
+        Разведён = 3
     }
 
+    enum Children
+    {
+        Нет = 0,
+        Да  = 1
+    }
 }
 

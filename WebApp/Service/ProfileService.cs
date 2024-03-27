@@ -39,22 +39,22 @@ public class ProfileService : IProfileService
         _userRepository = userRepository;
         _resetPasswordRepository = resetPassRepository;
     }
-    public async Task<List<IProfile>> ListProfile(ListFilterModel filterModel)
+    public async Task<List<UserProfile>> ListProfile(GetProfilesListQuery query, int itemsPerPage, int page)
     {
         var userFilterDto = new UserFilterDto
         {
-            CityId = filterModel.CityId,
-            CountryId = filterModel.CountryId,
-            FamilyStatus = filterModel.FamilyStatus,
-            Gender = filterModel.Gender,
-            HaveChildren = filterModel.HaveChildren,
-            ItemsPerPage = filterModel.ItemsPerPage,
-            Page= filterModel.Page
+            CityId = query.CityId,
+            CountryId = query.CountryId,
+            FamilyStatus = query.FamilyStatus,
+            Gender = query.Gender,
+            HaveChildren = query.HaveChildren,
+            AgeFrom = query.AgeFrom,
+            AgeTo = query.AgeTo
         };
 
-        var users = await _userService.GetPagedAsync(userFilterDto);
+        var users = await _userService.GetPagedAsync(userFilterDto, itemsPerPage, page);
 
-        return await Task.FromResult(new List<IProfile>(users.Select(u => new UserProfile { Id = u.Id })));
+        return await Task.FromResult(new List<UserProfile>(users.Select(u => new UserProfile { Id = u.Id , User=u})));
     }
 
     public async Task<IProfile> GetProfile(Guid id)

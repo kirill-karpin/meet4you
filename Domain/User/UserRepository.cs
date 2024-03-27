@@ -11,9 +11,11 @@ namespace User
         {
         }
 
-        public async Task<List<User>> GetPagedAsync(UserFilterDto userFilterDto)
+        public async Task<List<User>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page)
         {
             var query = GetAll().AsQueryable();
+
+            query = query.Where(u => userFilterDto.AgeFrom <= DateTime.Today.Year - u.DateOfBirth.Year && DateTime.Today.Year - u.DateOfBirth.Year <= userFilterDto.AgeTo);
 
             if (userFilterDto.Gender.HasValue)
             {
@@ -29,10 +31,10 @@ namespace User
             }
 
             query = query
-                .Skip((userFilterDto.Page - 1) * userFilterDto.ItemsPerPage)
-                .Take(userFilterDto.ItemsPerPage);
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
     }
 }

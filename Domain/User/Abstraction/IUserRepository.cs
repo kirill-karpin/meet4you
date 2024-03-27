@@ -6,5 +6,5 @@ namespace User.Abstraction;
 public interface IUserRepository : ICrudRepository<User>
 {
     //Task<List<User>> GetPagedAsync(int page, int itemsPerPage);
-    Task<List<User>> GetPagedAsync(UserFilterDto userFilterDto);
+    Task<List<User>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page);
 }

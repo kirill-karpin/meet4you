@@ -45,6 +45,5 @@ namespace BlazorApp.AuthProviders
             NotifyAuthenticationStateChanged(authState);
         }
 
-
     }
 }

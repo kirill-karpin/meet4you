@@ -1,0 +1,32 @@
+﻿@page "/users"
+@inject ProfileService profileService
+@inject LocationService locationService
+@using BlazorApp.Models
+@using BlazorApp.Models.List
+@using BlazorApp.Components
+
+
+<Filter @ref=filter OnClick=@GetProfiles></Filter>
+<List Profiles=@profiles>   </List>
+
+@code {
+    Filter filter;
+
+    ProfileResponse[] profiles;
+
+    public async Task GetProfiles()
+    {
+        profiles = await profileService.GetListProfile(
+            filter.SelectedGender, 
+            filter.Status,
+            filter.HasChildren, 
+            filter.AgeFrom,
+            filter.AgeTo);
+    }
+
+   
+
+
+
+}
+

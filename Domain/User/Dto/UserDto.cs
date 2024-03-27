@@ -75,7 +75,12 @@ public class UserDto
     /// </summary>
     public bool HaveChildren { get; set; }
 
-
+    /// <summary>
+    /// Логин пользователя. Не передавать в DTO!
+    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
+    /// </summary>
+    [MaxLength(150)]
+    public string Login { get; set; }
 
     /// <summary>
     /// Имя пользователя на сайте знакомств (которое он хочет высавить "на обозрение" для других пользователей

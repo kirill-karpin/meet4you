@@ -59,7 +59,8 @@ namespace WebApp
                 .AddTransient<ICityRepository, CityRepository>()
                 .AddTransient<ICountryRepository, CountryRepository>()
                 .AddTransient<IUserLocationRepository, UserLocationRepository>()
-                .AddTransient<IUserRepository, UserRepository>();
+                .AddTransient<IUserRepository, UserRepository>()
+                .AddTransient<IResetPasswordRepository, ResetPasswordRepository>();
             return serviceCollection;
         }
     }

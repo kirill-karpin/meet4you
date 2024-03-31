@@ -201,6 +201,9 @@ namespace User.Service
             return _userMapper.Map<List<User>, List<UserDto>>(users);
         }
 
-
+        public IQueryable<User> GetAll(bool noTracking = false)
+        {
+            return this._userRepository.GetAll(noTracking);
+        }
     }
 }

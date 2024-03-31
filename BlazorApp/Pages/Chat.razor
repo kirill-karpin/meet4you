@@ -6,7 +6,7 @@
 
 <PageTitle>Чаты</PageTitle>
 
-<RadzenDataList WrapItems="true" AllowPaging="false" Data="@chats" TItem="ChatItem">
+<RadzenDataList WrapItems="true" AllowPaging="false" Data="@_chats" TItem="ChatItem">
     <Template Context="chat">
         <RadzenLink Path="@("/chat/" + chat.UserId.ToString())">
             <RadzenCard Style="width:300px;" href="">
@@ -49,18 +49,11 @@
     }
 
 
-    private List<ChatItem> chats = new List<ChatItem>()
+    private ChatItem[]? _chats;
+    
+    protected override async Task OnInitializedAsync()
     {
-        new ChatItem()
-        {
-            ChatId = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
-            UserName = "111",
-            FirstName = "Иванов",
-            LastName = "Иван",
-            City = "Москва",
-            Photo = null ?? DefaultPhoto,
-        }
-    };
+        _chats = await Http.GetFromJsonAsync<ChatItem[]>("/api/message/chats");
+    }
 
 }

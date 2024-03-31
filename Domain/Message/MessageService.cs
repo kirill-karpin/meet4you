@@ -14,5 +14,14 @@ public class MessageService : CrudService<Message, CreatingMessageDto, UpdatingM
     public MessageService(IMapper mapper,
         IMessageRepository messageRepository) : base(mapper, messageRepository)
     {
+        _mapper = mapper;
+        _messageRepository = messageRepository;
     }
+
+    public async Task<List<Message>> GetChatsByUserIdAsync(Guid id)
+    {
+        return await _messageRepository.GetAllChatsByUserIdAsync(id);
+    }
+    
+    
 }

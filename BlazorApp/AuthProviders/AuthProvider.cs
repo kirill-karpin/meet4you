@@ -3,6 +3,7 @@ using System.Security.Claims;
 using BlazorApp.Utility;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 
 namespace BlazorApp.AuthProviders
 {
@@ -19,9 +20,12 @@ namespace BlazorApp.AuthProviders
             _anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            Console.WriteLine("GetAuthenticationStateAsync");
             var token = await _localStorage.GetItemAsync<string>("accessToken");
+            Console.WriteLine(token);
             if(string.IsNullOrEmpty(token))
             {
                 return _anonymous;

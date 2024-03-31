@@ -1,4 +1,8 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
+@using Blazored.LocalStorage
+@using BlazorApp.AuthProviders
+@inject HttpClient _HttpClient
+@using System.Net.Http.Headers
 @inject NavigationManager Navigation
 @inject IJSRuntime JsRuntime;
 @inherits LayoutComponentBase
@@ -52,6 +56,7 @@
 @code {
 
     public bool SidebarExpanded = false;
+    private ILocalStorageService? localStorage;
     
     public class AppStatus
     {
@@ -75,6 +80,7 @@
     
     protected override async Task OnInitializedAsync()
     {
+        await JsRuntime.InvokeVoidAsync("console.log", "main layout");
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/status"))
             .Build();
@@ -82,7 +88,7 @@
         hubConnection.On<AppStatus>("ReceiveStatus",  async (status) =>
         {
             OnlineCount = status.OnlineCount;
-            await JsRuntime.InvokeVoidAsync("console.log", status.OnlineCount);
+            
             await InvokeAsync(StateHasChanged);
         });
 

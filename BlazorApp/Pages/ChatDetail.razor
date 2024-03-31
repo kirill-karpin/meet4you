@@ -1,9 +1,13 @@
 ﻿@page "/chat/{userGuid}"
+@inject IJSRuntime JsRuntime;
 @inject HttpClient Http
 @using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
+@using Blazored.LocalStorage
+@using System.Text.Json
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Чаты</PageTitle>
 
@@ -20,7 +24,7 @@
                              alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
                     </RadzenStack>
                     <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
-                        @message
+                        @message.Content     
                     </RadzenStack>
                 </RadzenStack>
             </RadzenStack>
@@ -47,22 +51,38 @@
 @code {
 
     [Parameter]
-    public string UserGuid { get; set; } = "";
+    public string? UserGuid { get; set; }
+    
+    public class Message
+    {
+        public  Guid From  { get; set; }
+        public  Guid To { get; set; }
+        public string? Content  { get; set; }
+        
+    }
 
     private HubConnection? hubConnection;
-    private List<string> messages = new List<string>();
+    private ILocalStorageService? localStorage;
+    private List<Message> messages = new List<Message>();
     private string? messageInput;
-
+    
     protected override async Task OnInitializedAsync()
     {
+        
+        await JsRuntime.InvokeVoidAsync("console.log", "chat detail");
+        
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/chat"))
             .Build();
+        
+        
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        hubConnection.On<string>("ReceiveMessage", (dataString) =>
         {
-            var encodedMsg = $"{user}: {message}";
-            messages.Add(encodedMsg);
+            Message? message = 
+                JsonSerializer.Deserialize<Message>(dataString);
+
+            if (message != null) messages.Add(message);
 
             InvokeAsync(StateHasChanged);
         });
@@ -74,7 +94,23 @@
     {
         if (hubConnection is not null)
         {
-            await hubConnection.SendAsync("SendMessage", "USER_ID", messageInput);
+            var authState = await AuthenticationStateProvider
+                .GetAuthenticationStateAsync();
+            var user = authState.User;
+            string? senderId = user?.FindFirst("Id")?.Value;
+
+
+            if (senderId != null && UserGuid != null)
+            {
+                var dataString =  JsonSerializer.Serialize(new Message()
+                {
+                    From = new Guid(senderId),
+                    To = new Guid(UserGuid),
+                    Content = messageInput
+                }) ;
+            
+                await hubConnection.SendAsync("SendMessage", dataString);
+            }
         }
     }
 

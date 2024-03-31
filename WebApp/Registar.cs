@@ -47,6 +47,7 @@ namespace WebApp
                 .AddTransient<ICountryService, CountryService>()
                 .AddTransient<ILocationService, LocationService>()
                 .AddTransient<IUserService, UserService>()
+                .AddScoped<IRabbitMQService, RabbitMQService>()
                 .AddTransient<IProfileService, ProfileService>();
 
             return serviceCollection;

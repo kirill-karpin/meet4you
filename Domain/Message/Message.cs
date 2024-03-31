@@ -6,6 +6,8 @@ public class Message : BaseEntity
 {
 
     private Guid _from;
+    private string _chatId;
+
     public Guid From
     {
         set
@@ -20,4 +22,20 @@ public class Message : BaseEntity
     public Guid To { set; get; }
     public bool IsRead { set; get; }
     public string Content { set; get; }
+
+    public string ChatId
+    {
+        set => _chatId = value;
+        get
+        {
+            string[] data = new string[2] ;
+            
+            data[0] = From.ToString();
+            data[1] = To.ToString();
+	
+            Array.Sort(data);
+		
+            return String.Join("-", data);
+        }
+    }
 }

@@ -18,17 +18,6 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        var countryDTO = await _countryService.GetByIdAsync(id);
-
-        return countryDTO == null
-           ? NotFound()
-           : Ok(countryDTO);
-    }
-
-    [HttpGet]
     [Route("get-countries")]
     public async Task<IActionResult> GetCountries()
     {
@@ -39,27 +28,9 @@ public class CountryController : ControllerBase
            : Ok(countries);
     }
 
-    [HttpPost]
-    [Route("add-country")]
-    public async Task<IActionResult> AddCountry(CreateOrUpdateCountryDTO request)
-    {
-        request.Id = Guid.NewGuid();
 
-        var guId = await _countryService.CreateAsync(request);
 
-        return guId == Guid.Empty
-            ? BadRequest()
-            : Ok(guId);
-    }
-
-    [HttpDelete]
-    [Route("delete-country")]
-    public async Task<IActionResult> DeleteCountry(Guid id)
-    {
-        await _countryService.DeleteAsync(id);
-
-        return Ok();
-    }
+  
 
 
 

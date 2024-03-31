@@ -29,6 +29,16 @@ namespace User
             {
                 query = query.Where(u => u.HaveChildren == userFilterDto.HaveChildren.Value);
             }
+            if (userFilterDto.CountryId.HasValue)
+            {
+                query = query
+                //.Include(u => u.Location)
+                .Where(u => u.Location.CountryId == userFilterDto.CountryId.Value);
+            }
+            if (userFilterDto.CityId.HasValue)
+            {
+                query = query.Where(u => u.Location.CityId == userFilterDto.CityId);
+            }
 
             query = query
                 .Skip((page - 1) * itemsPerPage)

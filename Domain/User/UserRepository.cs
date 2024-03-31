@@ -19,7 +19,7 @@ namespace User
 
             if (userFilterDto.Gender.HasValue)
             {
-                query = query.Where(u=>u.Gender == userFilterDto.Gender.Value);
+                query = query.Where(u => u.Gender == userFilterDto.Gender.Value);
             }
             if (userFilterDto.FamilyStatus.HasValue)
             {
@@ -32,8 +32,8 @@ namespace User
             if (userFilterDto.CountryId.HasValue)
             {
                 query = query
-                //.Include(u => u.Location)
-                .Where(u => u.Location.CountryId == userFilterDto.CountryId.Value);
+                 .Include(u => u.Location)
+                 .Where(u => u.Location.CountryId == userFilterDto.CountryId.Value);
             }
             if (userFilterDto.CityId.HasValue)
             {

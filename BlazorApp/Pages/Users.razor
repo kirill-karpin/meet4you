@@ -8,7 +8,16 @@
 
 
 <FilterComponent @ref=filter OnClick=@GetProfiles></FilterComponent>
-<ListComponent Profiles=@profiles> </ListComponent>
+
+@if (profiles == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ListComponent Profiles=@profiles> </ListComponent>
+}
+
 
 @code {
     FilterComponent filter;

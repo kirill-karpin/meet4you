@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure;
+using Location;
+using Location.UserLocation.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,12 +23,14 @@ namespace User.Service
         private readonly IMapper _userMapper;
         private readonly IUserRepository _userRepository;
         private readonly IResetPasswordRepository _resetPasswordRepository;
+        private readonly ILocationService _locationService;
 
-        public UserService(IMapper mapper, IUserRepository userRepository, IResetPasswordRepository resetPassRepository) : base(mapper, userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IResetPasswordRepository resetPassRepository, ILocationService locationService) : base(mapper, userRepository)
         {
             _userMapper = mapper;
             _userRepository = userRepository;
             _resetPasswordRepository = resetPassRepository;
+            _locationService = locationService;
         }
 
         public async Task<UserDto> Add(UserDto_WithLoginPassword userDto_WithLoginPassword)
@@ -187,18 +191,20 @@ namespace User.Service
         }
         public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page)
         {
-            List<User> users = await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page);
-
-            users.ForEach(u =>
+            List<UserDto> users = _userMapper.Map<List<User>, List<UserDto>>(await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page));
+           
+            users.ForEach( u =>
             {
                 DateTime today = DateTime.Today;
                 var age = today.Year - u.DateOfBirth.Year;
                 if (u.DateOfBirth.AddYears(age) > today)
                     age--;
                 u.Age = age;
+
+                u.Location = _locationService.GetUserLocation(u.Id).Result;
             });
 
-            return _userMapper.Map<List<User>, List<UserDto>>(users);
+            return users;
         }
 
 

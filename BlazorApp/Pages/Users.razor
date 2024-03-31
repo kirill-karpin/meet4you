@@ -50,13 +50,5 @@ else
             filter.AgeFrom,
             filter.AgeTo);
     }
-
-   
-    protected override async Task OnInitializedAsync()
-    {
-        profiles = await profileService.GetListProfiles();
-    }
-
-
 }
 

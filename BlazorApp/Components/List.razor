@@ -1,6 +1,7 @@
 ﻿@using BlazorApp.Models
 @using BlazorApp.Models.List
 @using BlazorApp.Components
+@inject NavigationManager Navigation
 
 <RadzenDataList Style="height:400;overflow:auto;"
                 WrapItems="true" AllowPaging="true"
@@ -19,7 +20,9 @@
                         </RadzenColumn>
                         <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
                             <RadzenRow Gap="6px">
-                                <RadzenButton Text="Написать" Style="width: 100%" />
+                                <RadzenButton Text="Написать" 
+                                              Style="width: 100%" 
+                                              Click="@(() =>Navigation.NavigateTo("/chat/" + profile.Id.ToString()))" />
                             </RadzenRow>
                         </RadzenColumn>
                         <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">

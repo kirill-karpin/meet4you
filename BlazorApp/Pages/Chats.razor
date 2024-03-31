@@ -1,4 +1,4 @@
-﻿@page "/chat"
+﻿@page "/chats"
 @inject HttpClient Http
 @using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
@@ -35,17 +35,22 @@
 
 
 @code {
-    public static string DefaultPhoto { set; get; } = "photo-default.jpg";
+    public static string DefaultPhoto { set; get; } = "/photo-default.jpg";
 
     private class ChatItem
     {
-        public Guid ChatId { set; get; }
+        private string? _photo;
         public string UserName { set; get; }
         public string FirstName { set; get; }
         public string LastName { set; get; }
-        public string City { set; get; }
+        public string? City { set; get; }
         public Guid UserId { set; get; }
-        public string Photo { set; get; }
+
+        public string? Photo
+        {
+            set => _photo = value;
+            get => !string.IsNullOrEmpty(_photo) ?_photo : DefaultPhoto;
+        }
     }
 
 
@@ -53,7 +58,9 @@
     
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("OnInitializedAsync");
         _chats = await Http.GetFromJsonAsync<ChatItem[]>("/api/message/chats");
+        Console.WriteLine(_chats);
     }
 
 }

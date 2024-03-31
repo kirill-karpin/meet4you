@@ -18,5 +18,12 @@ namespace BlazorApp.Services
             var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(query);
             return data;
         }
+        
+        public async Task<ProfileResponse[]> GetListProfiles()
+        {
+            string query = $"https://localhost:7172/api/profile/list?itemsPerPage=10&page=1";
+            var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(query);
+            return data;
+        }
     }
 }

@@ -25,7 +25,10 @@
     }
 
    
-
+    protected override async Task OnInitializedAsync()
+    {
+        profiles = await profileService.GetListProfiles();
+    }
 
 
 }

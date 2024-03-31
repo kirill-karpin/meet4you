@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using Infrastructure;
 using Message.Abstraction;
+using Message.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -27,13 +28,22 @@ public class MessageRepository : CrudRepository<Message>, IMessageRepository
         return await query.ToListAsync();
     }
     
-    public async Task<List<Message>> GetAllChatsByUserIdAsync(Guid userId)
+    public async Task<List<ChatModel>> GetAllChatsByUserIdAsync(Guid userId)
     {
         var query = GetAll()
-            .Where(message => message.From == userId)
-            .GroupBy(m => m.From)
-            .Select(g => g.First());
-        return await query.ToListAsync();
+            .Where(message => message.From == userId || message.To == userId)
+            .GroupBy(m => m.ChatId);
+
+        var dbrGroup =  await query.Select(m => m.First()).ToListAsync();
+            
+       var dbr = dbrGroup.Select(m => new ChatModel
+        {
+            ChatId = m.ChatId,
+            UserId = m.To,
+        }).ToList();
+        
+        
+        return dbr;
     }
     
 }

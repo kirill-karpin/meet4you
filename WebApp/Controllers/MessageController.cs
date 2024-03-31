@@ -57,12 +57,12 @@ public class MessageController : Controller
    
         var result = dbResult.Join(
             _userService.GetAll(), 
-            messages=> messages.To, 
+            messages=> messages.UserId, 
             users => users.Id,
             (messages, users) => new
             { 
-                ChatId = messages.To,
-                UserId = messages.To,
+                ChatId = messages.ChatId,
+                UserId = messages.UserId,
                 UserName = users.UserName,
                 LastName = users.LastName,
                 FirstName = users.FirstName,

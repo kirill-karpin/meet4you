@@ -39,7 +39,7 @@ public class MessageRepository : CrudRepository<Message>, IMessageRepository
        var dbr = dbrGroup.Select(m => new ChatModel
         {
             ChatId = m.ChatId,
-            UserId = m.To,
+            UserId = m.To != userId ? m.To : m.From,
         }).ToList();
         
         

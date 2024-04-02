@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using User.Mapping;
 using WebApp.Hubs;
+using WebApp.Service;
 
 
 namespace WebApp
@@ -89,6 +90,8 @@ namespace WebApp
                 });
             
             services.AddSignalR();  
+            
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

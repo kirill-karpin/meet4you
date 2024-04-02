@@ -61,6 +61,15 @@
         
     }
 
+    protected async Task<string?> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider
+            .GetAuthenticationStateAsync();
+        var user = authState.User;
+        string? senderId = user?.FindFirst("Id")?.Value;
+        return senderId;
+    }
+
     private HubConnection? hubConnection;
     private ILocalStorageService? localStorage;
     private List<Message> messages = new List<Message>();
@@ -70,11 +79,11 @@
     {
         
         await JsRuntime.InvokeVoidAsync("console.log", "chat detail");
-        
+        var token = await GetUserId();
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/chat"))
+            .WithUrl(Navigation.ToAbsoluteUri($"https://localhost:7172/chat?token={token}"))
+            .WithAutomaticReconnect()
             .Build();
-        
         
 
         hubConnection.On<string>("ReceiveMessage", (dataString) =>
@@ -93,25 +102,19 @@
 
     private async Task Send()
     {
-        if (hubConnection is not null)
+        Console.WriteLine("Send");
+        var senderId = await GetUserId();
+
+        if (senderId != null && UserGuid != null)
         {
-            var authState = await AuthenticationStateProvider
-                .GetAuthenticationStateAsync();
-            var user = authState.User;
-            string? senderId = user?.FindFirst("Id")?.Value;
-
-
-            if (senderId != null && UserGuid != null)
+            var dataString =  JsonSerializer.Serialize(new Message()
             {
-                var dataString =  JsonSerializer.Serialize(new Message()
-                {
-                    From = new Guid(senderId),
-                    To = new Guid(UserGuid),
-                    Content = messageInput
-                }) ;
+                From = new Guid(senderId),
+                To = new Guid(UserGuid),
+                Content = messageInput
+            }) ;
             
-                await hubConnection.SendAsync("SendMessage", dataString);
-            }
+            await hubConnection.SendAsync("SendMessage", dataString);
         }
     }
 

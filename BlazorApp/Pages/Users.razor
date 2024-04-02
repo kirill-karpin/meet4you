@@ -7,7 +7,7 @@
 @using BlazorApp.Components
 
 
-<FilterComponent @ref=filter OnClick=@GetProfiles></FilterComponent>
+<FilterComponent @ref=filterComponent OnClick=@GetProfiles />
 
 @if (profiles == null)
 {
@@ -15,12 +15,14 @@
 }
 else
 {
-    <ListComponent Profiles=@profiles> </ListComponent>
+    <ListComponent Profiles=@profiles/>
 }
 
 
 @code {
-    FilterComponent filter;
+    FilterComponent filterComponent;
+
+    FilterParameters filterParameters;
 
     ProfileResponse[] profiles;
 
@@ -28,27 +30,14 @@ else
     {
         await base.OnInitializedAsync();
 
-        //todo:пока временно так
-        profiles = await profileService.GetListProfile(
-        null,
-        null,
-        null,
-        null,
-        false,
-        18,
-        65);
+        profiles = await profileService.GetListProfile(new FilterParameters());
     }
 
     public async Task GetProfiles()
     {
-        profiles = await profileService.GetListProfile(
-            filter.CountryId,
-            filter.CityId,
-            filter.SelectedGender, 
-            filter.Status,
-            filter.HasChildren, 
-            filter.AgeFrom,
-            filter.AgeTo);
+        filterParameters = filterComponent.filterParameters;
+
+        profiles = await profileService.GetListProfile(filterParameters);
     }
 }
 

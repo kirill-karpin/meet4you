@@ -5,27 +5,26 @@
 
 <RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
-        <LocationComponent @ref=@locationComponent CityId="@CityId" CountryId="@CountryId" ValueChanged="ChangeValue"></LocationComponent>
+        <LocationComponent @ref=@locationComponent CityId="@filterParameters.CityId" CountryId="@filterParameters.CountryId" ValueChanged="ChangeValue"></LocationComponent>
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Пол" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> </RadzenText>
-            <RadzenDropDown AllowClear="true" @bind-Value="@filter.Gender" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
+            <RadzenDropDown AllowClear="true" @bind-Value="@filterParameters.Gender" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
                             Data="@(Enum.GetValues(typeof(Gender)).Cast<Gender>().Select(t => new { Text = $"{t.GetDisplayDescription()}", Value = t }))" Size="ButtonSize.Small"
-                            Change="@OnGenderChange" />
+                            />
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
             <RadzenText Text="Семейное положение" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H2"></RadzenText>
-            <RadzenDropDown AllowClear="true" @bind-Value="@filter.FamilyStatus" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
+            <RadzenDropDown AllowClear="true" @bind-Value="@filterParameters.FamilyStatus" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
                             Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t.GetDisplayDescription()}", Value = t }))" Size="ButtonSize.Small" 
-                            Change="@OnFamilyStatusChange" />
-
+                             />
         </RadzenStack>
         <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
-            <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Возраст @filter.Range.First() - @filter.Range.Last() </RadzenText>
-                <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@filter.Range TValue="IEnumerable<int>" Change=@OnAgeChange Style="margin-top: 16px;" />
+            <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Возраст @filterParameters.Range.First() - @filterParameters.Range.Last() </RadzenText>
+                <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@filterParameters.Range TValue="IEnumerable<int>" Style="margin-top: 16px;" />
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
                 <RadzenText Text="Дети" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H2"></RadzenText>
-                <RadzenSwitch @bind-Value="@HasChildren" Style="margin-top: 10px;" />
+                <RadzenSwitch @bind-Value="@filterParameters.HasChildren" Style="margin-top: 10px;" />
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" Style="" Gap="4px">
                 <RadzenButton Text="Поиск" Click=OnClick Style="margin-top: 36px; width: 140px; height: 40px" />
@@ -39,74 +38,24 @@
     public EventCallback<Guid?> ValueChanged { get; set; }
 
     [Parameter]
-    public bool HasChildren { get; set; }
-
-    [Parameter]
-    public bool? SelectedGender { get; set; }
-
-    [Parameter]
-    public int AgeFrom { get; set; }
-
-    [Parameter]
-    public int AgeTo { get; set; }
-
-    [Parameter]
-    public int? Status { get; set; }
-
-    [Parameter]
-    public Guid? CountryId { get; set; }
-
-    [Parameter]
-    public Guid? CityId { get; set; }
-
-    [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     LocationComponent locationComponent;
 
-    public Filter filter = new Filter();
-
-    List<FamilyStatus> list = new List<FamilyStatus>();
+    [Parameter]
+    public FilterParameters filterParameters { get; set; } = new FilterParameters();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        AgeFrom = filter.Range.First();
-        AgeTo = filter.Range.Last();
     }
 
     private async Task ChangeValue()
     {
-        CountryId = locationComponent.CountryId;
-        await ValueChanged.InvokeAsync(CountryId.Value);
+        filterParameters.CountryId = locationComponent.CountryId;
+        await ValueChanged.InvokeAsync(filterParameters.CountryId);
 
-        CityId = locationComponent.CityId;
-        await ValueChanged.InvokeAsync(CityId.Value);
+        filterParameters.CityId = locationComponent.CityId;
+        await ValueChanged.InvokeAsync(filterParameters.CityId);
     }
-
-    public void OnGenderChange()
-    {
-        SelectedGender = null;
-
-        if (filter.Gender.HasValue)
-            SelectedGender = filter.Gender.Value == Gender.Женщина ? false : true;
-        this.StateHasChanged();
-    }
-    public void OnAgeChange()
-    {
-        AgeFrom = filter.Range.First();
-        AgeTo = filter.Range.Last();
-    }
-
-    public void OnFamilyStatusChange()
-    {
-        Status = null;
-
-        if (filter.FamilyStatus.HasValue)
-            Status = (int)filter.FamilyStatus.Value;
-        this.StateHasChanged();
-    }
-
-  
 }

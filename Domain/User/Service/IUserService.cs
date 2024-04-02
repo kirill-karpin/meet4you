@@ -19,5 +19,6 @@ namespace User
         public Task<bool> ChangePassword(Guid userId, string newPassword, string confirmationCode);
         public Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page);
         public IQueryable<User> GetAll(bool noTracking = false);
+        public Task AddFakeUsers();
     }
 }

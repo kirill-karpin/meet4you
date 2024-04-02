@@ -55,4 +55,14 @@ public class ProfileController : Controller
     {
         return await _profileService.GetTest();
     }
+
+    [HttpGet]
+    [Route("add-fake-users")]
+    public async Task<IActionResult> AddFakeUsers()
+    {
+         await _profileService.AddFakeUsers();
+         return Ok();
+
+
+    }
 }

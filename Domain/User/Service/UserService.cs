@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bogus;
 using Infrastructure;
 using Location;
 using Location.UserLocation.Abstractions;
@@ -210,6 +211,48 @@ namespace User.Service
         public IQueryable<User> GetAll(bool noTracking = false)
         {
             return this._userRepository.GetAll(noTracking);
+        }
+
+        public async Task AddFakeUsers()
+        {
+            Randomizer.Seed = new Random(8675309);
+
+            var faker = new Faker<User>("ru")
+            .RuleFor(u => u.Gender, f => f.Random.Bool())
+            .RuleFor(u => u.FirstName, (f, u) => f.Name.FirstName(u.Gender ? Bogus.DataSets.Name.Gender.Male : Bogus.DataSets.Name.Gender.Female))
+            .RuleFor(u => u.LastName, (f, u) => f.Name.LastName(u.Gender ? Bogus.DataSets.Name.Gender.Male : Bogus.DataSets.Name.Gender.Female))
+            .RuleFor(u => u.Surname, (f, u) => " ")
+            .RuleFor(u => u.Login, f => $"login{f.Random.Number(int.MaxValue)}")
+            .RuleFor(u => u.Password, f => $"passsword{f.UniqueIndex}")
+            .RuleFor(u => u.UserName, f => $"userName{f.UniqueIndex}")
+            .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
+            .RuleFor(u => u.HaveChildren, f => f.Random.Bool())
+            .RuleFor(u => u.FamilyStatus, f => f.PickRandom<FamilyStatus>())
+            .RuleFor(u => u.DateOfBirth, f => f.Date.Between(new DateTime(1965, 1, 1), new DateTime(2006, 1, 1)))
+            .RuleFor(u => u.LookingFor, f => " ")
+            .RuleFor(u => u.About, f => " ");
+
+            var country = await _locationService.GetCountries();
+
+            var russia = country.First(c => c.Name == "Россия");
+
+            for (int i = 0; i < 100; i++)
+            {
+                var user = faker.Generate();
+                _userRepository.Add(user);
+                _userRepository.SaveChanges();
+
+               var id = await _locationService.AddUserLocation(new Location.UserLocation.DTO.UserLocationDTO
+                {
+                    UserId = user.Id,
+                    CountryId = russia.Id,
+                    CityId = russia.Cities[Random.Shared.Next(0,4)].Id
+                });
+
+            }
+           
+
+
         }
     }
 }

@@ -38,16 +38,7 @@ public class UserLocationController : ControllerBase
             : Ok(guId);
     }
 
-    [HttpGet]
-    [Route("get-all-locations")]
-    public async Task<IActionResult> GetAllLocations()
-    {
-        var userLocations = await _locationService.GetAll();
-
-        return userLocations == null
-            ? BadRequest()
-            : Ok(userLocations);
-    }
+  
 
 
 }

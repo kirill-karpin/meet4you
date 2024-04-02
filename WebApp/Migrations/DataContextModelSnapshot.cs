@@ -141,6 +141,9 @@ namespace WebApp.Migrations
 
                     b.HasIndex("CountryId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("UserLocations");
                 });
 
@@ -365,6 +368,12 @@ namespace WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("User.User", null)
+                        .WithOne("Location")
+                        .HasForeignKey("Location.UserLocation.UserLocation", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
 
                     b.Navigation("Country");
@@ -373,6 +382,12 @@ namespace WebApp.Migrations
             modelBuilder.Entity("Location.Country.Country", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("User.User", b =>
+                {
+                    b.Navigation("Location")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

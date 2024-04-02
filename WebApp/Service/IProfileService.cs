@@ -28,4 +28,6 @@ public interface IProfileService
     public Task<string> GetConfirmationCode(Guid userId);
     public Task<bool> ChangePassword(Guid userId, string newPassword, string confirmationCode);
     public Task<List<UserDto>> GetTest();
+
+    public Task AddFakeUsers();
 }

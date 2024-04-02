@@ -1,4 +1,6 @@
-﻿using BlazorApp.Models.List;
+﻿using BlazorApp.Models.Filter;
+using BlazorApp.Models.List;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace BlazorApp.Services
@@ -12,10 +14,33 @@ namespace BlazorApp.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ProfileResponse[]> GetListProfile(bool gender, int status, bool children, int ageFrom, int ageTo)
+        public async Task<ProfileResponse[]> GetListProfile(FilterParameters filterParameters)
         {
-            string query = $"https://localhost:7172/api/profile/list?Gender={gender}&FamilyStatus={status}&HaveChildren={children}&AgeFrom={ageFrom}&AgeTo={ageTo}&itemsPerPage=10&page=1";
-            var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(query);
+            if (filterParameters==null)  
+                filterParameters = new FilterParameters();
+
+            Dictionary<string, string> dic = new()
+            {
+                { "itemsPerPage",filterParameters.ItemsPerPage.ToString()},
+                { "page", filterParameters.Page.ToString() }
+            };
+            if (filterParameters.CountryId.HasValue)
+                dic.Add("countryId", filterParameters.CountryId.Value.ToString());
+            if (filterParameters.CityId.HasValue)
+                dic.Add("cityId", filterParameters.CityId.Value.ToString());
+            if (filterParameters.Gender.HasValue)
+                dic.Add("gender", (filterParameters.Gender.Value== Gender.Мужчина ? true : false).ToString());
+            if (filterParameters.FamilyStatus.HasValue)
+                dic.Add("familyStatus", filterParameters.FamilyStatus.Value.ToString());
+
+            dic.Add("haveChildren", filterParameters.HasChildren.ToString());
+            dic.Add("ageFrom", filterParameters.Range.First().ToString());
+            dic.Add("ageTo", filterParameters.Range.Last().ToString());
+            
+            var queryString = string.Join("&", dic.Select(kvp => $"{WebUtility.UrlEncode(kvp.Key)}={WebUtility.UrlEncode(kvp.Value)}").ToArray());
+            string request= $"https://localhost:7172/api/profile/list?{queryString}";
+
+            var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(request);
             return data;
         }
         

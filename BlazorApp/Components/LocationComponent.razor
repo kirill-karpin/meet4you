@@ -4,20 +4,26 @@
 
 <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
     <RadzenText Text="Страна" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
-    <RadzenDropDown TValue="string" TextProperty="Name" ValueProperty="Id"
+    <RadzenDropDown AllowClear="true" TValue="string" TextProperty="Name" ValueProperty="Id"
                     LoadData=@LoadData Data=@countries Size="ButtonSize.Small" Change=@OnCountryChange />
 </RadzenStack>
 <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
     <RadzenText Text="Город" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
-    <RadzenDropDown  TValue="string" TextProperty="Name" ValueProperty="Id"
+    <RadzenDropDown @ref=@radzenDropDownCities AllowClear="true" TValue="string" TextProperty="Name" ValueProperty="Id"
                     Data=@cities Size="ButtonSize.Small" Change="@OnCityChange" />
 </RadzenStack>
 
 @code {
     [Parameter]
-    public Guid CountryId { get; set; }
+    public Guid? CountryId { get; set; }
+
     [Parameter]
-    public Guid CityId { get; set; }
+    public Guid? CityId { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> ValueChanged { get; set; }
+
+    RadzenDropDown<string> radzenDropDownCities;
 
     CountryResponse[]? countries;
     CityResponse[]? cities;
@@ -30,22 +36,34 @@
     }
     public async void OnCountryChange(object value)
     {
-        if (value == null)
-            cities = null;
-        else
+        radzenDropDownCities.Reset();
+
+        cities = null;
+        CityId = null;
+        CountryId = null;
+
+        if (value != null)
         {
             var countryId = (Guid)value;
             CountryId = countryId;
             cities = await locationService.GetCitiesByCountryId(countryId);
-            await InvokeAsync(StateHasChanged);
+          
         }
+        StateHasChanged();
 
-
+        await ValueChanged.InvokeAsync();
     }
-    public void OnCityChange(object value)
+    public async void OnCityChange(object value)
     {
+        CityId = null;
+
         if (value != null)
             CityId = (Guid)value;
+
         StateHasChanged();
+
+        await ValueChanged.InvokeAsync();
     }
+
+ 
 }

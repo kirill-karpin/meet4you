@@ -319,4 +319,8 @@ public class ProfileService : IProfileService
         return userDtos;
     }
 
+    public async Task AddFakeUsers()
+    {
+        await _userService.AddFakeUsers();
+    }
 }

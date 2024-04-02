@@ -1,4 +1,5 @@
 ﻿using Entities.Abstractions;
+using Location.UserLocation.DTO;
 using System.ComponentModel.DataAnnotations;
 
 namespace User.Dto;
@@ -97,4 +98,6 @@ public class UserDto
     /// Подтверждён ли аккаунт пользователя? Нет - не лезь сюда за бабами! Совсем усилий не приложил!..
     /// </summary>
     public bool Confirmed { get; set; }
+
+    public UserLocationDTO Location { get; set; }
 }

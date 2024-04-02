@@ -4,6 +4,7 @@ namespace BlazorApp.Services
 {
     public interface IAuthenticationService
     {
+        Task<HttpResponseMessage> Registration(RegistrationDTO model);
         Task<LoginResponse> Login(LoginDTO model);
         Task Logout();
     }

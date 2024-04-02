@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Bogus;
 using Infrastructure;
+using Location;
+using Location.UserLocation.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,12 +24,14 @@ namespace User.Service
         private readonly IMapper _userMapper;
         private readonly IUserRepository _userRepository;
         private readonly IResetPasswordRepository _resetPasswordRepository;
+        private readonly ILocationService _locationService;
 
-        public UserService(IMapper mapper, IUserRepository userRepository, IResetPasswordRepository resetPassRepository) : base(mapper, userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IResetPasswordRepository resetPassRepository, ILocationService locationService) : base(mapper, userRepository)
         {
             _userMapper = mapper;
             _userRepository = userRepository;
             _resetPasswordRepository = resetPassRepository;
+            _locationService = locationService;
         }
 
         public async Task<UserDto> Add(UserDto_WithLoginPassword userDto_WithLoginPassword)
@@ -187,23 +192,67 @@ namespace User.Service
         }
         public async Task<List<UserDto>> GetPagedAsync(UserFilterDto userFilterDto, int itemsPerPage, int page)
         {
-            List<User> users = await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page);
-
-            users.ForEach(u =>
+            List<UserDto> users = _userMapper.Map<List<User>, List<UserDto>>(await _userRepository.GetPagedAsync(userFilterDto, itemsPerPage, page));
+           
+            users.ForEach( u =>
             {
                 DateTime today = DateTime.Today;
                 var age = today.Year - u.DateOfBirth.Year;
                 if (u.DateOfBirth.AddYears(age) > today)
                     age--;
                 u.Age = age;
+
+                u.Location = _locationService.GetUserLocation(u.Id).Result;
             });
 
-            return _userMapper.Map<List<User>, List<UserDto>>(users);
+            return users;
         }
 
         public IQueryable<User> GetAll(bool noTracking = false)
         {
             return this._userRepository.GetAll(noTracking);
+        }
+
+        public async Task AddFakeUsers()
+        {
+            Randomizer.Seed = new Random(8675309);
+
+            var faker = new Faker<User>("ru")
+            .RuleFor(u => u.Gender, f => f.Random.Bool())
+            .RuleFor(u => u.FirstName, (f, u) => f.Name.FirstName(u.Gender ? Bogus.DataSets.Name.Gender.Male : Bogus.DataSets.Name.Gender.Female))
+            .RuleFor(u => u.LastName, (f, u) => f.Name.LastName(u.Gender ? Bogus.DataSets.Name.Gender.Male : Bogus.DataSets.Name.Gender.Female))
+            .RuleFor(u => u.Surname, (f, u) => " ")
+            .RuleFor(u => u.Login, f => $"login{f.Random.Number(int.MaxValue)}")
+            .RuleFor(u => u.Password, f => $"passsword{f.UniqueIndex}")
+            .RuleFor(u => u.UserName, f => $"userName{f.UniqueIndex}")
+            .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
+            .RuleFor(u => u.HaveChildren, f => f.Random.Bool())
+            .RuleFor(u => u.FamilyStatus, f => f.PickRandom<FamilyStatus>())
+            .RuleFor(u => u.DateOfBirth, f => f.Date.Between(new DateTime(1965, 1, 1), new DateTime(2006, 1, 1)))
+            .RuleFor(u => u.LookingFor, f => " ")
+            .RuleFor(u => u.About, f => " ");
+
+            var country = await _locationService.GetCountries();
+
+            var russia = country.First(c => c.Name == "Россия");
+
+            for (int i = 0; i < 100; i++)
+            {
+                var user = faker.Generate();
+                _userRepository.Add(user);
+                _userRepository.SaveChanges();
+
+               var id = await _locationService.AddUserLocation(new Location.UserLocation.DTO.UserLocationDTO
+                {
+                    UserId = user.Id,
+                    CountryId = russia.Id,
+                    CityId = russia.Cities[Random.Shared.Next(0,4)].Id
+                });
+
+            }
+           
+
+
         }
     }
 }

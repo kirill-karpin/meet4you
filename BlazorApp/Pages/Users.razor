@@ -3,33 +3,41 @@
 @inject LocationService locationService
 @using BlazorApp.Models
 @using BlazorApp.Models.List
+@using BlazorApp.Models.Filter
 @using BlazorApp.Components
 
 
-<Filter @ref=filter OnClick=@GetProfiles></Filter>
-<List Profiles=@profiles>   </List>
+<FilterComponent @ref=filterComponent OnClick=@GetProfiles />
+
+@if (profiles == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ListComponent Profiles=@profiles/>
+}
+
 
 @code {
-    Filter filter;
+    FilterComponent filterComponent;
+
+    FilterParameters filterParameters;
 
     ProfileResponse[] profiles;
 
-    public async Task GetProfiles()
-    {
-        profiles = await profileService.GetListProfile(
-            filter.SelectedGender, 
-            filter.Status,
-            filter.HasChildren, 
-            filter.AgeFrom,
-            filter.AgeTo);
-    }
-
-   
     protected override async Task OnInitializedAsync()
     {
-        profiles = await profileService.GetListProfiles();
+        await base.OnInitializedAsync();
+
+        profiles = await profileService.GetListProfile(new FilterParameters());
     }
 
+    public async Task GetProfiles()
+    {
+        filterParameters = filterComponent.filterParameters;
 
+        profiles = await profileService.GetListProfile(filterParameters);
+    }
 }
 

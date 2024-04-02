@@ -62,4 +62,9 @@ public abstract class CrudService<TEntity, TCreatingDtoEntity, TUpdatingDtoEntit
         entity.Deleted = true;
         await _crudRepository.SaveChangesAsync();
     }
+
+    public IQueryable<TEntity> GetAll(bool noTracking = false)
+    {
+        return _crudRepository.GetAll(noTracking);
+    }
 }

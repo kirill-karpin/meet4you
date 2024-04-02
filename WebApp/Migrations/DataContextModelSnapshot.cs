@@ -35,7 +35,7 @@ namespace WebApp.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -51,7 +51,7 @@ namespace WebApp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
@@ -73,7 +73,7 @@ namespace WebApp.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -89,7 +89,7 @@ namespace WebApp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
@@ -115,7 +115,7 @@ namespace WebApp.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -127,7 +127,7 @@ namespace WebApp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
@@ -136,6 +136,13 @@ namespace WebApp.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserLocations");
                 });
@@ -149,12 +156,16 @@ namespace WebApp.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("ChatId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -175,7 +186,7 @@ namespace WebApp.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
@@ -183,6 +194,55 @@ namespace WebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("User.ResetPassword", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ConfirmationCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("NewPasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("TimeLimit")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResetPasswords");
                 });
 
             modelBuilder.Entity("User.User", b =>
@@ -209,16 +269,16 @@ namespace WebApp.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("Confirmed_At")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
@@ -267,7 +327,7 @@ namespace WebApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
@@ -294,9 +354,40 @@ namespace WebApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Location.UserLocation.UserLocation", b =>
+                {
+                    b.HasOne("Location.City.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Location.Country.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("User.User", null)
+                        .WithOne("Location")
+                        .HasForeignKey("Location.UserLocation.UserLocation", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("Location.Country.Country", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("User.User", b =>
+                {
+                    b.Navigation("Location")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

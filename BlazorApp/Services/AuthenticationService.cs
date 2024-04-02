@@ -30,16 +30,16 @@ namespace BlazorApp.Services
             return result;
         }
 
-        public async Task<LoginResponse> Login(LoginDTO model)
+        public async Task<LoginResponse?> Login(LoginDTO model)
         {
-            
-            var loginResult = await _httpClient.PostAsJsonAsync($"{baseUrl}/sign-in",model);
+            //var loginResult = await _httpClient.PostAsJsonAsync($"{baseUrl}/sign-in", model);
+            var loginResult = await _httpClient.PostAsJsonAsync($"{baseUrl}/sign-in", model);
             if (!loginResult.IsSuccessStatusCode)
                 return new LoginResponse { StatusCode = 0, Message = "Server error" };
             var loginResponseContent = await loginResult.Content.ReadFromJsonAsync<LoginResponse>();
             if (loginResponseContent != null)
             {
-                _localStorage.SetItemAsync("accessToken", loginResponseContent.Token);
+                _localStorage?.SetItemAsync("accessToken", loginResponseContent.Token);
                 ((AuthProvider)_authStateProvider).NotifyUserAuthentication(loginResponseContent.Token);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResponseContent.Token);
             }

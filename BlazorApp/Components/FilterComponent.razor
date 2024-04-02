@@ -1,0 +1,61 @@
+﻿@inject LocationService locationService
+@using BlazorApp.Models
+@using BlazorApp.Models.List
+@using BlazorApp.Models.Filter
+
+<RadzenCard>
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
+        <LocationComponent @ref=@locationComponent CityId="@filterParameters.CityId" CountryId="@filterParameters.CountryId" ValueChanged="ChangeValue"></LocationComponent>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            <RadzenText Text="Пол" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> </RadzenText>
+            <RadzenDropDown AllowClear="true" @bind-Value="@filterParameters.Gender" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
+                            Data="@(Enum.GetValues(typeof(Gender)).Cast<Gender>().Select(t => new { Text = $"{t.GetDisplayDescription()}", Value = t }))" Size="ButtonSize.Small"
+                            />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            <RadzenText Text="Семейное положение" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H2"></RadzenText>
+            <RadzenDropDown AllowClear="true" @bind-Value="@filterParameters.FamilyStatus" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
+                            Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t.GetDisplayDescription()}", Value = t }))" Size="ButtonSize.Small" 
+                             />
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Возраст @filterParameters.Range.First() - @filterParameters.Range.Last() </RadzenText>
+                <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@filterParameters.Range TValue="IEnumerable<int>" Style="margin-top: 16px;" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+                <RadzenText Text="Дети" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H2"></RadzenText>
+                <RadzenSwitch @bind-Value="@filterParameters.HasChildren" Style="margin-top: 10px;" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Vertical" Style="" Gap="4px">
+                <RadzenButton Text="Поиск" Click=OnClick Style="margin-top: 36px; width: 140px; height: 40px" />
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+
+    @code {
+
+    [Parameter]
+    public EventCallback<Guid?> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    LocationComponent locationComponent;
+
+    [Parameter]
+    public FilterParameters filterParameters { get; set; } = new FilterParameters();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async Task ChangeValue()
+    {
+        filterParameters.CountryId = locationComponent.CountryId;
+        await ValueChanged.InvokeAsync(filterParameters.CountryId);
+
+        filterParameters.CityId = locationComponent.CityId;
+        await ValueChanged.InvokeAsync(filterParameters.CityId);
+    }
+}

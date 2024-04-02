@@ -43,4 +43,6 @@ public interface ICrudService<TEntity, in TCreatingDtoEntity, in TUpdatingDtoEnt
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     public Task DeleteAsync(Guid id);
+    
+    public IQueryable<TEntity> GetAll(bool noTracking = false);
 }

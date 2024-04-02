@@ -1,0 +1,104 @@
+﻿@page "/updateprofile"
+@using BlazorApp.Models
+@using static User.Dto.UserDto;
+
+
+
+<PageTitle>Обновить профиль</PageTitle>
+
+<RadzenText TextStyle="TextStyle.H2">Обновить профиль</RadzenText>
+
+
+<RadzenCard class="my-4">
+    <RadzenStack Orientation="Orientation.Vertical" >
+        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+            <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
+            <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+        </RadzenStack>
+    </RadzenStack>
+</RadzenCard>
+
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.FirstName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Фамилия</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.LastName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Отчество</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.Surname class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">О себе</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.About class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ищу</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.LookingFor class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+
+
+
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Как нам тебя звать?</RadzenText>
+    <RadzenTextBox @bind-Value=userDto.UserName class="w-100" aria-label="Default TextBox" />
+</RadzenCard>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Возраст</RadzenText>
+    <RadzenNumeric TValue="int" Disabled="true" @bind-Value=@userDto.Age />
+</RadzenCard>
+
+<RadzenCard>
+    Семейное положение
+<RadzenDropDown TValue="string" TextProperty="Text"
+                Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+</RadzenCard>
+
+<RadzenCard>
+    Наличие детей
+    <RadzenDropDown TValue="string" TextProperty="Text"
+                    Data="@(Enum.GetValues(typeof(Children)).Cast<Children>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
+</RadzenCard>
+
+@code {
+    User.Dto.UserDto userDto = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Тут мне нужно получить данный объект
+        userDto = new User.Dto.UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Blocked = false,
+                Gender = true,
+                DateOfBirth = DateTime.Now,
+                FirstName = "Тест",
+                LastName = "Тестовый",
+                Surname = "Тестовский",
+                About = "Я пока тут просто мебель",
+                LookingFor = "Ищу новую, свежую сущность, не опороченную хранением в базе данных",
+                FamilyStatus = 0,
+                HaveChildren = false,
+                Login = "TestNagibator666",
+                UserName = "TestNagibator666",
+                Age = 22,
+                Confirmed = false
+            };
+    }
+
+    enum FamilyStatus
+    {
+        Свободен = 0,
+        ВБраке = 1,
+        Разведён = 3
+    }
+
+    enum Children
+    {
+        Нет = 0,
+        Да  = 1
+    }
+}
+

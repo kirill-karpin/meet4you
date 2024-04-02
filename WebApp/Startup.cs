@@ -2,13 +2,13 @@
 using Location.City.Mapping;
 using Location.Country.Mapping;
 using Location.UserLocation.Mapping;
-using Message;
+using Microsoft.AspNetCore.SignalR;
 using Message.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using User.Mapping;
-
+using WebApp.Hubs;
 
 
 namespace WebApp
@@ -88,6 +88,7 @@ namespace WebApp
                     };
                 });
             
+            services.AddSignalR();  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -114,7 +115,13 @@ namespace WebApp
 
             app.UseSwaggerUI();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+                 endpoints.MapHub<StatusHub>("/status");
+            });
         }
 
         private static IServiceCollection InstallAutomapper(IServiceCollection services)
@@ -127,11 +134,13 @@ namespace WebApp
         {
             var configuration = new MapperConfiguration(cfg =>
             {
+                cfg.ShouldMapMethod = (m => false);
                 cfg.AddProfile<MessageMappingProfile>();
                 cfg.AddProfile<CityMappingProfile>();
                 cfg.AddProfile<CountryMappingProfile>();
                 cfg.AddProfile<UserLocationMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
+                cfg.AddProfile<ResetPasswordProfile>();
             });
             configuration.AssertConfigurationIsValid();
             return configuration;

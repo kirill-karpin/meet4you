@@ -1,0 +1,43 @@
+﻿@page "/users"
+@inject ProfileService profileService
+@inject LocationService locationService
+@using BlazorApp.Models
+@using BlazorApp.Models.List
+@using BlazorApp.Models.Filter
+@using BlazorApp.Components
+
+
+<FilterComponent @ref=filterComponent OnClick=@GetProfiles />
+
+@if (profiles == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ListComponent Profiles=@profiles/>
+}
+
+
+@code {
+    FilterComponent filterComponent;
+
+    FilterParameters filterParameters;
+
+    ProfileResponse[] profiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        profiles = await profileService.GetListProfile(new FilterParameters());
+    }
+
+    public async Task GetProfiles()
+    {
+        filterParameters = filterComponent.filterParameters;
+
+        profiles = await profileService.GetListProfile(filterParameters);
+    }
+}
+

@@ -17,17 +17,6 @@ public class CityController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        var cityDTO = await _cityService.GetByIdAsync(id);
-
-        return cityDTO == null
-           ? NotFound()
-           : Ok(cityDTO);
-    }
-
-    [HttpGet]
     [Route("get-cities")]
     public async Task<IActionResult> GetCities()
     {
@@ -38,26 +27,14 @@ public class CityController : ControllerBase
            : Ok(cities);
     }
 
-
-    [HttpPost]
-    [Route("add-city")]
-    public async Task<IActionResult> AddCity(CityDTO request)
+    [HttpGet]
+    [Route("get-cities/{countryId}")]
+    public async Task<IActionResult> GetCities(Guid countryId)
     {
-        request.Id = Guid.NewGuid();
+        var cities = await _cityService.GetCitiesByCountryId(countryId);
 
-        var guId = await _cityService.CreateAsync(request);
-
-        return guId == Guid.Empty
-            ? BadRequest()
-            : Ok(guId);
-    }
-
-    [HttpDelete]
-    [Route("delete-city")]
-    public async Task<IActionResult> DeleteCity(Guid id)
-    {
-        await _cityService.DeleteAsync(id);
-
-        return Ok();
+        return cities == null
+           ? BadRequest()
+           : Ok(cities);
     }
 }

@@ -1,6 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using User.Dto;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Models;
 using WebApp.Service;
 using WebApp.Service;
@@ -30,12 +33,11 @@ public class ProfileController : Controller
         return await _profileService.GetPersonaProfile(new Guid(Id));
     }
 
-    [Authorize]
     [HttpGet]
     [Route("list")]
-    public async Task<List<IProfile>> List()
+    public async Task<List<UserProfile>> List([FromQuery] GetProfilesListQuery query, [Required] int itemsPerPage, [Required] int page)
     {
-        return await _profileService.ListProfile();
+        return await _profileService.ListProfile(query, itemsPerPage, page);
     }
 
     [HttpGet]
@@ -44,5 +46,23 @@ public class ProfileController : Controller
     public async Task<IProfile> Get(Guid id)
     {
         return await _profileService.GetProfile(id);
+    }
+
+    // TODO DELETE AFTER TEST
+    [HttpGet]
+    [Route("getTEST")]
+    public async Task<List<UserDto>> GetTest()
+    {
+        return await _profileService.GetTest();
+    }
+
+    [HttpGet]
+    [Route("add-fake-users")]
+    public async Task<IActionResult> AddFakeUsers()
+    {
+         await _profileService.AddFakeUsers();
+         return Ok();
+
+
     }
 }

@@ -6,6 +6,7 @@ public class Message : BaseEntity
 {
 
     private Guid _from;
+
     public Guid From
     {
         set
@@ -20,4 +21,6 @@ public class Message : BaseEntity
     public Guid To { set; get; }
     public bool IsRead { set; get; }
     public string Content { set; get; }
+
+    public string ChatId  { set; get; }
 }

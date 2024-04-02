@@ -1,0 +1,129 @@
+﻿@page "/chat/{userGuid}"
+@inject IJSRuntime JsRuntime;
+@inject HttpClient Http
+@using Microsoft.AspNetCore.SignalR
+@using Microsoft.AspNetCore.SignalR.Client
+@using Blazored.LocalStorage
+@using System.Text.Json
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Чаты</PageTitle>
+
+<h1>Чат c пользователем </h1>
+
+<RadzenCard Class="rz-my-12 rz-mx-auto" Style="height: 500px; overflow: scroll;">
+    @foreach (var message in messages)
+    {
+        <RadzenRow Gap="0">
+            <RadzenStack >
+                <RadzenStack Orientation="Orientation.Horizontal">
+                    <RadzenStack Style="border-radius: 23px;">
+                        <img src="photo-default.jpg"
+                             alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                    </RadzenStack>
+                    <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
+                        @message.Content     
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenRow>
+    }
+
+</RadzenCard>
+<RadzenCard>
+
+    <RadzenStack Orientation="Orientation.Horizontal">
+
+        <RadzenHtmlEditor @bind-Value=@messageInput style="height: 100px; width: 90%;" UploadUrl="upload/image">
+            <RadzenHtmlEditorUndo/>
+        </RadzenHtmlEditor>
+        <RadzenButton type="button" Style="width: 10%" Click="Send"
+                      disabled="@(!IsConnected)">
+            Отправить
+        </RadzenButton>
+    </RadzenStack>
+
+</RadzenCard>
+
+
+@code {
+
+    [Parameter]
+    public string? UserGuid { get; set; }
+    
+    public class Message
+    {
+        public  Guid From  { get; set; }
+        public  Guid To { get; set; }
+        public string? Content  { get; set; }
+        
+    }
+
+    private HubConnection? hubConnection;
+    private ILocalStorageService? localStorage;
+    private List<Message> messages = new List<Message>();
+    private string? messageInput;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        
+        await JsRuntime.InvokeVoidAsync("console.log", "chat detail");
+        
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/chat"))
+            .Build();
+        
+        
+
+        hubConnection.On<string>("ReceiveMessage", (dataString) =>
+        {
+            Message? message = 
+                JsonSerializer.Deserialize<Message>(dataString);
+
+            if (message != null) messages.Add(message);
+
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+        
+    }
+
+    private async Task Send()
+    {
+        if (hubConnection is not null)
+        {
+            var authState = await AuthenticationStateProvider
+                .GetAuthenticationStateAsync();
+            var user = authState.User;
+            string? senderId = user?.FindFirst("Id")?.Value;
+
+
+            if (senderId != null && UserGuid != null)
+            {
+                var dataString =  JsonSerializer.Serialize(new Message()
+                {
+                    From = new Guid(senderId),
+                    To = new Guid(UserGuid),
+                    Content = messageInput
+                }) ;
+            
+                await hubConnection.SendAsync("SendMessage", dataString);
+            }
+        }
+    }
+
+    public bool IsConnected =>
+        hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+}

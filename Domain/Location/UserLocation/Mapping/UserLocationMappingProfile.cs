@@ -15,7 +15,15 @@ public class UserLocationMappingProfile : Profile
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
             .ForMember(dest => dest.Deleted, opt => opt.Ignore())
             .ForMember(dest => dest.Sort, opt => opt.Ignore())
-            .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
-        CreateMap<UserLocation, UserLocationDTO>();
+            .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
+            .ForMember(dest => dest.City, opt => opt.Ignore())
+            .ForMember(dest => dest.Country, opt => opt.Ignore());
+
+        CreateMap<UserLocation, UserLocationDTO>()
+            .ForMember(dest => dest.Country,opt=>opt.MapFrom(s=>s.Country.Name))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(s => s.City.Name))
+            .ForMember(dest => dest.UserId, opt => opt.Ignore())
+            .ForMember(dest => dest.CityId, opt => opt.Ignore())
+            .ForMember(dest => dest.CountryId, opt => opt.Ignore());
     }
 }

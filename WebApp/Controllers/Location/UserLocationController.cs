@@ -38,5 +38,7 @@ public class UserLocationController : ControllerBase
             : Ok(guId);
     }
 
-   
+  
+
+
 }

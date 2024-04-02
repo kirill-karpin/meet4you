@@ -1,0 +1,66 @@
+﻿@page "/chats"
+@inject HttpClient Http
+@using Microsoft.AspNetCore.SignalR
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+
+<PageTitle>Чаты</PageTitle>
+
+<RadzenDataList WrapItems="true" AllowPaging="false" Data="@_chats" TItem="ChatItem">
+    <Template Context="chat">
+        <RadzenLink Path="@("/chat/" + chat.UserId.ToString())">
+            <RadzenCard Style="width:300px;" href="">
+
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+
+                    <RadzenImage Path="@chat.Photo" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(chat?.FirstName + " " + chat?.LastName)"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Собеседник</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">
+                            <b>@(chat?.FirstName + " " + chat?.LastName)</b>
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Город</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">
+                            <b>@(chat?.City)</b>
+                        </RadzenText>
+                    </RadzenStack>
+
+                </RadzenStack>
+
+                <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;"/>
+            </RadzenCard>
+        </RadzenLink>
+    </Template>
+</RadzenDataList>
+
+
+@code {
+    public static string DefaultPhoto { set; get; } = "/photo-default.jpg";
+
+    private class ChatItem
+    {
+        private string? _photo;
+        public string UserName { set; get; }
+        public string FirstName { set; get; }
+        public string LastName { set; get; }
+        public string? City { set; get; }
+        public Guid UserId { set; get; }
+
+        public string? Photo
+        {
+            set => _photo = value;
+            get => !string.IsNullOrEmpty(_photo) ?_photo : DefaultPhoto;
+        }
+    }
+
+
+    private ChatItem[]? _chats;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("OnInitializedAsync");
+        _chats = await Http.GetFromJsonAsync<ChatItem[]>("/api/message/chats");
+        Console.WriteLine(_chats);
+    }
+
+}

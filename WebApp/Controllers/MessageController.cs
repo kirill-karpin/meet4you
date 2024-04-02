@@ -3,6 +3,7 @@ using Message.Abstraction;
 using Message.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using User;
 using WebApp.Models;
 using IResult = WebApp.Models.Abstraction.IResult;
 
@@ -13,10 +14,12 @@ namespace WebApp.Controllers;
 public class MessageController : Controller
 {
     private readonly IMessageService _messageService;
+    private readonly IUserService _userService;
 
-    public MessageController(IMessageService messageService)
+    public MessageController(IMessageService messageService, IUserService userService)
     {
         _messageService = messageService;
+        _userService = userService;
     }
 
     // GET
@@ -45,4 +48,28 @@ public class MessageController : Controller
         return result;
     }
     
+    [HttpGet]
+    [Route("chats")]
+    public async Task<IEnumerable<dynamic>> GetChatsAsync()
+    {
+        string id = User.Claims.First(i => i.Type == "Id").Value;
+        var dbResult = await _messageService.GetChatsByUserIdAsync(new Guid(id));
+   
+        var result = dbResult.Join(
+            _userService.GetAll(), 
+            messages=> messages.UserId, 
+            users => users.Id,
+            (messages, users) => new
+            { 
+                ChatId = messages.ChatId,
+                UserId = messages.UserId,
+                UserName = users.UserName,
+                LastName = users.LastName,
+                FirstName = users.FirstName,
+                City = String.Empty,
+                Photo = String.Empty
+            });
+
+        return result.ToList();
+    }
 }

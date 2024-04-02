@@ -1,4 +1,5 @@
 ﻿using Entities.Abstractions;
+using Location.UserLocation;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -107,4 +108,6 @@ public class User : BaseEntity
     /// Email пользователя. Может быть использован для восстановления пароля, подтверждения регистрации и т.д.
     /// </summary>
     public string Email { get; set; }
+
+    public UserLocation Location { get; set; }
 }

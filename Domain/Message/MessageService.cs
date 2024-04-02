@@ -3,6 +3,7 @@ using AutoMapper;
 using Infrastructure;
 using Infrastructure.Abstraction;
 using Message.Dto;
+using Message.Models;
 
 namespace Message;
 
@@ -14,5 +15,14 @@ public class MessageService : CrudService<Message, CreatingMessageDto, UpdatingM
     public MessageService(IMapper mapper,
         IMessageRepository messageRepository) : base(mapper, messageRepository)
     {
+        _mapper = mapper;
+        _messageRepository = messageRepository;
     }
+
+    public async Task<List<ChatModel>> GetChatsByUserIdAsync(Guid id)
+    {
+        return await _messageRepository.GetAllChatsByUserIdAsync(id);
+    }
+    
+    
 }

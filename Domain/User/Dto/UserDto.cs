@@ -1,4 +1,5 @@
 ﻿using Entities.Abstractions;
+using Location.UserLocation.DTO;
 using System.ComponentModel.DataAnnotations;
 
 namespace User.Dto;
@@ -75,7 +76,12 @@ public class UserDto
     /// </summary>
     public bool HaveChildren { get; set; }
 
-
+    /// <summary>
+    /// Логин пользователя. Не передавать в DTO!
+    /// Исключение - UserDto_WithLoginPassword. Там эти данные нужны для работы.
+    /// </summary>
+    [MaxLength(150)]
+    public string Login { get; set; }
 
     /// <summary>
     /// Имя пользователя на сайте знакомств (которое он хочет высавить "на обозрение" для других пользователей
@@ -92,4 +98,6 @@ public class UserDto
     /// Подтверждён ли аккаунт пользователя? Нет - не лезь сюда за бабами! Совсем усилий не приложил!..
     /// </summary>
     public bool Confirmed { get; set; }
+
+    public UserLocationDTO Location { get; set; }
 }

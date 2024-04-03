@@ -39,7 +39,8 @@ public class ChatHub : Hub
         if (message != null)
         {
             Console.WriteLine($"{Context.ConnectionId } try save DB");
-            //_messageService.CreateAsync(message);
+            
+            await _messageService.CreateAsync(message);
             
             Console.WriteLine($"{Context.ConnectionId } try get connections");
             var clientsList = ConnectionPool.GetConnectionsByUserId(message.To.ToString());

@@ -46,4 +46,12 @@ public class MessageRepository : CrudRepository<Message>, IMessageRepository
         return dbr;
     }
     
+    public async Task<List<Message>> GetMessagesByChatId(string chatId)
+    {
+        var query = GetAll()
+            .Where(message => message.ChatId == chatId);
+        
+        return await query.ToListAsync();
+    }
+    
 }

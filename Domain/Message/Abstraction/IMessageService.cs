@@ -9,4 +9,5 @@ public interface IMessageService : ICrudService<Message, CreatingMessageDto, Upd
 {
     public Task<List<ChatModel>> GetChatsByUserIdAsync(Guid id);
     public IQueryable<Message> GetAll(bool noTracking = false);
+    public Task<List<Message>> GetMessagesByChatId(string chatId);
 }

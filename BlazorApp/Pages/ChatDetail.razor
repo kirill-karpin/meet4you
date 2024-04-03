@@ -85,6 +85,7 @@
             .WithAutomaticReconnect()
             .Build();
         
+        
 
         hubConnection.On<string>("ReceiveMessage", (dataString) =>
         {
@@ -97,6 +98,9 @@
         });
 
         await hubConnection.StartAsync();
+        
+        messages = await Http.GetFromJsonAsync<List<Message>>($"/api/message/chat/{UserGuid}/items") 
+                   ?? throw new InvalidOperationException();
         
     }
 

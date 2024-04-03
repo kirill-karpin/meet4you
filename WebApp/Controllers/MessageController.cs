@@ -72,4 +72,17 @@ public class MessageController : Controller
 
         return result.ToList();
     }
+    
+    [HttpGet]
+    [Route("chat/{UserGuid}/items")]
+    public async Task<List<Message.Message>> GetChatsMessagesAsync(Guid userGuid)
+    {
+        string id = User.Claims.First(i => i.Type == "Id").Value;
+
+        var chatId = CreatingMessageDto.GetChatId(userGuid.ToString(), id);
+        
+        var dbResult = await _messageService.GetMessagesByChatId(chatId);
+   
+        return dbResult.ToList();
+    }
 }

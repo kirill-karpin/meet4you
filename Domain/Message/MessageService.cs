@@ -24,5 +24,10 @@ public class MessageService : CrudService<Message, CreatingMessageDto, UpdatingM
         return await _messageRepository.GetAllChatsByUserIdAsync(id);
     }
     
+    public async Task<List<Message>> GetMessagesByChatId(string chatId)
+    {
+        return await _messageRepository.GetMessagesByChatId(chatId);
+    }
+    
     
 }

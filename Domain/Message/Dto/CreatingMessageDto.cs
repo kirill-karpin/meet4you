@@ -10,16 +10,18 @@ public class CreatingMessageDto
     private string _chatId;
     public string ChatId
     {
-        get
-        {
-            string[] data = new string[2] ;
-            
-            data[0] = From.ToString();
-            data[1] = To.ToString();
-	
-            Array.Sort(data);
-		
-            return String.Join("-", data);
-        }
+        get { return GetChatId(From.ToString(), To.ToString()); }
+    }
+
+    public static string GetChatId(string guid1, string guid2)
+    {
+        var data = new string[2];
+
+        data[0] = guid1;
+        data[1] = guid2;
+
+        Array.Sort(data);
+
+        return String.Join("-", data);
     }
 }

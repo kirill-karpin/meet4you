@@ -1,25 +1,34 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace BlazorApp.Models.List
+﻿namespace BlazorApp.Models.Filter
 {
     public class UserRepsonse
     {
-        public Guid Id { get; set; }
+            public Guid Id { get; set; }
 
-        public bool Gender { get; set; }
+            public bool Gender { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+            public DateTime DateOfBirth { get; set; }
 
-        public string FirstName { get; set; }
+            public string FirstName { get; set; }
 
-        public string LastName { get; set; }
+            public string LastName { get; set; }
 
-        public string Surname { get; set; }
+            public string Surname { get; set; }
 
-        public int Age { get; set; }
+            public string About { get; set; }
 
-        public Location Location { get; set; }
+            public string LookingFor { get; set; }
+
+            public FamilyStatus FamilyStatus { get; set; }
+
+            public bool HaveChildren { get; set; }
+
+            public string Login { get; set; }
+
+            public string UserName { get; set; }
+
+            public int Age { get; set; }
+
+            public Location Location { get; set; }
     }
 
     public class Location

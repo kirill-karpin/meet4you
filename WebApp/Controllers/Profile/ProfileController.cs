@@ -42,9 +42,9 @@ public class ProfileController : Controller
 
     [HttpGet]
     [Authorize]
-    [Route("get")]
+    [Route("{id}")]
     public async Task<IProfile> Get(Guid id)
-    {
+    { 
         return await _profileService.GetProfile(id);
     }
 

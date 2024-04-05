@@ -1,4 +1,4 @@
-﻿namespace BlazorApp.Models.List
+﻿namespace BlazorApp.Models.Filter
 {
     public enum Gender
     {

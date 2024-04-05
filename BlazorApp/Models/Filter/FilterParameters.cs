@@ -1,7 +1,4 @@
-﻿using BlazorApp.Models.List;
-using Microsoft.AspNetCore.Components;
-
-namespace BlazorApp.Models.Filter
+﻿namespace BlazorApp.Models.Filter
 {
     public class FilterParameters
     {

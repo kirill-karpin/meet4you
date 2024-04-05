@@ -1,0 +1,86 @@
+﻿@page "/profile/{userGuid}"
+@inject HttpClient Http
+@using BlazorApp.Models.Filter
+@using BlazorApp.Models
+
+<PageTitle>user @UserGuid </PageTitle>
+
+    <RadzenTemplateForm Data="@profile" TItem="ProfileResponse">
+        <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
+            <RadzenColumn Size="3" class="rz-background-color-info-lighter rz-color-on-info-lighter">
+                <RadzenImage Path="photo-default.jpg" Style="width: 100%; height: 100%; border-radius: 50%;" />
+            </RadzenColumn>
+            <RadzenColumn Size="10" SizeMD="4">
+                <RadzenStack>
+                    <RadzenFieldset>
+                        <RadzenStack Gap="1rem">
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="Имя" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.FirstName" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="Фамилия" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.LastName" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="Дата рождения" Component="Birthday" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenDatePicker @bind-Value="@profile.User.DateOfBirth" DateFormat="dd/MM/yyyy" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="Статус" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenTextBox Style="width: 100%;" Name="Name" Value="@profile.User.FamilyStatus.ToString()" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="Ищу" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.LookingFor" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                            <RadzenRow AlignItems="AlignItems.Center">
+                                <RadzenColumn Size="12" SizeMD="4">
+                                    <RadzenLabel Text="О себе" />
+                                </RadzenColumn>
+                                <RadzenColumn Size="12" SizeMD="8">
+                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.About" ReadOnly="true" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenStack>
+                    </RadzenFieldset>
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenTemplateForm>
+
+
+ @code {
+
+    ProfileResponse profile = null;
+
+    [Parameter]
+    public string? UserGuid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await Http.GetFromJsonAsync<ProfileResponse>($"/api/profile/{UserGuid}");
+    }
+}

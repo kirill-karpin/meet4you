@@ -9,7 +9,6 @@ using Install;
 using Message.Dto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebApp.Models;
 using User.CustomExceprions;
 using User.Abstraction;
 using System.Reflection;
@@ -60,9 +59,16 @@ public class ProfileService : IProfileService
 
     public async Task<IProfile> GetProfile(Guid id)
     {
+        var user = await _userRepository.GetAsync(id);
+
+        if (user==null)
+            throw new UserNotFoundException("user not found");
+
         return await Task.FromResult<IProfile>(new UserProfile()
         {
-            Id = id
+            Id = id,
+            User = _userMapper.Map<UserClass, UserDto>(user)
+            
         });
     }
 

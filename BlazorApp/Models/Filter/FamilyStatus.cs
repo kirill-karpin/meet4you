@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlazorApp.Models.List
+namespace BlazorApp.Models.Filter
 {
     public enum FamilyStatus
     {

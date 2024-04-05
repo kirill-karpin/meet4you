@@ -9,69 +9,42 @@ namespace FileStorage.Controllers;
 [Route("[controller]")]
 public class FileStorageController : ControllerBase
 {
-    private const string mongoCnStr = "mongodb://meetforyou:meetforyou@localhost:27017/?authSource=meetforyou_files";
-    private IMongoDatabase _mongoDB;
     
-    private readonly ILogger<WeatherForecastController> _logger;
-    public FileStorageController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
-        MongoClient client = new MongoClient(mongoCnStr);
-        _mongoDB = client.GetDatabase("meetforyou_files");
-    }
+    private readonly IFileUploadAdapter _fileUploadAdapter;
 
-    /*
-    /// <summary> Row добавление файла. На вход принимает... файл! Возвращает хэш </summary>
-    [HttpPost(Name = "PostFile")]
-    public string PostFile(Stream fileStream)
+    public FileStorageController(IFileUploadAdapter fileUploadAdapter)
     {
-        return "";
+        _fileUploadAdapter = fileUploadAdapter;
     }
-    */
     
-    /// <summary> Добавление файла. На вход принимает объект UserFile. Возвращает хэш </summary>
-    [HttpPost(Name = "PostUserFile")]
-    public string PostUserFile(UserFile file)
+    /// <summary> Добавление файла. На вход принимает объект UserFile. Возвращает Id </summary>
+    [HttpPost(Name = "UploadImage")]
+    public async Task<string> UploadImageAsync([FromForm] string userId, IFormFile file)
     {
-        var uFiles = _mongoDB.GetCollection<UserFile>("user_files");
-        // Если такой файл уже есть - не надо ничего делать с базой. Поищем...
-        var filter = new BsonDocument()
+        file = HttpContext.Request.Form.Files[0];
+        var userFile = new UserFile()
         {
-            { "Hash", file.Hash }
+            Name = file.FileName,
+            UserId = userId
         };
-        var tFiles = uFiles.Find(filter).ToList();
-        if (tFiles != null || tFiles.Count > 0)
-            return file.Hash;
-
-        uFiles.InsertOne(file);
-        return file.Hash;
-    }
-    
-    /// <summary> Возвращает файл по его хешу </summary>
-    [HttpGet(Name = "GetFileByHash")]
-    public  IActionResult Get(){
-        var request = HttpContext.Request;
-        var query = request.Query;
-        var hash = query.Where(x => x.Key == "hash").Select(x => x.Value).First().ToString();
-        if ( string.IsNullOrEmpty(hash)) {
-            var ms = new MemoryStream();
-            return File(ms, "application/zip", fileDownloadName: "empty");
+        using (var ms = new MemoryStream())
+        {
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            userFile.File = fileBytes;
         }
-        var uFiles = _mongoDB.GetCollection<UserFile>("user_files");
-        // Если такой файл уже есть - не надо ничего делать с базой. Поищем...
-        var filter = new BsonDocument()
-        {
-            { "Hash", hash }
-        };
-        var tFiles = uFiles.Find(filter).ToList();
-        if (tFiles != null || tFiles.Count > 0)
-            return File(tFiles[0].file, "application/octet-stream", fileDownloadName: tFiles[0].source_name);
+
+        var result = await _fileUploadAdapter.SaveFileAsync(userFile);
         
-        // случай, когда по хэшу нет файла        
-        var ms1 = new MemoryStream();
-        return File(ms1, "application/zip", fileDownloadName: "empty");
+        return result;
     }
     
-    
-    
+    /// <summary> Возвращает файл по его Id </summary>
+    [HttpGet(Name = "GetById")]
+    public  async Task<IActionResult>  GetById(string id){
+
+        var file =  await _fileUploadAdapter.GetFileByIdAsync(id);
+        
+        return File(file.File, "application/octet-stream", fileDownloadName: file.Name);
+    }
 }

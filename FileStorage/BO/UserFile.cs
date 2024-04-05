@@ -1,16 +1,22 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace FileStorage.BO;
 using System.Security.Cryptography;
 
 public class UserFile
 {
+    
     private byte[] _file;
     private byte[] _hash;
-    
+
+    [BsonId]
+    public ObjectId Id { get; set; }
     public string Hash { get; set; }
-    public DateTime creationDt { get; set; }
-    public string source_name { get; set; }
-    public int? seq_number { get; set; }
-    public byte[] file
+    public string Name { get; set; }
+    public string UserId { get; set; }
+    
+    public byte[] File
     {
         get { return _file;}
         set

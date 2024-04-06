@@ -6,9 +6,10 @@ namespace WebApp.Hubs;
 
 public class EventBusHub : Hub
 {
+    
     private static readonly ConnectionPool ConnectionPool = new();
 
-
+    
     public string? GetToken()
     {
         var http = Context?.GetHttpContext();
@@ -104,5 +105,13 @@ public class EventBusHub : Hub
                 });
             await ReceiveEvent(eventMessage);
         }
+    }
+
+    public async Task ReceiveNotificationHandler(string receiver, NotificationModel model)
+    {
+        var eventMessage = EventMessage.GetPersonalNotificationFabricMethod(
+            receiver, 
+            model);
+        await ReceiveEvent(eventMessage);
     }
 }

@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage", "FileStorage\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{216B3A1E-EA66-4811-A0A5-448DD119EB22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBroker", "MessageBroker\MessageBroker.csproj", "{72566926-35C5-4F8E-9016-CBBD40FCC788}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{216B3A1E-EA66-4811-A0A5-448DD119EB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{216B3A1E-EA66-4811-A0A5-448DD119EB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{216B3A1E-EA66-4811-A0A5-448DD119EB22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72566926-35C5-4F8E-9016-CBBD40FCC788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72566926-35C5-4F8E-9016-CBBD40FCC788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72566926-35C5-4F8E-9016-CBBD40FCC788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72566926-35C5-4F8E-9016-CBBD40FCC788}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,4 +40,15 @@ public class EventMessage
             DataJson = JsonSerializer.Serialize(data)
         };
     }
+    
+    public static EventMessage GetPersonalNotificationFabricMethod(string receiver, object data)
+    {
+        return new EventMessage()
+        {
+            Receivers = new List<string>() { receiver },
+            Type = EventType.Personal,
+            Subscriber = EventSubscriber.Notification,
+            DataJson = JsonSerializer.Serialize(data)
+        };
+    }
 }

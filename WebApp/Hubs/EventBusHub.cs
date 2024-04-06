@@ -37,7 +37,7 @@ public class EventBusHub : Hub
         }
     }
 
-    public override async  Task<Task> OnConnectedAsync()
+    public override Task OnConnectedAsync()
     {
         Console.WriteLine($"{Context.ConnectionId} connected");
 
@@ -51,7 +51,7 @@ public class EventBusHub : Hub
                 UserId = userId,
                 ConnectionId = connectionId
             });
-            await NotifyAll();
+            NotifyAll();
             return  base.OnConnectedAsync();
         }
 

@@ -99,6 +99,7 @@
             {
                 Console.WriteLine("ReceiveEvent");
                 Console.WriteLine(eventMessage.Subscriber);
+                
                 if (eventMessage.Subscriber == EventSubscriber.Status)
                 {
                     Console.WriteLine("Parse data");
@@ -114,8 +115,6 @@
             });
 
             await hubConnection.StartAsync();
-
-            await hubConnection.SendAsync("FetchStatus");
         }
         
         

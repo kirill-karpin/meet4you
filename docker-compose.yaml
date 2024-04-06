@@ -1,7 +1,6 @@
 # Use postgres/example user/password credentials
 version: '3.8'
-
-services:
+services: 
 
   db:
     image: postgres

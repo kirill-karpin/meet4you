@@ -223,7 +223,7 @@ namespace User.Service
             .RuleFor(u => u.LastName, (f, u) => f.Name.LastName(u.Gender ? Bogus.DataSets.Name.Gender.Male : Bogus.DataSets.Name.Gender.Female))
             .RuleFor(u => u.Surname, (f, u) => " ")
             .RuleFor(u => u.Login, f => $"login{f.Random.Number(int.MaxValue)}")
-            .RuleFor(u => u.Password, f => $"passsword{f.UniqueIndex}")
+            .RuleFor(u => u.Password, f => $"passsword")
             .RuleFor(u => u.UserName, f => $"userName{f.UniqueIndex}")
             .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
             .RuleFor(u => u.HaveChildren, f => f.Random.Bool())

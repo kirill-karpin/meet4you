@@ -1,56 +1,70 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
 @using Blazored.LocalStorage
-@using BlazorApp.AuthProviders
-@inject HttpClient _HttpClient
-@using System.Net.Http.Headers
+@using System.Text.Json
+@using Common
+@using Common.Models
+@inject IAuthenticationService AuthService;
 @inject NavigationManager Navigation
-@inject IJSRuntime JsRuntime;
 @inherits LayoutComponentBase
 
-<RadzenLayout style="position: relative;grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+<RadzenLayout style="position: relative; grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
     <RadzenHeader>
         <RadzenStack Gap="50%" JustifyContent="JustifyContent.Stretch" Orientation="Orientation.Horizontal">
-                      <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                                  <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)"/>
-                                  <RadzenLabel Text="Meet4You"/>
-                              </RadzenStack>
-            <RadzenStack Gap="2rem" Orientation="Orientation.Horizontal" 
-                          AlignItems="AlignItems.Center"
-                         JustifyContent="JustifyContent.Right"  Style="width: 100%">
-                <RadzenLabel >
-                    Online :  @OnlineCount
-                </RadzenLabel>
-                <RadzenLabel >
-                    <div class="notification-container"><RadzenIcon Icon="notifications"/>
-                        <span class="notification-counter">99+</span></div>
-                </RadzenLabel>
-                <RadzenLabel >
-                     <RadzenLink Path="logout">Выход</RadzenLink>
-                </RadzenLabel>
-                <RadzenLabel >
-                     <RadzenLink Path="registr">Регистрация</RadzenLink>
-                </RadzenLabel>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)"/>
+                <RadzenLabel Text="Meet4You"/>
+            </RadzenStack>
+
+
+            <RadzenStack Gap="2rem" Orientation="Orientation.Horizontal"
+                         AlignItems="AlignItems.Center"
+                         JustifyContent="JustifyContent.Right" Style="width: 100%">
+                <AuthorizeView>
+                    <Authorized>
+                        <RadzenLabel >
+                            Online : @OnlineCount
+                        </RadzenLabel>
+                        <RadzenLabel >
+                            <div class="notification-container">
+                                <RadzenIcon Icon="notifications"/>
+                                <span class="notification-counter">99+</span>
+                            </div>
+                        </RadzenLabel>
+                        <RadzenLabel >
+                            <RadzenLink Path="logout">Выход</RadzenLink>
+                        </RadzenLabel>
+
+                    </Authorized>
+                    <NotAuthorized>
+                        <RadzenLabel >
+                            <RadzenLink Path="registr">Регистрация</RadzenLink>
+                        </RadzenLabel>
+                        <RadzenLabel >
+                            <RadzenLink Path="logout">Вход</RadzenLink>
+                        </RadzenLabel>
+                    </NotAuthorized>
+                </AuthorizeView>
             </RadzenStack>
         </RadzenStack>
-        
+
     </RadzenHeader>
     <RadzenSidebar Responsive="false" @bind-Expanded="@SidebarExpanded" style="position: absolute; z-index: 3">
         <RadzenStack AlignItems="AlignItems.End" Class="rz-p-2">
-            <RadzenButton Icon="west" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Click="@(() => SidebarExpanded = false)" />
+            <RadzenButton Icon="west" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Click="@(() => SidebarExpanded = false)"/>
         </RadzenStack>
         <RadzenPanelMenu>
             <NavMenu/>
         </RadzenPanelMenu>
-        
+
     </RadzenSidebar>
     <RadzenBody>
         <div class="rz-p-4">
-              @Body
+            @Body
         </div>
     </RadzenBody>
     @if (SidebarExpanded)
     {
-    <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
+        <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
     }
 </RadzenLayout>
 
@@ -58,44 +72,51 @@
 
     public bool SidebarExpanded = false;
     private ILocalStorageService? localStorage;
-    
-    public class AppStatus
-    {
-        public int OnlineCount { set; get; } = 0;
-    }
 
-    public int? OnlineCount { get; set;  } = 0;
-    private int? CountNotification { get; set;  } = 0;
-    
+    public int? OnlineCount { get; set; } = 0;
+    private int? CountNotification { get; set; } = 0;
     private bool ShownNotification { get; set; } = false;
-
-    private bool collapseNavMenu = true;
+    
     private HubConnection? hubConnection;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-    
     protected override async Task OnInitializedAsync()
     {
-        await JsRuntime.InvokeVoidAsync("console.log", "main layout");
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri("https://localhost:7172/status"))
-            .Build();
-
-        hubConnection.On<AppStatus>("ReceiveStatus",  async (status) =>
-        {
-            OnlineCount = status.OnlineCount;
-            
-            await InvokeAsync(StateHasChanged);
-        });
-
-        await hubConnection.StartAsync();
+        Console.WriteLine("MainLayout");
         
-        await hubConnection.SendAsync("FetchStatus");
+        var isAuthorized = await AuthService.IsAuthorized();
+        if (!isAuthorized)
+        {
+            Navigation.NavigateTo("/login");    
+        }
+        else
+        {
+            var token = await AuthService.GetUserId();
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(Navigation.ToAbsoluteUri($"https://localhost:7172/status?token={token}"))
+                .Build();
+
+            hubConnection.On<EventMessage>("ReceiveEvent", async (eventMessage) =>
+            {
+                Console.WriteLine("ReceiveEvent");
+                Console.WriteLine(eventMessage.Subscriber);
+                if (eventMessage.Subscriber == EventSubscriber.Status)
+                {
+                    Console.WriteLine("Parse data");
+                    var data = eventMessage.DataJson;
+                    StatusModel? status = 
+                        JsonSerializer.Deserialize<StatusModel>(data);
+                    Console.WriteLine("status?.Count");
+                    Console.WriteLine(status?.Count);
+                    OnlineCount = status?.Count ?? 0;
+                }
+            
+                await InvokeAsync(StateHasChanged);
+            });
+
+            await hubConnection.StartAsync();
+
+            await hubConnection.SendAsync("FetchStatus");
+        }
         
         
     }
@@ -104,6 +125,6 @@
     {
         ShownNotification = !ShownNotification;
     }
-    
-    
+
+
 }

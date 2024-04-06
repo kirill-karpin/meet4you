@@ -7,13 +7,13 @@ using Microsoft.JSInterop;
 
 namespace BlazorApp.AuthProviders
 {
-    public class AuthProvider:AuthenticationStateProvider
+    public class AuthProvider : AuthenticationStateProvider
     {
         private readonly HttpClient _http;
         private readonly ILocalStorageService _localStorage;
         private readonly AuthenticationState _anonymous;
 
-        public AuthProvider(HttpClient http,ILocalStorageService localStorage )
+        public AuthProvider(HttpClient http, ILocalStorageService localStorage)
         {
             _http = http;
             _localStorage = localStorage;
@@ -26,13 +26,14 @@ namespace BlazorApp.AuthProviders
             Console.WriteLine("GetAuthenticationStateAsync");
             var token = await _localStorage.GetItemAsync<string>("accessToken");
             Console.WriteLine(token);
-            if(string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token))
             {
                 return _anonymous;
             }
+
             _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             return new AuthenticationState(new ClaimsPrincipal(
-                  new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));
+                new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));
         }
 
         public void NotifyUserAuthentication(string token)
@@ -40,7 +41,6 @@ namespace BlazorApp.AuthProviders
             var authUser = new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType"));
             var authState = Task.FromResult(new AuthenticationState(authUser));
             NotifyAuthenticationStateChanged(authState);
-
         }
 
         public void NotifyUserLogout()
@@ -48,6 +48,7 @@ namespace BlazorApp.AuthProviders
             var authState = Task.FromResult(_anonymous);
             NotifyAuthenticationStateChanged(authState);
         }
-
+        
+        
     }
 }

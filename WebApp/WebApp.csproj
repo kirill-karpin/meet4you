@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Common\Common.csproj" />
         <ProjectReference Include="..\Domain\Message\Message.csproj" />
         <ProjectReference Include="..\Domain\User\User.csproj" />
         <ProjectReference Include="..\Entities\Entities.csproj" />

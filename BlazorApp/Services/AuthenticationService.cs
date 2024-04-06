@@ -55,5 +55,18 @@ namespace BlazorApp.Services
 
         }
 
+        public async Task<bool> IsAuthorized()
+        {
+          var token = await _localStorage.GetItemAsync<string>("accessToken");
+          return (token != null);
+        }
+        
+        public async Task<string?> GetUserId()
+        {
+            var authState = await _authStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            string? senderId = user?.FindFirst("Id")?.Value;
+            return senderId;
+        }
     }
 }

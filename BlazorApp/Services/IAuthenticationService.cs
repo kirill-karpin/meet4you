@@ -7,5 +7,7 @@ namespace BlazorApp.Services
         Task<HttpResponseMessage> Registration(RegistrationDTO model);
         Task<LoginResponse> Login(LoginDTO model);
         Task Logout();
+        Task<bool> IsAuthorized();
+        Task<string> GetUserId();
     }
 }

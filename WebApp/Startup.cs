@@ -123,7 +123,7 @@ namespace WebApp
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
-                 endpoints.MapHub<StatusHub>("/status");
+                 endpoints.MapHub<EventBusHub>("/status");
             });
         }
 

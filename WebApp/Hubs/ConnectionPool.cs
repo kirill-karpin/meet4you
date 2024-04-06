@@ -40,4 +40,9 @@ public class ConnectionPool
 
         return new List<string>();
     }
+
+    public int GetCount()
+    {
+        return _pool.Count; 
+    }
 }

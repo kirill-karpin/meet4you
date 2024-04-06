@@ -2,7 +2,7 @@
 @using BlazorJwtAuth.Models;
 @inject IAuthenticationService _authService;
 @inject NavigationManager _navMgr;
-<h3>Login</h3>
+
 
 <div class="row my-2">
     <div class="col-md-6">
@@ -39,9 +39,10 @@
     {
         loginResponse.Message = "Wait....";
         loginResponse = await _authService.Login(loginModel);
-        if (loginResponse.StatusCode == 1)
+        Console.WriteLine(loginResponse);
+        if (loginResponse?.Token != null)
         {
-            _navMgr.NavigateTo("/dashboard");
+            _navMgr.NavigateTo("/users");
         }
             
     }

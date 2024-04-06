@@ -20,7 +20,7 @@ public class EventMessage
         return Type == EventType.Personal;
     }
 
-    public static EventMessage GetBroadcastMessageFabric(EventSubscriber subscriber, object data)
+    public static EventMessage GetBroadcastMessageFabricMethod(EventSubscriber subscriber, object data)
     {
         return new EventMessage()
         {
@@ -30,7 +30,7 @@ public class EventMessage
         };
     }
 
-    public static EventMessage GetPersonalMessageFabric(EventSubscriber subscriber, string receiver, object data)
+    public static EventMessage GetPersonalMessageFabricMethod(EventSubscriber subscriber, string receiver, object data)
     {
         return new EventMessage()
         {

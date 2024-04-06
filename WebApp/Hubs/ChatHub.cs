@@ -34,7 +34,7 @@ public class ChatHub : Hub
             JsonSerializer.Deserialize<CreatingMessageDto>(dataString);
         var http = Context?.GetHttpContext();
         
-        Console.WriteLine($"{Context.ConnectionId } SendMessage");
+        Console.WriteLine($"{Context?.ConnectionId } SendMessage");
         
         if (message != null)
         {
@@ -65,7 +65,11 @@ public class ChatHub : Hub
         
         if (token is not null && id is not null)
         {
-            ConnectionPool.Add(token, id);
+            ConnectionPool.Update(new UpdatePoolAction
+            {
+                UserId = token,
+                ConnectionId = id
+            });
             return base.OnConnectedAsync();
         }
 
@@ -81,7 +85,12 @@ public class ChatHub : Hub
         
         if (token is not null && id is not null)
         {
-            ConnectionPool.Remove(token);    
+            ConnectionPool.Update(new UpdatePoolAction
+            {
+                UserId = token,
+                ConnectionId = id,
+                IsDelete = true
+            });
         }
         await base.OnDisconnectedAsync(e);
     }

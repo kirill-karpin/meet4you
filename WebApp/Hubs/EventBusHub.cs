@@ -37,33 +37,42 @@ public class EventBusHub : Hub
         }
     }
 
-    public override Task OnConnectedAsync()
+    public override async  Task<Task> OnConnectedAsync()
     {
         Console.WriteLine($"{Context.ConnectionId} connected");
 
-        var token = GetToken();
-        var id = GetConnectionId();
+        var userId = GetToken();
+        var connectionId = GetConnectionId();
 
-        if (!String.IsNullOrEmpty(token)  && !String.IsNullOrEmpty( id))
+        if (!String.IsNullOrEmpty(userId)  && !String.IsNullOrEmpty( connectionId))
         {
-            ConnectionPool.Add(token, id);
-            NotifyAll();
-            return base.OnConnectedAsync();
+            ConnectionPool.Update(new UpdatePoolAction
+            {
+                UserId = userId,
+                ConnectionId = connectionId
+            });
+            await NotifyAll();
+            return  base.OnConnectedAsync();
         }
 
-        return base.OnDisconnectedAsync(new Exception("No  token id"));
+        throw new Exception("Unknown token");
     }
 
     public override async Task OnDisconnectedAsync(Exception e)
     {
         Console.WriteLine($"Disconnected {e?.Message} {Context.ConnectionId}");
 
-        var token = GetToken();
-        var id = GetConnectionId();
+        var userId = GetToken();
+        var connectionId = GetConnectionId();
 
-        if (!String.IsNullOrEmpty(token)  && !String.IsNullOrEmpty( id))
+        if (!String.IsNullOrEmpty(userId)  && !String.IsNullOrEmpty( connectionId))
         {
-            ConnectionPool.Remove(token);
+            ConnectionPool.Update(new UpdatePoolAction
+            {
+                UserId = userId,
+                ConnectionId = connectionId,
+                IsDelete = true
+            });
             NotifyAll();
         }
 
@@ -72,7 +81,7 @@ public class EventBusHub : Hub
 
     public async Task NotifyAll()
     {
-        var eventMessage = EventMessage.GetBroadcastMessageFabric(
+        var eventMessage = EventMessage.GetBroadcastMessageFabricMethod(
             EventSubscriber.Status, 
             new StatusModel()
             {
@@ -83,12 +92,12 @@ public class EventBusHub : Hub
     
     public async Task FetchStatus()
     {
-        var token = GetToken();
-        if (!String.IsNullOrEmpty(token))
+        var receiver = GetToken();
+        if (!String.IsNullOrEmpty(receiver))
         {
-            var eventMessage = EventMessage.GetPersonalMessageFabric(
+            var eventMessage = EventMessage.GetPersonalMessageFabricMethod(
                 EventSubscriber.Status, 
-                token, 
+                receiver, 
                 new StatusModel()
                 {
                     Count = ConnectionPool.GetCount()

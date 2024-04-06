@@ -1,5 +1,4 @@
 ﻿using BlazorApp.Models.Filter;
-using BlazorApp.Models.List;
 using System.Net;
 using System.Net.Http.Json;
 

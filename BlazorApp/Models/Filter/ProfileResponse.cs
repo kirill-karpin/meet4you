@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BlazorApp.Models.List
+namespace BlazorApp.Models.Filter
 {
     public class ProfileResponse
     {

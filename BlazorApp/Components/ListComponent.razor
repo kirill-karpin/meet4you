@@ -1,12 +1,11 @@
-﻿@using BlazorApp.Models
-@using BlazorApp.Models.List
+﻿@using BlazorApp.Models.Filter
 @using BlazorApp.Components
 
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@Profiles" TItem="ProfileResponse">
     <Template Context="profile">
       
         <RadzenCard Style="width:300px;">
-
+         <RadzenLink Path="@("/profile/" + profile.Id.ToString())">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
                 <RadzenImage Path="photo-default.jpg" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(profile.User.FirstName + " " + profile.User.LastName + ", " + profile.User.Age)" />
                 <RadzenStack Gap="0">
@@ -16,6 +15,7 @@
                     <RadzenText TextStyle="TextStyle.Body1" Visible="@(profile.User.Location!=null)"> <b>@(profile.User.Location?.City), @(profile.User.Location?.Country)</b></RadzenText>
                 </RadzenStack>
             </RadzenStack>
+        </RadzenLink>
             <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
             <RadzenRow>
                 <RadzenColumn Size="8" Class="rz-text-truncate">
@@ -24,7 +24,7 @@
         
             </RadzenRow>
         </RadzenCard>
-     
+       
     </Template>
 </RadzenDataList>
 

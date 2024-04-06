@@ -1,10 +1,11 @@
-﻿using Message;
+﻿using Common.Models;
 using Message.Abstraction;
 using Message.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using User;
 using WebApp.Models;
+using WebApp.Service;
 using IResult = WebApp.Models.Abstraction.IResult;
 
 namespace WebApp.Controllers;
@@ -15,6 +16,7 @@ public class MessageController : Controller
 {
     private readonly IMessageService _messageService;
     private readonly IUserService _userService;
+
 
     public MessageController(IMessageService messageService, IUserService userService)
     {
@@ -69,7 +71,6 @@ public class MessageController : Controller
                 City = String.Empty,
                 Photo = String.Empty
             });
-
         return result.ToList();
     }
     

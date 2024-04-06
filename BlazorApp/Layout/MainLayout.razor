@@ -27,7 +27,10 @@
                         <RadzenLabel >
                             <div class="notification-container">
                                 <RadzenIcon Icon="notifications"/>
-                                <span class="notification-counter">99+</span>
+                                @if (CountNotification > 0)
+                                {
+                                    <span class="notification-counter"> @CountNotification </span>
+                                }
                             </div>
                         </RadzenLabel>
                         <RadzenLabel >
@@ -72,12 +75,20 @@
 
     public bool SidebarExpanded = false;
     private ILocalStorageService? localStorage;
+    private List<NotificationModel> _notifications = new();
 
     public int? OnlineCount { get; set; } = 0;
-    private int? CountNotification { get; set; } = 0;
+
+    private int? CountNotification
+    {
+        get => _notifications.Count;
+        set => _countNotification = value;
+    }
+
     private bool ShownNotification { get; set; } = false;
     
     private HubConnection? hubConnection;
+    private int? _countNotification = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -109,6 +120,21 @@
                     Console.WriteLine("status?.Count");
                     Console.WriteLine(status?.Count);
                     OnlineCount = status?.Count ?? 0;
+                }
+                
+                if (eventMessage.Subscriber == EventSubscriber.Notification)
+                {
+                    Console.WriteLine("Parse data");
+                    var data = eventMessage.DataJson;
+                    NotificationModel? notification = 
+                        JsonSerializer.Deserialize<NotificationModel>(data);
+
+                    if (notification != null)
+                    {
+                        _notifications.Add(notification);    
+                    }
+                    
+                    
                 }
             
                 await InvokeAsync(StateHasChanged);

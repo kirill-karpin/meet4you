@@ -33,6 +33,7 @@
 
     <ItemGroup>
         <Folder Include="Controllers\Notification\" />
+        <Folder Include="EventBus\" />
         <Folder Include="Migrations\" />
         <Folder Include="Models\Abstraction\" />
     </ItemGroup>

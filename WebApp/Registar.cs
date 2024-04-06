@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using User;
 using User.Abstraction;
 using User.Service;
+using WebApp.Hubs;
 using WebApp.Service;
 using WebApp.Settings;
 using WebApp.Service;
@@ -33,6 +34,7 @@ namespace WebApp
             applicationSettings.ConnectionString = configuration?.GetConnectionString("DefaultConnection") ?? "";
             services.AddSingleton(applicationSettings);
             services.AddScoped(typeof(DbContext), typeof(DataContext));
+            services.AddSingleton<ConnectionPool>();
             return services.AddSingleton((IConfigurationRoot)configuration)
                 .InstallServices()
                 .ConfigureContext(applicationSettings.ConnectionString)
@@ -47,6 +49,7 @@ namespace WebApp
                 .AddTransient<ICountryService, CountryService>()
                 .AddTransient<ILocationService, LocationService>()
                 .AddTransient<IUserService, UserService>()
+                .AddTransient<IEventBusService, EventBusService>()
                 .AddScoped<IRabbitMQService, RabbitMQService>()
                 .AddTransient<IProfileService, ProfileService>();
 

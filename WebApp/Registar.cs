@@ -9,6 +9,7 @@ using Infrastructure;
 using Install;
 using Message;
 using Message.Abstraction;
+using MessageBroker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,8 @@ namespace WebApp
             services.AddSingleton(applicationSettings);
             services.AddScoped(typeof(DbContext), typeof(DataContext));
             services.AddSingleton<ConnectionPool>();
+            services.AddHostedService<ServiceListener>();
+            
             return services.AddSingleton((IConfigurationRoot)configuration)
                 .InstallServices()
                 .ConfigureContext(applicationSettings.ConnectionString)
@@ -49,8 +52,8 @@ namespace WebApp
                 .AddTransient<ICountryService, CountryService>()
                 .AddTransient<ILocationService, LocationService>()
                 .AddTransient<IUserService, UserService>()
-                .AddTransient<IEventBusService, EventBusService>()
-                .AddScoped<IRabbitMQService, RabbitMQService>()
+                .AddSingleton<IMessageBroker, MessageBrokerService>()
+                .AddSingleton<IEventBusService, EventBusService>()
                 .AddTransient<IProfileService, ProfileService>();
 
             return serviceCollection;

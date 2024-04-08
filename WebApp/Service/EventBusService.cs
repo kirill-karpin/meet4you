@@ -7,26 +7,24 @@ namespace WebApp.Service;
 
 public class EventBusService : IEventBusService
 {
-    private readonly IHubContext<EventBusHub> _eventBusHub;
+    private readonly IHubContext<MainHub> _eventBusHub;
     private readonly ConnectionPool _connectionPool;
 
-    
-    
-    public EventBusService( IHubContext<EventBusHub> eventBusHub, ConnectionPool connectionPool)
+
+    public EventBusService(IHubContext<MainHub> eventBusHub, ConnectionPool connectionPool)
     {
         _eventBusHub = eventBusHub;
         _connectionPool = connectionPool;
-        EventBusHub.MyStaticEvent += HandleMyEvent;
     }
-    
+
     public async Task ReceiveNotification(string receiver, NotificationModel model)
     {
         var eventMessage = EventMessage.GetPersonalNotificationFabricMethod(
-            receiver, 
+            receiver,
             model);
         await ReceiveEvent(eventMessage);
     }
-    
+
     public async Task ReceiveEvent(EventMessage eventMessage)
     {
         if (eventMessage.isBroadcast())
@@ -47,17 +45,11 @@ public class EventBusService : IEventBusService
     public async Task NotifyAll()
     {
         var eventMessage = EventMessage.GetBroadcastMessageFabricMethod(
-            EventSubscriber.Status, 
+            EventSubscriber.Status,
             new StatusModel()
             {
                 Count = _connectionPool.GetCount()
             });
         await ReceiveEvent(eventMessage);
-    }
-    
-    public void HandleMyEvent(object sender, EventArgs e)
-    {
-        //Console.WriteLine("Событие из NotifyAll произошло!");
-        NotifyAll();
     }
 }

@@ -32,7 +32,6 @@ public class ChatHub : Hub
     {
         CreatingMessageDto? message = 
             JsonSerializer.Deserialize<CreatingMessageDto>(dataString);
-        var http = Context?.GetHttpContext();
         
         Console.WriteLine($"{Context?.ConnectionId } SendMessage");
         

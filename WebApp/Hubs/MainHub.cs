@@ -1,29 +1,21 @@
 ﻿using Common;
 using Common.Models;
+using MessageBroker;
 using Microsoft.AspNetCore.SignalR;
 using WebApp.Service;
 
 
 namespace WebApp.Hubs;
 
-public class EventBusHub : Hub
+public class MainHub : Hub
 {
     private readonly ConnectionPool _connectionPool;
-    private readonly IEventBusService _eventBusService;
+    private readonly IMessageBroker _messageBroker;
 
-    public delegate void EventHandler(object sender, EventArgs e);
-
-    public static event EventHandler? MyStaticEvent;
-    
-    public EventBusHub(ConnectionPool connectionPool, IEventBusService eventBusService)
+    public MainHub(ConnectionPool connectionPool, IMessageBroker messageBroker)
     {
         _connectionPool = connectionPool;
-        _eventBusService = eventBusService;
-    }
-    
-    public static void RaiseMyStaticEvent()
-    {
-        MyStaticEvent?.Invoke(null, EventArgs.Empty);
+        _messageBroker = messageBroker;
     }
 
     public string? GetToken()
@@ -45,15 +37,15 @@ public class EventBusHub : Hub
         var userId = GetToken();
         var connectionId = GetConnectionId();
 
-        if (!String.IsNullOrEmpty(userId)  && !String.IsNullOrEmpty( connectionId))
+        if (!String.IsNullOrEmpty(userId) && !String.IsNullOrEmpty(connectionId))
         {
             _connectionPool.Update(new UpdatePoolAction
             {
                 UserId = userId,
                 ConnectionId = connectionId
             });
-            RaiseMyStaticEvent();
-            return  base.OnConnectedAsync();
+            SendNotifyAllMessage();
+            return base.OnConnectedAsync();
         }
 
         throw new Exception("Unknown token");
@@ -66,7 +58,7 @@ public class EventBusHub : Hub
         var userId = GetToken();
         var connectionId = GetConnectionId();
 
-        if (!String.IsNullOrEmpty(userId)  && !String.IsNullOrEmpty( connectionId))
+        if (!String.IsNullOrEmpty(userId) && !String.IsNullOrEmpty(connectionId))
         {
             _connectionPool.Update(new UpdatePoolAction
             {
@@ -74,9 +66,17 @@ public class EventBusHub : Hub
                 ConnectionId = connectionId,
                 IsDelete = true
             });
-            RaiseMyStaticEvent();
+            SendNotifyAllMessage();
         }
 
         await base.OnDisconnectedAsync(e);
+    }
+    
+    public void SendNotifyAllMessage()
+    {
+        _messageBroker.SendMessage(new QueueMessage()
+        {
+            Message = "notify-all"
+        });
     }
 }

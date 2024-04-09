@@ -1,0 +1,62 @@
+<mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" background="none" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="node4" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Cities&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; CountryId: uuid&lt;br/&gt; Name: text&lt;br/&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="-33" y="-12" width="169" height="280" as="geometry" />
+    </mxCell>
+    <mxCell id="node5" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Countries&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Name: text&lt;br/&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="-81" y="-320" width="169" height="256" as="geometry" />
+    </mxCell>
+    <mxCell id="node0" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Messages&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;br/&gt; Content: text&lt;br/&gt; IsRead: boolean&lt;br/&gt; To: uuid&lt;br/&gt; From: uuid&lt;br/&gt; ChatId: text&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="412" y="-320" width="169" height="352" as="geometry" />
+    </mxCell>
+    <mxCell id="node6" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;ResetPasswords&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Login: varchar(150)&lt;br/&gt; ConfirmationCode: varchar(10)&lt;br/&gt; TimeLimit: timestamp&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; NewPasswordHash: text&lt;br/&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="626" y="-320" width="219" height="328" as="geometry" />
+    </mxCell>
+    <mxCell id="node1" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;UserLocations&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; UserId: uuid&lt;br/&gt; CityId: uuid&lt;br/&gt; CountryId: uuid&lt;br/&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="-81" y="320" width="169" height="304" as="geometry" />
+    </mxCell>
+    <mxCell id="node2" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Users&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; FirstName: text&lt;br/&gt; LastName: text&lt;br/&gt; Surname: text&lt;br/&gt; Sort: integer&lt;br/&gt; Active: boolean&lt;br/&gt; CreatedAt: timestamp&lt;br/&gt; UpdatedAt: timestamp&lt;br/&gt; CreatedBy: uuid&lt;br/&gt; UpdatedBy: uuid&lt;br/&gt; Deleted: boolean&lt;br/&gt; About: varchar(250)&lt;br/&gt; Blocked: boolean&lt;br/&gt; DateOfBirth: timestamp&lt;br/&gt; FamilyStatus: integer&lt;br/&gt; Gender: boolean&lt;br/&gt; HaveChildren: boolean&lt;br/&gt; Login: varchar(150)&lt;br/&gt; LookingFor: varchar(250)&lt;br/&gt; Password: varchar(150)&lt;br/&gt; Age: integer&lt;br/&gt; Confirmed: boolean&lt;br/&gt; Confirmed_At: timestamp&lt;br/&gt; Email: text&lt;br/&gt; UserName: varchar(150)&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; Id: uuid&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="181" y="-320" width="186" height="640" as="geometry" />
+    </mxCell>
+    <mxCell id="node3" parent="1" vertex="1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;__EFMigrationsHistory&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; ProductVersion: varchar(32)&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; MigrationId: varchar(150)&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;">
+      <mxGeometry x="-113" y="669" width="225" height="95" as="geometry" />
+    </mxCell>
+    <mxCell id="edge2" edge="1" value="" parent="1" source="node4" target="node5" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=none;endArrow=block;endSize=12;strokeColor=#595959;exitX=0.500;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="51" y="-38" />
+          <mxPoint x="4" y="-38" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="label14" parent="edge2" vertex="1" connectable="0" value="CountryId:Id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
+      <mxGeometry x="17" y="-58" as="geometry" />
+    </mxCell>
+    <mxCell id="edge1" edge="1" value="" parent="1" source="node1" target="node4" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=none;endArrow=block;endSize=12;strokeColor=#595959;exitX=0.750;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="46" y="294" />
+          <mxPoint x="51" y="294" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="label8" parent="edge1" vertex="1" connectable="0" value="CityId:Id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
+      <mxGeometry x="-1" y="284" as="geometry" />
+    </mxCell>
+    <mxCell id="edge0" edge="1" value="" parent="1" source="node1" target="node5" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=none;endArrow=block;endSize=12;strokeColor=#595959;exitX=0.250;exitY=0.000;exitDx=0;exitDy=0;entryX=0.500;entryY=1.000;entryDx=0;entryDy=0;">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="-39" y="294" />
+          <mxPoint x="-44" y="294" />
+          <mxPoint x="-44" y="-38" />
+          <mxPoint x="4" y="-38" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="label2" parent="edge0" vertex="1" connectable="0" value="CountryId:Id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;">
+      <mxGeometry x="-113" y="118" as="geometry" />
+    </mxCell>
+  </root>
+</mxGraphModel>

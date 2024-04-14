@@ -16,6 +16,7 @@ using System.Text;
 using User.Settings;
 using UserClass = User.User; // позволяет обращаться к классу User через UserClass, вместо User.User (ужас!)
 using System.Security.Cryptography;
+using Common;
 
 
 namespace WebApp.Service;

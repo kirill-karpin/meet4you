@@ -4,6 +4,7 @@
 @using Common
 @using Common.Models
 @inject IAuthenticationService AuthService;
+@inject ProfileService ProfileService;
 @inject NavigationManager Navigation
 @inherits LayoutComponentBase
 
@@ -102,48 +103,48 @@
         else
         {
             var token = await AuthService.GetUserId();
-            hubConnection = new HubConnectionBuilder()
-                .WithUrl(Navigation.ToAbsoluteUri($"https://localhost:7172/status?token={token}"))
-                .Build();
 
-            hubConnection.On<EventMessage>("ReceiveEvent", async (eventMessage) =>
+            var profile = await ProfileService.Me();
+            if (profile != null)
             {
-                Console.WriteLine("ReceiveEvent");
-                Console.WriteLine(eventMessage.Subscriber);
-                
-                if (eventMessage.Subscriber == EventSubscriber.Status)
-                {
-                    Console.WriteLine("Parse data");
-                    var data = eventMessage.DataJson;
-                    StatusModel? status = 
-                        JsonSerializer.Deserialize<StatusModel>(data);
-                    Console.WriteLine("status?.Count");
-                    Console.WriteLine(status?.Count);
-                    OnlineCount = status?.Count ?? 0;
-                }
-                
-                if (eventMessage.Subscriber == EventSubscriber.Notification)
-                {
-                    Console.WriteLine("Parse data");
-                    var data = eventMessage.DataJson;
-                    NotificationModel? notification = 
-                        JsonSerializer.Deserialize<NotificationModel>(data);
+                ProfileService.Profile = profile;
+                hubConnection = new HubConnectionBuilder()
+                    .WithUrl(Navigation.ToAbsoluteUri($"https://localhost:7172/status?token={token}"))
+                    .Build();
 
-                    if (notification != null)
+                hubConnection.On<EventMessage>("ReceiveEvent", async (eventMessage) =>
+                {
+                    Console.WriteLine("ReceiveEvent");
+                    Console.WriteLine(eventMessage.Subscriber);
+                
+                    if (eventMessage.Subscriber == EventSubscriber.Status)
                     {
-                        _notifications.Add(notification);    
+                        Console.WriteLine("Parse data");
+                        var data = eventMessage.DataJson;
+                        StatusModel? status = 
+                            JsonSerializer.Deserialize<StatusModel>(data);
+                        Console.WriteLine("status?.Count");
+                        Console.WriteLine(status?.Count);
+                        OnlineCount = status?.Count ?? 0;
                     }
-                    
-                    
-                }
-            
-                await InvokeAsync(StateHasChanged);
-            });
+                
+                    if (eventMessage.Subscriber == EventSubscriber.Notification)
+                    {
+                        Console.WriteLine("Parse data");
+                        var data = eventMessage.DataJson;
+                        NotificationModel? notification = 
+                            JsonSerializer.Deserialize<NotificationModel>(data);
 
-            await hubConnection.StartAsync();
+                        if (notification != null)
+                        {
+                            _notifications.Add(notification);    
+                        }
+                    }
+                    await InvokeAsync(StateHasChanged);
+                });
+                await hubConnection.StartAsync();
+            }
         }
-        
-        
     }
 
     private async Task ShowNotificationBlock()

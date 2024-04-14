@@ -1,16 +1,45 @@
 ﻿using BlazorApp.Models.Filter;
 using System.Net;
 using System.Net.Http.Json;
+using Common;
+using User.Dto;
 
 namespace BlazorApp.Services
 {
     public class ProfileService
     {
         private readonly HttpClient _httpClient;
+        private object? _getUserImage;
+        public Profile? Profile { get; set; }
+
+        public UserDto? User
+        {
+            get
+            {
+                return Profile?.User;
+            }
+        }
+
+        public string? ImageId
+        {
+            get
+            {
+                return Profile?.User.ImageId;
+            }
+            
+        }
 
         public ProfileService(HttpClient httpClient) 
         {
             _httpClient = httpClient;
+        }
+        
+        
+
+        public async Task<Profile?> Me()
+        {
+            var data = await _httpClient.GetFromJsonAsync<Profile>($"https://localhost:7172/api/profile/me/");
+            return data;
         }
 
         public async Task<ProfileResponse[]> GetListProfile(FilterParameters filterParameters)

@@ -2,13 +2,14 @@
 @inject HttpClient Http
 @using BlazorApp.Models.Filter
 @using BlazorApp.Models
+@inject FileService FileService
 
 <PageTitle>user @UserGuid </PageTitle>
 
     <RadzenTemplateForm Data="@profile" TItem="ProfileResponse">
         <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4">
             <RadzenColumn Size="3" class="rz-background-color-info-lighter rz-color-on-info-lighter">
-                <RadzenImage Path="photo-default.jpg" Style="width: 100%; height: 100%; border-radius: 50%;" />
+                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 100%; height: 100%; border-radius: 50%;" />
             </RadzenColumn>
             <RadzenColumn Size="10" SizeMD="4">
                 <RadzenStack>

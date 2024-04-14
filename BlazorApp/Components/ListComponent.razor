@@ -8,7 +8,7 @@
         <RadzenCard Style="width:300px;">
          <RadzenLink Path="@("/profile/" + profile.Id.ToString())">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(profile.User.FirstName + " " + profile.User.LastName + ", " + profile.User.Age)" />
+                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 80px; height: 80px; border-radius: 50%" />
                 <RadzenStack Gap="0">
                     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Пользователь</RadzenText>
                     <RadzenText TextStyle="TextStyle.Body1"><b>@(profile.User.FirstName + " " + profile.User.LastName + ", " + profile.User.Age)</b></RadzenText>

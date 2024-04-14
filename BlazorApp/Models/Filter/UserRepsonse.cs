@@ -1,4 +1,6 @@
-﻿namespace BlazorApp.Models.Filter
+﻿using System.Threading.Tasks.Dataflow;
+
+namespace BlazorApp.Models.Filter
 {
     public class UserRepsonse
     {
@@ -29,6 +31,16 @@
             public int Age { get; set; }
 
             public Location Location { get; set; }
+
+            public string ShortName()
+            {
+                string[] abc = {
+                    FirstName, LastName
+                };
+                return String.Join(" ", abc);
+            }
+            
+            public string ImageId { get; set; }
     }
 
     public class Location

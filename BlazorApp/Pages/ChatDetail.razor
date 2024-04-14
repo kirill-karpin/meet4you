@@ -5,7 +5,9 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using Blazored.LocalStorage
 @using System.Text.Json
+@using BlazorApp.Models.Filter
 @inject NavigationManager Navigation
+@inject FileService FileService
 @implements IAsyncDisposable
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -16,19 +18,41 @@
 <RadzenCard Class="rz-my-12 rz-mx-auto" Style="height: 500px; overflow: scroll;">
     @foreach (var message in messages)
     {
-        <RadzenRow Gap="0">
-            <RadzenStack >
-                <RadzenStack Orientation="Orientation.Horizontal">
-                    <RadzenStack Style="border-radius: 23px;">
-                        <img src="photo-default.jpg"
-                             alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
-                    </RadzenStack>
-                    <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
-                        @message.Content     
+        var id =  message.From.ToString();
+        if (id == OwnerGuid)
+        {
+            <RadzenRow  Style="flex-direction: row-reverse" >
+                <RadzenStack >
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenStack Style="border-radius: 23px;">
+                            <img src="photo-default.jpg"
+                                 alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                        </RadzenStack>
+                        <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
+                           [Вы]: @message.Content     
+                        </RadzenStack>
                     </RadzenStack>
                 </RadzenStack>
-            </RadzenStack>
-        </RadzenRow>
+            </RadzenRow>
+        }
+        else
+        {
+            <RadzenRow  Style="" >
+                <RadzenStack >
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenStack Style="border-radius: 23px;">
+                            <img src="@(FileService.GetFilePath(ChatPartner?.ImageId))"
+                                 alt="avatar 1" style="width: 45px; height: 45px; border-radius: 50%;">
+                        </RadzenStack>
+                        <RadzenStack Style=" overflow-wrap: break-word; width: 90%">
+                            [@ChatPartner?.ShortName()]: @message.Content     
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenRow>
+        }
+        
+       
     }
 
 </RadzenCard>
@@ -53,6 +77,10 @@
     [Parameter]
     public string? UserGuid { get; set; }
     
+    public string? OwnerGuid { get; set; }
+    
+    public UserRepsonse? ChatPartner { get; set; }
+    
     public class Message
     {
         public  Guid From  { get; set; }
@@ -74,10 +102,11 @@
     private ILocalStorageService? localStorage;
     private List<Message> messages = new List<Message>();
     private string? messageInput;
+
     
     protected override async Task OnInitializedAsync()
     {
-        
+        Console.WriteLine("chat detail1");
         await JsRuntime.InvokeVoidAsync("console.log", "chat detail");
         var token = await GetUserId();
         hubConnection = new HubConnectionBuilder()
@@ -101,7 +130,11 @@
         
         messages = await Http.GetFromJsonAsync<List<Message>>($"/api/message/chat/{UserGuid}/items") 
                    ?? throw new InvalidOperationException();
+
+        OwnerGuid = await GetUserId();
         
+        var profileResponse = await Http.GetFromJsonAsync<ProfileResponse>($"/api/profile/{UserGuid}");
+        ChatPartner = profileResponse?.User;
     }
 
     private async Task Send()

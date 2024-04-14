@@ -110,4 +110,9 @@ public class User : BaseEntity
     public string Email { get; set; }
 
     public UserLocation Location { get; set; }
+    
+    /// <summary>
+    /// Аватар пользователя
+    /// </summary>
+    public string ImageId { get; set; }
 }

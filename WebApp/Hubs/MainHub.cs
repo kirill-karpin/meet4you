@@ -76,7 +76,7 @@ public class MainHub : Hub
     {
         _messageBroker.SendMessage(new QueueMessage()
         {
-            Message = "notify-all"
+            Message = "notify-all",
         });
     }
 }

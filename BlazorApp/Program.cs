@@ -11,6 +11,7 @@ const string baseAddress = "https://localhost:7172";
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+//var url = builder.Configuration.GetValue<string>("FileServer");
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
 builder.Services.AddScoped<ProfileService, ProfileService>();
 builder.Services.AddScoped<LocationService, LocationService>();
+builder.Services.AddScoped<FileService, FileService>();
 
 
 builder.Services.AddAuthorizationCore();

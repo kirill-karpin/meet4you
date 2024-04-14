@@ -6,7 +6,7 @@ using MongoDB.Driver;
 namespace FileStorage.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/file")]
 public class FileStorageController : ControllerBase
 {
     
@@ -18,7 +18,7 @@ public class FileStorageController : ControllerBase
     }
     
     /// <summary> Добавление файла. На вход принимает объект UserFile. Возвращает Id </summary>
-    [HttpPost(Name = "UploadImage")]
+    [HttpPost(Name = "/add")]
     public async Task<string> UploadImageAsync([FromForm] string userId, IFormFile file)
     {
         file = HttpContext.Request.Form.Files[0];
@@ -40,7 +40,8 @@ public class FileStorageController : ControllerBase
     }
     
     /// <summary> Возвращает файл по его Id </summary>
-    [HttpGet(Name = "GetById")]
+    [HttpGet]
+    [Route("{id}")]
     public  async Task<IActionResult>  GetById(string id){
 
         var file =  await _fileUploadAdapter.GetFileByIdAsync(id);

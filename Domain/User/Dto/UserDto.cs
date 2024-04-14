@@ -100,4 +100,6 @@ public class UserDto
     public bool Confirmed { get; set; }
 
     public UserLocationDTO Location { get; set; }
+    
+    public string ImageId { get; set; }
 }

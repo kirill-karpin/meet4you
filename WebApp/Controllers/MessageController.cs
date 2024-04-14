@@ -69,7 +69,7 @@ public class MessageController : Controller
                 LastName = users.LastName,
                 FirstName = users.FirstName,
                 City = String.Empty,
-                Photo = String.Empty
+                Photo = users.ImageId
             });
         return result.ToList();
     }

@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
+@inject FileService FileService
 
 <PageTitle>Чаты</PageTitle>
 
@@ -13,7 +14,7 @@
 
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
 
-                    <RadzenImage Path="@chat.Photo" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(chat?.FirstName + " " + chat?.LastName)"/>
+                    <RadzenImage Path="@FileService.GetFilePath(chat.Photo)" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@(chat?.FirstName + " " + chat?.LastName)"/>
                     <RadzenStack Gap="0">
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Собеседник</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1">
@@ -49,7 +50,7 @@
         public string? Photo
         {
             set => _photo = value;
-            get => !string.IsNullOrEmpty(_photo) ?_photo : DefaultPhoto;
+            get => _photo;
         }
     }
 

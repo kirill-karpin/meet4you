@@ -60,8 +60,9 @@ namespace BlazorApp.Services
                 dic.Add("gender", (filterParameters.Gender.Value== Gender.Мужчина ? true : false).ToString());
             if (filterParameters.FamilyStatus.HasValue)
                 dic.Add("familyStatus", filterParameters.FamilyStatus.Value.ToString());
+            if (filterParameters.ChildrenStatus.HasValue)
+                dic.Add("haveChildren", (filterParameters.ChildrenStatus == ChildrenStatus.Нет ? false : true).ToString());
 
-            dic.Add("haveChildren", filterParameters.HasChildren.ToString());
             dic.Add("ageFrom", filterParameters.Range.First().ToString());
             dic.Add("ageTo", filterParameters.Range.Last().ToString());
             

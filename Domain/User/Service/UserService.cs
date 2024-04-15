@@ -230,7 +230,8 @@ namespace User.Service
             .RuleFor(u => u.FamilyStatus, f => f.PickRandom<FamilyStatus>())
             .RuleFor(u => u.DateOfBirth, f => f.Date.Between(new DateTime(1965, 1, 1), new DateTime(2006, 1, 1)))
             .RuleFor(u => u.LookingFor, f => " ")
-            .RuleFor(u => u.About, f => " ");
+            .RuleFor(u => u.About, f => " ")
+            .RuleFor(u => u.ImageId, f => string.Empty);
 
             var country = await _locationService.GetCountries();
 

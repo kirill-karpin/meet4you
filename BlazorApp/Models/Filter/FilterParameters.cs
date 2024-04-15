@@ -7,6 +7,7 @@
 
         public Gender? Gender;
         public FamilyStatus? FamilyStatus;
+        public ChildrenStatus? ChildrenStatus;
         public bool HasChildren;
 
         public IEnumerable<int> Range = new List<int> { 18, 65 };

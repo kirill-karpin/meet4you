@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using Common;
 using MessageBroker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -9,9 +11,8 @@ using WebApp.Service;
 
 namespace WebApp.Service;
 
-public class ServiceListener  : BackgroundService
+public class ServiceListener : BackgroundService
 {
-    
     private IConnection _connection;
     private IModel _channel;
     private readonly IConfiguration _configuration;
@@ -33,10 +34,11 @@ public class ServiceListener  : BackgroundService
             Password = rabbitMqConfig["Password"],
             DispatchConsumersAsync = true
         };
-        
+
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
-        _channel.QueueDeclare(queue: QueueMessage.DefaultQueue, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        _channel.QueueDeclare(queue: QueueMessage.DefaultQueue, durable: false, exclusive: false, autoDelete: false,
+            arguments: null);
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,28 +46,47 @@ public class ServiceListener  : BackgroundService
         stoppingToken.ThrowIfCancellationRequested();
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
-        
+
         consumer.Received += async (ch, ea) =>
         {
             var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-			
-            // Каким-то образом обрабатываем полученное сообщение
-            Console.WriteLine($"Получено сообщение: {content}");
-            
-            _eventBusService.NotifyAll();
-            
+
+            Console.WriteLine($"Hande message: {content}");
+
+            var queueMessage = JsonSerializer.Deserialize<QueueMessage>(content);
+            if (queueMessage != null)
+            {
+                await RouteHandlerServices(queueMessage);
+            }
+
             _channel.BasicAck(ea.DeliveryTag, false);
         };
 
-         _channel.BasicConsume(QueueMessage.DefaultQueue, false, consumer);
+        _channel.BasicConsume(QueueMessage.DefaultQueue, false, consumer);
 
         return Task.CompletedTask;
     }
-	
+
     public override void Dispose()
     {
         _channel.Close();
         _connection.Close();
         base.Dispose();
+    }
+
+    public Task RouteHandlerServices(QueueMessage queueMessage)
+    {
+        switch (queueMessage.Service)
+        {
+            case ServicesEnum.Notification:
+                EventMessage? message = JsonSerializer.Deserialize<EventMessage>(queueMessage.Message);
+                if (message != null) _eventBusService.ReceiveEvent(message);
+
+                break;
+            default:
+                throw new Exception("Unknown service handler");
+        }
+
+        return Task.FromResult(true);
     }
 }

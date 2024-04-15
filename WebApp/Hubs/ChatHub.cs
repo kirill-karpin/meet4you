@@ -50,15 +50,18 @@ public class ChatHub : Hub
 
             await Clients.Clients(clientsList).SendAsync("ReceiveMessage", dataString);
 
+            var eventMessage = EventMessage.GetPersonalNotificationFabricMethod(
+                message.To.ToString(),
+                new NotificationModel()
+                {
+                    Content = "Новое сообщение",
+                    Title = "Новое сообщение"
+                });
+
             _messageBroker.SendMessage(new QueueMessage
             {
-                Message = JsonSerializer.Serialize(EventMessage.GetListNotificationFabricMethod(
-                    clientsList,
-                    new NotificationModel()
-                    {
-                        Content = "Новое сообщение",
-                        Title = "Новое сообщение"
-                    }))
+                Service = ServicesEnum.Notification,
+                Message = JsonSerializer.Serialize(eventMessage)
             });
 
             var senderList = ConnectionPool.GetConnectionsByUserId(message.From.ToString());

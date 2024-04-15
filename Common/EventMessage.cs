@@ -4,8 +4,8 @@ namespace Common;
 
 public class EventMessage
 {
-    public EventType Type;
-    public List<string> Receivers = new List<string>();
+    public EventType Type { get; set; }
+    public List<string> Receivers { get; set; } = new List<string>() ;
     public EventSubscriber Subscriber { get; set; }
 
     public string DataJson { get; set; }

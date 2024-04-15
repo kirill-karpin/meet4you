@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -38,13 +39,13 @@ public class MessageBrokerService : IMessageBroker
             arguments: null
         );
         
-        var body = Encoding.UTF8.GetBytes("notify-all");
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(queueMessage));
 
         Channel.BasicPublish(exchange: "",
             routingKey: queueMessage.QueueName,
             basicProperties: null,
             body: body);
 
-        Console.WriteLine(" [x] Sent {0}", $"  {queueMessage.QueueName} : {queueMessage.Message}");
+        Console.WriteLine($"Send to message broker: {body}");
     }
 }

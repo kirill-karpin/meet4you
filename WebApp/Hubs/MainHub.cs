@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Text.Json;
+using Common;
 using Common.Models;
 using MessageBroker;
 using Microsoft.AspNetCore.SignalR;
@@ -76,7 +77,13 @@ public class MainHub : Hub
     {
         _messageBroker.SendMessage(new QueueMessage()
         {
-            Message = "notify-all",
+            Message = JsonSerializer.Serialize( EventMessage.GetBroadcastMessageFabricMethod(
+                EventSubscriber.Status, 
+                new StatusModel()
+                {
+                    Count = _connectionPool.GetCount()
+                }
+            ))
         });
     }
 }

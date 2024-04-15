@@ -43,6 +43,7 @@
         if (loginResponse?.Token != null)
         {
             _navMgr.NavigateTo("/users");
+            _navMgr.Refresh();
         }
             
     }

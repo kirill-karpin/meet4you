@@ -58,7 +58,7 @@ namespace User.Service
         {
             User user = await _userRepository.GetAsync(id);
             UserDto userDto = _userMapper.Map<UserDto>(user);
-
+            SetAgeAndLocation(userDto);
             return userDto;
         }
 
@@ -196,16 +196,21 @@ namespace User.Service
            
             users.ForEach( u =>
             {
-                DateTime today = DateTime.Today;
-                var age = today.Year - u.DateOfBirth.Year;
-                if (u.DateOfBirth.AddYears(age) > today)
-                    age--;
-                u.Age = age;
-
-                u.Location = _locationService.GetUserLocation(u.Id).Result;
+                SetAgeAndLocation(u);
             });
 
             return users;
+        }
+
+        private void SetAgeAndLocation(UserDto u)
+        {
+            DateTime today = DateTime.Today;
+            var age = today.Year - u.DateOfBirth.Year;
+            if (u.DateOfBirth.AddYears(age) > today)
+                age--;
+            u.Age = age;
+
+            u.Location = _locationService.GetUserLocation(u.Id).Result;
         }
 
         public IQueryable<User> GetAll(bool noTracking = false)

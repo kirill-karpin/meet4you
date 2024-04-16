@@ -1,13 +1,13 @@
 ﻿@inject LocationService locationService
 @using BlazorApp.Models
 
-<RadzenStack Orientation="Orientation.Vertical" Gap="4px">
-    <RadzenText Text="Страна" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
+<RadzenStack Orientation="Orientation.Vertical" Gap="1px">
+    <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Страна</RadzenText>
     <RadzenDropDown AllowClear="true" TValue="string" TextProperty="Name" ValueProperty="Id"
                     LoadData=@LoadData Data=@countries Size="ButtonSize.Small" Change=@OnCountryChange />
 </RadzenStack>
-<RadzenStack Orientation="Orientation.Vertical" Gap="4px">
-    <RadzenText Text="Город" TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"></RadzenText>
+<RadzenStack Orientation="Orientation.Vertical" Gap="1px">
+    <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left">Город</RadzenText>
     <RadzenDropDown @ref=@radzenDropDownCities AllowClear="true" TValue="string" TextProperty="Name" ValueProperty="Id"
                     Data=@cities Size="ButtonSize.Small" Change="@OnCityChange" />
 </RadzenStack>

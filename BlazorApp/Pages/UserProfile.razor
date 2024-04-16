@@ -3,79 +3,71 @@
 @using BlazorApp.Models.Filter
 @using BlazorApp.Models
 @inject FileService FileService
+@inject NavigationManager _nav;
 
 <PageTitle>user @UserGuid </PageTitle>
 
-    <RadzenTemplateForm Data="@profile" TItem="ProfileResponse" Visible="profile!=null">
-        <RadzenRow Gap="2rem" JustifyContent="JustifyContent.Center" Class="rz-p-0 rz-p-lg-4">
-            <RadzenColumn Size="3" class="rz-background-color-info-lighter rz-color-on-info-lighter">
-                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 100%; height: 100%; border-radius: 50%;" />
-            </RadzenColumn>
-
-
-            <RadzenColumn Size="10" SizeMD="4">
-                <RadzenStack>
-                    <RadzenFieldset>
-                        <RadzenStack Gap="1rem">
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="Имя"  />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.FirstName" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="Фамилия" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.LastName" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="Дата рождения" Component="Birthday" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenDatePicker @bind-Value="@profile.User.DateOfBirth" DateFormat="dd/MM/yyyy" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="Статус" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenTextBox Style="width: 100%;" Name="Name" Value="@profile.User.FamilyStatus.ToString()" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="Ищу" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.LookingFor" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-                            <RadzenRow AlignItems="AlignItems.Center">
-                                <RadzenColumn Size="12" SizeMD="4">
-                                    <RadzenLabel Text="О себе" />
-                                </RadzenColumn>
-                                <RadzenColumn Size="12" SizeMD="8">
-                                    <RadzenTextBox Style="width: 100%;" Value="@profile.User.About" ReadOnly="true" />
-                                </RadzenColumn>
-                            </RadzenRow>
-                        </RadzenStack>
-                    </RadzenFieldset>
+    <RadzenCard class="rz-mx-auto rz-p-4 rz-p-md-6" style="max-width: 600px;">
+         <RadzenStack Gap="10px">
+             <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 200px; height: 200px; border-radius: 50%" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.H5" TagName="TagName.P" TextAlign="TextAlign.Center">  <strong> @(profile?.User?.FirstName + " " + profile?.User?.LastName) </strong></RadzenText>
                 </RadzenStack>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenTemplateForm>
+            </RadzenStack>
+
+            <RadzenStack Orientation="Orientation.Vertical" Gap="16px" class="rz-p-12">
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Страна</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">  @(profile?.User?.Location?.Country) </RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Город</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">@(profile?.User?.Location?.City) </RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Возраст</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">@(profile?.User?.Age)</RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">День рождения</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">@(profile?.User.DateOfBirth.ToString("d MMMM"))</RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Статус</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">@(profile?.User.FamilyStatus.GetDisplayDescription())</RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Дети</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">@((profile?.User?.HaveChildren != null && profile?.User?.HaveChildren == true) ? "Есть" : "Нет")</RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">Ищу</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">...</RadzenText>
+                </RadzenStack>
+                <RadzenStack Gap="0px">
+                    <span style="font-size: .8em; color: var(--rz-text-tertiary-color)">О себе</span>
+                    <RadzenText TextAlign="TextAlign.Left" TextStyle="TextStyle.H6">...</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+
+            <RadzenStack  Gap="1rem">
+                <RadzenButton Text="Перейти в чат" Style="width: 100%" Click="@(()=>_nav.NavigateTo("/chat/" + profile.Id.ToString()))" />
+            </RadzenStack>
 
 
- @code {
+         </RadzenStack>
+
+
+
+
+    </RadzenCard>
+
+
+   
+
+
+    @code {
 
     ProfileResponse profile = null;
 
@@ -86,4 +78,6 @@
     {
         profile = await Http.GetFromJsonAsync<ProfileResponse>($"/api/profile/{UserGuid}");
     }
+
+ 
 }

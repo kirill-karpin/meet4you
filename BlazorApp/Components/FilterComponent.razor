@@ -6,7 +6,7 @@
 <RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
         <LocationComponent @ref=@locationComponent CityId="@filterParameters.CityId" CountryId="@filterParameters.CountryId" ValueChanged="ChangeValue"></LocationComponent>
-        
+
         <RadzenStack Orientation="Orientation.Vertical" Gap="1px">
             <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left" TagName="TagName.H3">Пол</RadzenText>
             <RadzenDropDown AllowClear="true" @bind-Value="@filterParameters.Gender" TextProperty="Text" ValueProperty="Value" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "justify content" }})"
@@ -28,13 +28,14 @@
         <RadzenStack Orientation="Orientation.Vertical" Gap="1px">
             <RadzenText TextStyle="TextStyle.Subtitle1" TextAlign="TextAlign.Left"> Возраст @filterParameters.Range.First() - @filterParameters.Range.Last() </RadzenText>
                 <RadzenSlider Range="true" Min="18" Max="65" @bind-Value=@filterParameters.Range TValue="IEnumerable<int>" Style="margin-top: 16px;" />
+            </RadzenStack>
         </RadzenStack>
+
 
         <RadzenButton Text="Поиск" Click=OnClick Style="margin-top: 36px; width: 140px; height: 40px" />
-        
 
-        </RadzenStack>
-</RadzenCard>
+
+    </RadzenCard>
 
 
     @code {

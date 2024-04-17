@@ -1,64 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Service;
 
-/*
+
 namespace WebApp.Controllers;
 
 [ApiController]
-[Route("/api/files")]
-
-interface IFileAdapter
-{
-    public Task<string> SaveFile()
-    {
-        
-    }
-    
-    public Task<byte> GetFileById(id)
-    {
-        
-    }
-    
-    public Task<byte> RemoveFile(id)
-    {
-        
-    }
-}
-
-public class FileStorageAdpater {
-
-}
-
-public interface IFileService
-{
-    public Task<string> SaveFile()
-    {
-        
-    }
-    
-    public Task<byte> GetFileById(id)
-    {
-        
-    }
-    
-    public Task<byte> RemoveFile(id)
-    {
-        
-    }
-}
-
-class FileService : IFileService
-{
-    private readonly IFileAdapter _fileAdapter;
-
-    public FileService(IFileAdapter fileAdapter)
-    {
-        _fileAdapter = fileAdapter;
-    }
-}
-
-
-
-
+[Route("files")]
 public class FileController : Controller
 {
     private readonly IFileService _fileService;
@@ -68,18 +15,20 @@ public class FileController : Controller
         _fileService = fileService;
     }
 
-    public Task<string> SaveFile(Byte data)
+    [HttpPost]
+    [Route("add-file")]
+    public async Task<string> SaveFile([FromForm] string userId, IFormFile file)
     {
-        _fileService.SaveFile(data);
+        file = HttpContext.Request.Form.Files[0];
+
+        byte[] array;
+        using (var ms = new MemoryStream())
+        {
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            array = fileBytes;
+        }
+
+        return await _fileService.SaveFile(array);
     }
-    
-    public Task<byte> GetFileById(id)
-    {
-        _fileService.GetFileById(id);
-    }
-    
-    public Task<byte> RemoveFile(id)
-    {
-        _fileService.RemoveFile(id);
-    }
-}*/
+}

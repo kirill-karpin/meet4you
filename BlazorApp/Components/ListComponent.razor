@@ -2,30 +2,30 @@
 @using BlazorApp.Components
 @inject FileService FileService
 
-<RadzenDataList Data="@Profiles" TItem="ProfileResponse" AllowVirtualization=false WrapItems="true" AllowPaging="true" PageSize="20" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" PagerPosition="PagerPosition.Bottom">
+<RadzenDataList Data="@Profiles" TItem="ProfileResponse" AllowVirtualization=false WrapItems="true" AllowPaging="true" PageSize="15" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true" PagerPosition="PagerPosition.Bottom">
     <Template Context="profile">
-      
-        <RadzenCard style="max-width: 350px;">
-         <RadzenLink Path="@("/profile/" + profile.Id.ToString())">
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 80px; height: 80px; border-radius: 50%" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Пользователь</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body1"><b>@(profile.User.FirstName + " " + profile.User.LastName + ", " + profile.User.Age)</b></RadzenText>
-                    <RadzenText TextStyle="TextStyle.Overline" Visible="@(profile.User.Location!=null)" class="rz-display-flex rz-mt-4 rz-mb-0">Город</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body1" Visible="@(profile.User.Location!=null)"> <b>@(profile.User.Location?.City), @(profile.User.Location?.Country)</b></RadzenText>
+
+        <RadzenCard style="width: 350; max-width: 350px;">
+            <RadzenLink Path="@("/profile/" + profile.Id.ToString())">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                    <RadzenImage Path="@FileService.GetFilePath(profile?.User.ImageId)" Style="width: 80px; height: 80px; border-radius: 50%" />
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Пользователь</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@(profile.User.FirstName + " " + profile.User.LastName + ", " + profile.User.Age)</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Visible="@(profile.User.Location!=null)" class="rz-display-flex rz-mt-4 rz-mb-0">Город</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Visible="@(profile.User.Location!=null)"> <b>@(profile.User.Location?.City), @(profile.User.Location?.Country)</b></RadzenText>
+                    </RadzenStack>
                 </RadzenStack>
-            </RadzenStack>
-        </RadzenLink>
+            </RadzenLink>
             <hr style="border: none; background-color: rgba(0,0,0,.2); height: 1px; margin: 1rem 0;" />
             <RadzenRow>
-                <RadzenColumn Size="8" Class="rz-text-truncate" >
+                <RadzenColumn Size="8" Class="rz-text-truncate">
                     <RadzenLink Path="@("/chat/" + profile.Id.ToString())" Text="Написать" />
                 </RadzenColumn>
-        
+
             </RadzenRow>
         </RadzenCard>
-       
+
     </Template>
 </RadzenDataList>
 

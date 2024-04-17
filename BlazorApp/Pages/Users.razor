@@ -5,17 +5,38 @@
 @using BlazorApp.Models.Filter
 @using BlazorApp.Components
 
+<RadzenCard class="rz-mx-auto rz-p-4 rz-p-md-6" style="max-width: 1250px;">
+    <RadzenStack Gap="10px">
+        <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
+            <FilterComponent @ref=filterComponent OnClick=@GetProfiles />
+        </RadzenStack>
 
-<FilterComponent @ref=filterComponent OnClick=@GetProfiles />
+        <RadzenStack Orientation="Orientation.Vertical" Gap="16px" class="rz-p-12">
+            @if (profiles == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                <ListComponent Profiles=@profiles />
+            }
+        </RadzenStack>
 
-@if (profiles == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <ListComponent Profiles=@profiles/>
-}
+
+
+
+    </RadzenStack>
+
+
+
+
+</RadzenCard>
+
+
+
+
+
+
 
 
 @code {

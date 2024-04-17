@@ -1,9 +1,8 @@
-﻿namespace WebApp.Service
+﻿namespace WebApp.FileStorageAdapter
 {
-    public interface IFileService
+    interface IFileStorageAdapter
     {
         Task<string> SaveFile(byte[] array);
-
         Task<byte> GetFileById(string id);
     }
 }

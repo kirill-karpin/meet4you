@@ -20,7 +20,7 @@ using User.Service;
 using WebApp.Hubs;
 using WebApp.Service;
 using WebApp.Settings;
-using WebApp.Service;
+using WebApp.FileStorageAdapter;
 
 namespace WebApp
 {
@@ -28,7 +28,7 @@ namespace WebApp
     /// Регистратор сервиса
     /// </summary>
     public static class Registrar
-    {
+    {     
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var applicationSettings = configuration.Get<ApplicationSettings>();
@@ -37,7 +37,7 @@ namespace WebApp
             services.AddScoped(typeof(DbContext), typeof(DataContext));
             services.AddSingleton<ConnectionPool>();
             services.AddHostedService<ServiceListener>();
-            
+          
             return services.AddSingleton((IConfigurationRoot)configuration)
                 .InstallServices()
                 .ConfigureContext(applicationSettings.ConnectionString)
@@ -54,7 +54,11 @@ namespace WebApp
                 .AddTransient<IUserService, UserService>()
                 .AddSingleton<IMessageBroker, MessageBrokerService>()
                 .AddSingleton<IEventBusService, EventBusService>()
-                .AddTransient<IProfileService, ProfileService>();
+                .AddTransient<IProfileService, ProfileService>()
+                .AddTransient<IFileService, FileService>()
+                .AddTransient<IFileStorageAdapter, FileStorageAdapter.FileStorageAdapter>();
+            
+
 
             return serviceCollection;
         }

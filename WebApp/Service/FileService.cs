@@ -1,13 +1,13 @@
-﻿using WebApp.Adapter;
+﻿using WebApp.FileStorageAdapter;
 using WebApp.Controllers;
 
 namespace WebApp.Service
 {
     class FileService : IFileService
     {
-        private readonly IFileStorageAdpater _fileAdapter;
+        private readonly IFileStorageAdapter _fileAdapter;
 
-        public FileService(IFileStorageAdpater fileAdapter)
+        public FileService(IFileStorageAdapter fileAdapter)
         {
             _fileAdapter = fileAdapter;
         }
@@ -17,14 +17,9 @@ namespace WebApp.Service
             return await _fileAdapter.GetFileById(id);
         }
 
-        public async Task<byte> RemoveFile(string id)
+        public async Task<string> SaveFile(byte[] array)
         {
-            return await _fileAdapter.RemoveFile(id);
-        }
-
-        public async Task<string> SaveFile(Stream stream)
-        {
-            return await _fileAdapter.SaveFile(stream);
+            return await _fileAdapter.SaveFile(array);
         }
     }
 }

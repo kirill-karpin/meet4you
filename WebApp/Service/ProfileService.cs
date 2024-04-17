@@ -60,7 +60,7 @@ public class ProfileService : IProfileService
 
     public async Task<IProfile> GetProfile(Guid id)
     {
-        var user = await _userRepository.GetAsync(id);
+        var user = await _userService.Get(id);
 
         if (user==null)
             throw new UserNotFoundException("user not found");
@@ -68,8 +68,8 @@ public class ProfileService : IProfileService
         return await Task.FromResult<IProfile>(new UserProfile()
         {
             Id = id,
-            User = _userMapper.Map<UserClass, UserDto>(user)
-            
+            User = user
+
         });
     }
 

@@ -12,7 +12,7 @@
 
         public IEnumerable<int> Range = new List<int> { 18, 65 };
 
-        public int ItemsPerPage = 30;
+        public int ItemsPerPage = 100;
         public int Page = 1;
     }
 }

@@ -65,4 +65,13 @@ public class ProfileController : Controller
 
 
     }
+    
+    [Authorize]
+    [HttpPost]
+    [Route("update")]
+    public async Task<UserDto> Update(UserDto userDto)
+    {
+        return await _profileService.Update(userDto);
+    }
+
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace User.Dto;
 
+[Serializable]
 /// <summary>
 /// User Data Transfer Object
 /// </summary>
@@ -99,7 +100,7 @@ public class UserDto
     /// </summary>
     public bool Confirmed { get; set; }
 
-    public UserLocationDTO Location { get; set; }
+    public UserLocationDTO? Location { get; set; }
     
     public string ImageId { get; set; }
 }

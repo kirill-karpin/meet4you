@@ -79,5 +79,12 @@ namespace BlazorApp.Services
             var data = await _httpClient.GetFromJsonAsync<ProfileResponse[]>(query);
             return data;
         }
+        
+        public async Task<HttpResponseMessage?> Update(UserDto userDto)
+        {
+            string query = $"https://localhost:7172/api/profile/update/";
+            var data = await _httpClient.PostAsJsonAsync<UserDto>(query, userDto);
+            return data;
+        }
     }
 }

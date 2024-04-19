@@ -1,40 +1,42 @@
 ﻿@page "/updateprofile"
 @inject ProfileService profileService;
 @using BlazorApp.Models
+@using Common
+@using User.Dto
 @using static User.Dto.UserDto;
-
 
 
 <RadzenText TextStyle="TextStyle.H2">Мой профиль</RadzenText>
 
 
-<RadzenCard class="my-4">
-    <RadzenStack Orientation="Orientation.Vertical" >
-        <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
-            <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;" />
-            <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek />
+<RadzenTemplateForm Data="@userDto" Submit="@( async (UserDto args) => { await SubmitHandler(args); })" >
+    <RadzenCard class="my-4">
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
+                <RadzenLabel Text="Дата рождения" Component="RadzenDatePickerBindValue" Style="margin-right: 8px; vertical-align: middle;"/>
+                <RadzenDatePicker @bind-Value=@userDto.DateOfBirth Name="RadzenDatePickerBindValue" ShowCalendarWeek/>
+            </RadzenStack>
         </RadzenStack>
-    </RadzenStack>
-</RadzenCard>
+    </RadzenCard>
 
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.FirstName class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Фамилия</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.LastName class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Отчество</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.Surname class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">О себе</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.About class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Имя</RadzenText>
+        <RadzenTextBox @bind-Value=userDto.FirstName class="w-100" aria-label="Default TextBox"/>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Фамилия</RadzenText>
+        <RadzenTextBox @bind-Value=userDto.LastName class="w-100" aria-label="Default TextBox"/>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Отчество</RadzenText>
+        <RadzenTextBox @bind-Value=userDto.Surname class="w-100" aria-label="Default TextBox"/>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">О себе</RadzenText>
+        <RadzenTextBox @bind-Value=userDto.About class="w-100" aria-label="Default TextBox"/>
+    </RadzenCard>
 
-@*<RadzenCard>
+    @*<RadzenCard>
     Семейное положение
 <RadzenDropDown TValue="string" TextProperty="Text"
                 Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
@@ -45,9 +47,20 @@
     <RadzenDropDown TValue="string" TextProperty="Text"
                     Data="@(Enum.GetValues(typeof(Children)).Cast<Children>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
 </RadzenCard>*@
+      <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+            <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save" />
+      </RadzenStack>
+</RadzenTemplateForm>
 
 @code {
-    User.Dto.UserDto? userDto = new ();
+    User.Dto.UserDto? userDto = new();
+
+    public async Task SubmitHandler(UserDto args)
+    {
+        Console.WriteLine("send");
+        var profile = await profileService.Update(args);
+        return;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,27 +68,7 @@
         if (profile != null)
         {
             userDto = profile.User;
-        } 
-           
-        // Тут мне нужно получить данный объект
-        /*userDto = new User.Dto.UserDto()
-            {
-                Id = Guid.NewGuid(),
-                Blocked = false,
-                Gender = true,
-                DateOfBirth = DateTime.Now,
-                FirstName = "Тест",
-                LastName = "Тестовый",
-                Surname = "Тестовский",
-                About = "Я пока тут просто мебель",
-                LookingFor = "Ищу новую, свежую сущность, не опороченную хранением в базе данных",
-                FamilyStatus = 0,
-                HaveChildren = false,
-                Login = "TestNagibator666",
-                UserName = "TestNagibator666",
-                Age = 22,
-                Confirmed = false
-            };*/
+        }
     }
 
     enum FamilyStatus
@@ -88,7 +81,7 @@
     enum Children
     {
         Нет = 0,
-        Да  = 1
+        Да = 1
     }
-}
 
+}

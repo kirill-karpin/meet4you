@@ -109,7 +109,7 @@ public class User : BaseEntity
     /// </summary>
     public string Email { get; set; }
 
-    public UserLocation Location { get; set; }
+    public UserLocation? Location { get; set; }
     
     /// <summary>
     /// Аватар пользователя

@@ -1,12 +1,11 @@
 ﻿@page "/updateprofile"
+@inject ProfileService profileService;
 @using BlazorApp.Models
 @using static User.Dto.UserDto;
 
 
 
-<PageTitle>Обновить профиль</PageTitle>
-
-<RadzenText TextStyle="TextStyle.H2">Обновить профиль</RadzenText>
+<RadzenText TextStyle="TextStyle.H2">Мой профиль</RadzenText>
 
 
 <RadzenCard class="my-4">
@@ -34,23 +33,8 @@
     <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">О себе</RadzenText>
     <RadzenTextBox @bind-Value=userDto.About class="w-100" aria-label="Default TextBox" />
 </RadzenCard>
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ищу</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.LookingFor class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
 
-
-
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Как нам тебя звать?</RadzenText>
-    <RadzenTextBox @bind-Value=userDto.UserName class="w-100" aria-label="Default TextBox" />
-</RadzenCard>
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Возраст</RadzenText>
-    <RadzenNumeric TValue="int" Disabled="true" @bind-Value=@userDto.Age />
-</RadzenCard>
-
-<RadzenCard>
+@*<RadzenCard>
     Семейное положение
 <RadzenDropDown TValue="string" TextProperty="Text"
                 Data="@(Enum.GetValues(typeof(FamilyStatus)).Cast<FamilyStatus>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
@@ -60,15 +44,21 @@
     Наличие детей
     <RadzenDropDown TValue="string" TextProperty="Text"
                     Data="@(Enum.GetValues(typeof(Children)).Cast<Children>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
-</RadzenCard>
+</RadzenCard>*@
 
 @code {
-    User.Dto.UserDto userDto = null;
+    User.Dto.UserDto? userDto = new ();
 
     protected override async Task OnInitializedAsync()
     {
+        var profile = await profileService?.Me()!;
+        if (profile != null)
+        {
+            userDto = profile.User;
+        } 
+           
         // Тут мне нужно получить данный объект
-        userDto = new User.Dto.UserDto()
+        /*userDto = new User.Dto.UserDto()
             {
                 Id = Guid.NewGuid(),
                 Blocked = false,
@@ -85,7 +75,7 @@
                 UserName = "TestNagibator666",
                 Age = 22,
                 Confirmed = false
-            };
+            };*/
     }
 
     enum FamilyStatus

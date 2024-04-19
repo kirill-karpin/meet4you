@@ -1,15 +1,18 @@
 ﻿@page "/updateprofile"
 @inject ProfileService profileService;
+@inject FileService fileService;
 @using BlazorApp.Models
 @using Common
 @using User.Dto
 @using static User.Dto.UserDto;
+@using System.Text
 
 
 <RadzenText TextStyle="TextStyle.H2">Мой профиль</RadzenText>
 
 
-<RadzenTemplateForm Data="@userDto" Submit="@( async (UserDto args) => { await SubmitHandler(args); })" >
+    <RadzenTemplateForm Data="@userDto" Submit="@(async (UserDto args) => { await SubmitHandler(args); })">
+    
     <RadzenCard class="my-4">
         <RadzenStack Orientation="Orientation.Vertical">
             <RadzenStack Orientation="Orientation.Vertical" Gap="4px">
@@ -47,12 +50,17 @@
     <RadzenDropDown TValue="string" TextProperty="Text"
                     Data="@(Enum.GetValues(typeof(Children)).Cast<Children>().Select(t => new { Text = $"{t}", Value = t }))" Size="ButtonSize.Small" />
 </RadzenCard>*@
-      <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
-            <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save" />
-      </RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save"/>
+    </RadzenStack>
 </RadzenTemplateForm>
 
 @code {
+    string? fileId;
+    
+    string fileName;
+    long? fileSize;
+    
     User.Dto.UserDto? userDto = new();
 
     public async Task SubmitHandler(UserDto args)
@@ -84,4 +92,36 @@
         Да = 1
     }
 
+    int progress;
+    string info;
+
+    void OnProgress(UploadProgressArgs args, string name)
+    {
+        this.info = $"% '{name}' / {args.Loaded} of {args.Total} bytes.";
+        this.progress = args.Progress;
+    }
+
+    public async Task<string?> OnChangeFile(string value, string name)
+    {
+        /*Console.WriteLine("GET STREAM");
+        
+        var formData = new MultipartFormDataContent();
+        byte[] byteArray = Convert.FromBase64String(value);
+        
+        Console.WriteLine("FILE");
+        Stream streamToWriteTo = File.Open("test.jpg", FileMode.Create);
+        
+        var stream = new MemoryStream(byteArray);
+        await stream.CopyToAsync(streamToWriteTo);
+            
+        stream.Position = 0;
+        Console.WriteLine("GET STREAM2");
+        formData.Add(new StreamContent(streamToWriteTo), "file");   
+        formData.Add(new StringContent("GUID"), "UserId");
+
+        var response = await fileService.UploadFile(formData);
+                
+        //return response?.Content?.ToString();*/
+        return "";
+    }
 }

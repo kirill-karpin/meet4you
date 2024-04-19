@@ -3,56 +3,62 @@
 @using System.Net
 @inject IAuthenticationService _authService;
 @inject NavigationManager _navMgr;
-<h3>Registration</h3>
+<h3>Регистрация</h3>
 
 <div class="row my-2">
     <div class="col-md-6">
         <EditForm Model="@_registrationDto" OnValidSubmit="DoRegistration">
-            <DataAnnotationsValidator />
+            <DataAnnotationsValidator/>
             <div class="form-group">
-                <label for="Login">Login</label>
+                <label for="Login">Логин</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.Login"/>
-                <ValidationMessage For="@(()=>_registrationDto.Login)"/>
-            </div>
-            
-            <div class="form-group">
-                <label for="Password">Password</label>
-                <InputText type="password" class="form-control" @bind-Value="_registrationDto.Password" />
-                <ValidationMessage For="@(()=>_registrationDto.Password)" />
-            </div>
-            
-            <div class="form-group">
-                <label for="FirstName">FirstName</label>
-                <InputText class="form-control" @bind-Value="_registrationDto.FirstName"/>
-                <ValidationMessage For="@(()=>_registrationDto.FirstName)"/>
+                <ValidationMessage For="@(() => _registrationDto.Login)"/>
             </div>
 
             <div class="form-group">
-                <label for="Surname">Surname</label>
+                <label for="Password">Пароль</label>
+                <InputText type="password" class="form-control" @bind-Value="_registrationDto.Password"/>
+                <ValidationMessage For="@(() => _registrationDto.Password)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="FirstName">Имя</label>
+                <InputText class="form-control" @bind-Value="_registrationDto.FirstName"/>
+                <ValidationMessage For="@(() => _registrationDto.FirstName)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="Surname">Фамилия</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.Surname"/>
-                <ValidationMessage For="@(()=>_registrationDto.Surname)"/>
+                <ValidationMessage For="@(() => _registrationDto.Surname)"/>
             </div>
             <div class="form-group">
-                <label for="LastName">LastName</label>
+                <label for="LastName">Отчество</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.LastName"/>
-                <ValidationMessage For="@(()=>_registrationDto.LastName)"/>
+                <ValidationMessage For="@(() => _registrationDto.LastName)"/>
             </div>
             <div class="form-group">
-                <label for="Email">Email</label>
+                <label for="About">День рождения</label>
+                <InputDate class="form-control" @bind-Value="_registrationDto.DateOfBirth"/>
+                <ValidationMessage For="@(() => _registrationDto.DateOfBirth)"/>
+            </div>
+            <div class="form-group">
+                <label for="Email">Почта</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.Email"/>
-                <ValidationMessage For="@(()=>_registrationDto.Email)"/>
+                <ValidationMessage For="@(() => _registrationDto.Email)"/>
             </div>
             <div class="form-group">
-                <label for="LookingFor">LookingFor</label>
+                <label for="LookingFor">Интересы</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.LookingFor"/>
-                <ValidationMessage For="@(()=>_registrationDto.LookingFor)"/>
+                <ValidationMessage For="@(() => _registrationDto.LookingFor)"/>
             </div>
             <div class="form-group">
-                <label for="About">About</label>
+                <label for="About">О себе</label>
                 <InputText class="form-control" @bind-Value="_registrationDto.About"/>
-                <ValidationMessage For="@(()=>_registrationDto.About)"/>
+                <ValidationMessage For="@(() => _registrationDto.About)"/>
             </div>
-            
+
+
             <div class="my-2">
                 @_result.RequestMessage
             </div>
@@ -68,11 +74,12 @@
 @code {
     RegistrationDTO _registrationDto = new();
     HttpResponseMessage _result = new();
-    
+
     async Task DoRegistration()
     {
         _result = await _authService.Registration(_registrationDto);
         if (_result.StatusCode == HttpStatusCode.OK)
             _navMgr.NavigateTo("/login");
     }
+
 }

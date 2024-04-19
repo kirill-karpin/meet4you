@@ -114,5 +114,5 @@ public class User : BaseEntity
     /// <summary>
     /// Аватар пользователя
     /// </summary>
-    public string ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

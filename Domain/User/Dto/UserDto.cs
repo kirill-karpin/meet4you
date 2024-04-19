@@ -102,5 +102,5 @@ public class UserDto
 
     public UserLocationDTO? Location { get; set; }
     
-    public string ImageId { get; set; }
+    public string? ImageId { get; set; }
 }

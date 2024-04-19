@@ -20,7 +20,7 @@ public class RegistrationDTO
     public bool Gender { get; set; }
     public FamilyStatus FamilyStatus { get; set; }
     public bool HaveChildren { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; } =  new DateTime(1900, 1, 1);
     public string About { get; set; }
     [Required]
     public string Email { get; set; }

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject ProfileService ProfileService;
 
 <PageTitle>Main</PageTitle>
 
@@ -6,4 +7,17 @@
 
 @code {
     string text = "Добро пожаловать в социальную сеть, meet4you!";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("abcd");
+        
+        var profile = await ProfileService?.Me()!;
+        if (profile != null)
+        {
+            text = $"Привет, {profile.User?.FirstName}!";
+        }
+
+    }
+
 }
